@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F86AFB12-D88E-45F8-A306-EE6B900720F4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ManagedX</RootNamespace>
+    <AssemblyName>ManagedX.Display</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>..\..\ManagedX.Display.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>..\..\ManagedX.Display.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>ManagedX.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="code\classes\DisplayAdapter.cs" />
+    <Compile Include="code\classes\DisplayDeviceBase.cs" />
+    <Compile Include="code\classes\DisplayMonitor.cs" />
+    <Compile Include="code\classes\ReadOnlyDisplayAdapterCollection.cs" />
+    <Compile Include="code\classes\ReadOnlyDisplayDeviceModeCollection.cs" />
+    <Compile Include="code\classes\ReadOnlyDisplayMonitorCollection.cs" />
+    <None Include="code\DisplayConfig\structures\TargetBaseType.cs" />
+    <Compile Include="code\DisplayConfig\structures\TargetPreferredMode.cs" />
+    <Compile Include="code\Point.cs" />
+    <Compile Include="code\DisplayConfig\DisplayConfiguration.cs" />
+    <Compile Include="code\DisplayConfig\enumerations\VideoSignalStandard.cs" />
+    <Compile Include="code\DisplayConfig\enumerations\QueryDisplayConfigRequest.cs" />
+    <Compile Include="code\DisplayConfig\structures\AdapterName.cs" />
+    <Compile Include="code\DisplayConfig\structures\DeviceInfoHeader.cs" />
+    <Compile Include="code\DisplayConfig\enumerations\DeviceInfoType.cs" />
+    <Compile Include="code\DisplayConfig\structures\ModeInfo.cs" />
+    <Compile Include="code\DisplayConfig\enumerations\ModeInfoType.cs" />
+    <Compile Include="code\DisplayConfig\structures\PathInfo.cs" />
+    <Compile Include="code\DisplayConfig\structures\SourceDeviceName.cs" />
+    <Compile Include="code\DisplayConfig\ReadOnlyModeInfoCollection.cs" />
+    <Compile Include="code\DisplayConfig\ReadOnlyPathInfoCollection.cs" />
+    <Compile Include="code\DisplayConfig\structures\PathSourceInfo.cs" />
+    <Compile Include="code\DisplayConfig\structures\PathTargetInfo.cs" />
+    <Compile Include="code\DisplayConfig\enumerations\PathTargetInfoStatus.cs" />
+    <Compile Include="code\DisplayConfig\enumerations\PixelFormat.cs" />
+    <Compile Include="code\DisplayConfig\enumerations\Scaling.cs" />
+    <Compile Include="code\DisplayConfig\structures\SourceMode.cs" />
+    <Compile Include="code\DisplayConfig\structures\TargetDeviceName.cs" />
+    <Compile Include="code\DisplayConfig\enumerations\TargetDeviceNameFlags.cs" />
+    <Compile Include="code\DisplayConfig\structures\TargetMode.cs" />
+    <Compile Include="code\DisplayConfig\enumerations\TopologyId.cs" />
+    <Compile Include="code\DisplayConfig\enumerations\VideoOutputTechnology.cs" />
+    <Compile Include="code\DisplayConfig\structures\VideoSignalInfo.cs" />
+    <Compile Include="code\enumerations\AdapterStates.cs" />
+    <Compile Include="code\enumerations\MonitorStates.cs" />
+    <Compile Include="code\enumerations\DisplayOrientation.cs" />
+    <Compile Include="code\enumerations\DisplayFixedOutput.cs" />
+    <Compile Include="code\enumerations\MonitorInfoStates.cs" />
+    <Compile Include="code\enumerations\DisplayRotation.cs" />
+    <Compile Include="code\enumerations\ScanlineOrdering.cs" />
+    <Compile Include="code\LUID.cs" />
+    <Compile Include="code\Rect.cs" />
+    <Compile Include="code\Size.cs" />
+    <Compile Include="code\structures\DisplayDevice.cs" />
+    <Compile Include="code\structures\DisplayDeviceMode.cs" />
+    <Compile Include="code\structures\MonitorInfoEx.cs" />
+    <Compile Include="code\structures\Rational.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="LICENSE">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ManagedX.snk" />
+    <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TODO.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
