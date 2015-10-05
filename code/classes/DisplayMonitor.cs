@@ -48,7 +48,7 @@ namespace ManagedX.Display
 		/// <summary>Retrieves information about a display monitor.</summary>
 		/// <param name="monitorHandle">A handle (HMONITOR) to the display monitor of interest.</param>
 		/// <returns>Returns a <see cref="MonitorInfoEx"/> structure containing information about the display monitor associated with the specified <paramref name="monitorHandle"/>.</returns>
-		internal static MonitorInfoEx GetMonitorInfo( IntPtr monitorHandle )
+		public static MonitorInfoEx GetMonitorInfo( IntPtr monitorHandle )
 		{
 			var info = MonitorInfoEx.Default;
 			if( monitorHandle == IntPtr.Zero || !SafeNativeMethods.GetMonitorInfoW( monitorHandle, ref info ) )
