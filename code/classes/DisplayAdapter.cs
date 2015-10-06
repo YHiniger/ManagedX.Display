@@ -340,7 +340,7 @@ namespace ManagedX.Display
 		/// <returns>Returns a read-only collection containing the handle (HMONITOR) of all connected monitors.</returns>
 		unsafe private static ReadOnlyCollection<IntPtr> GetMonitorHandles()
 		{
-			var handles = new List<IntPtr>();
+			var handles = new List<IntPtr>( 1 );
 			
 			var callback = new NativeMethods.MonitorEnumProc(
 				( IntPtr hMonitor, IntPtr hDeviceContext, Rect* monitor, IntPtr param ) =>
