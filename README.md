@@ -4,7 +4,7 @@ Also implements DisplayConfig (not available on Windows Vista).
 
 Features:
 - Supports both x64 and x86 platforms (AnyCPU)
-- 100% CLS-compliant
+- CLS-compliant
+- Fully commented (offline documentation will be provided later)
 - Built taking into account code analysis suggestions (all rules enabled)
-- Fully commented (Intellisense)
 - Hand-written: special care has been taken to avoid duplicating types (ie: DXGI), thus increasing compatibility (and readability?)
