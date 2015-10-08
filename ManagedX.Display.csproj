@@ -58,7 +58,6 @@
     <Compile Include="code\classes\ReadOnlyDisplayMonitorCollection.cs" />
     <None Include="code\DisplayConfig\structures\TargetBaseType.cs" />
     <Compile Include="code\DisplayConfig\structures\TargetPreferredMode.cs" />
-    <Compile Include="code\Point.cs" />
     <Compile Include="code\DisplayConfig\DisplayConfiguration.cs" />
     <Compile Include="code\DisplayConfig\enumerations\VideoSignalStandard.cs" />
     <Compile Include="code\DisplayConfig\enumerations\QueryDisplayConfigRequest.cs" />
@@ -91,8 +90,6 @@
     <Compile Include="code\enumerations\DisplayRotation.cs" />
     <Compile Include="code\enumerations\ScanlineOrdering.cs" />
     <Compile Include="code\LUID.cs" />
-    <Compile Include="code\Rect.cs" />
-    <Compile Include="code\Size.cs" />
     <Compile Include="code\structures\DisplayDevice.cs" />
     <Compile Include="code\structures\DisplayDeviceMode.cs" />
     <Compile Include="code\structures\MonitorInfoEx.cs" />
@@ -110,6 +107,12 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ManagedX\trunk\ManagedX.csproj">
+      <Project>{d69df2e9-a523-4b18-9dc2-2473033f9739}</Project>
+      <Name>ManagedX</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
