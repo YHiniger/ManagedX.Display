@@ -19,20 +19,6 @@ namespace ManagedX.Display
 	public struct DisplayDeviceMode : IEquatable<DisplayDeviceMode>, IComparable<DisplayDeviceMode>//, IFormattable
 	{
 
-		//public enum SpecVersionEnum : short
-		//{
-		//	/// <summary>Not supported.</summary>
-		//	Windows2000 = 0x0401,
-		//	/// <summary>Not supported.</summary>
-		//	WindowsXP = 0x0501,
-		//	WindowsVista = 0x0600,
-		//	Windows7 = 0x0601,
-		//	Windows8 = 0x0602,
-		//	Windows8dot1 = 0x0603,
-		//	WindowsX = 0x1000
-		//}
-
-
 		/// <summary>Specifies which members of the <see cref="DisplayDeviceMode"/> structure have been initialized.</summary>
 		[Flags]
 		private enum FieldFlags : int

@@ -24,32 +24,6 @@ namespace ManagedX.Display.DisplayConfig
 		public const int MaxPathCount = DisplayAdapter.MaxAdapterCount * MaxSourceCount * MaxClonePerSource;
 
 
-		/// <summary>Enumerates error codes used by DisplayConfig.</summary>
-		private enum ErrorCode : int
-		{
-
-			/// <summary>The operation was successful.</summary>
-			None = 0,
-
-			/// <summary>Access is denied.</summary>
-			AccessDenied = 5,
-
-			/// <summary>A device attached to the system is not functioning.</summary>
-			GenFailure = 31,
-
-			/// <summary>The request is not supported.</summary>
-			NotSupported = 50,
-
-			/// <summary>The parameter is incorrect.</summary>
-			InvalidParameter = 87,
-
-			/// <summary>The data area passed to a system call is too small.</summary>
-			InsufficientBuffer = 122
-
-			// https://msdn.microsoft.com/en-us/library/windows/desktop/ms681382(v=vs.85).aspx
-		}
-
-
 		/// <summary>Provides access to native functions (located in User32.dll, defined in WinUser.h) related to DisplayConfig.
 		/// <para>Requires Windows 7 or newer.</para>
 		/// </summary>
@@ -79,7 +53,7 @@ namespace ManagedX.Display.DisplayConfig
 			/// <see cref="ErrorCode.AccessDenied"/>, or
 			/// <see cref="ErrorCode.GenFailure"/>.
 			/// </returns>
-			[DllImport( LibraryName, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
+			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			private static extern ErrorCode GetDisplayConfigBufferSizes(
 				[In] QueryDisplayConfigRequest flags,
 				[Out] out int pathArrayElementCount,
@@ -131,7 +105,7 @@ namespace ManagedX.Display.DisplayConfig
 			/// <see cref="ErrorCode.GenFailure"/> or
 			/// <see cref="ErrorCode.InsufficientBuffer"/>.
 			/// </returns>
-			[DllImport( LibraryName, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
+			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			private static extern ErrorCode QueryDisplayConfig(
 				[In] QueryDisplayConfigRequest flags,
 				[In, Out] ref int pathInfoArrayElementCount,
@@ -173,7 +147,7 @@ namespace ManagedX.Display.DisplayConfig
 			/// <see cref="ErrorCode.InsufficientBuffer"/>.
 			/// </returns>
 			/// <remarks></remarks>
-			[DllImport( LibraryName, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
+			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			private static extern ErrorCode QueryDisplayConfig(
 				[In] QueryDisplayConfigRequest flags,
 				[In, Out] ref int pathInfoArrayElementCount,
@@ -258,7 +232,7 @@ namespace ManagedX.Display.DisplayConfig
 			/// The caller can obtain names for the adapter, the source, and the target.
 			/// The caller can also call this function to obtain the best resolution of the connected display device.
 			/// </remarks>
-			[DllImport( LibraryName, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
+			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			internal static extern ErrorCode DisplayConfigGetDeviceInfo(
 				[In, Out] ref AdapterName requestPacket
 			);
@@ -281,7 +255,7 @@ namespace ManagedX.Display.DisplayConfig
 			/// The caller can obtain names for the adapter, the source, and the target.
 			/// The caller can also call this function to obtain the best resolution of the connected display device.
 			/// </remarks>
-			[DllImport( LibraryName, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
+			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			internal static extern ErrorCode DisplayConfigGetDeviceInfo(
 				[In, Out] ref SourceDeviceName requestPacket
 			);
@@ -305,7 +279,7 @@ namespace ManagedX.Display.DisplayConfig
 			/// The caller can obtain names for the adapter, the source, and the target.
 			/// The caller can also call this function to obtain the best resolution of the connected display device.
 			/// </remarks>
-			[DllImport( LibraryName, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
+			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			internal static extern ErrorCode DisplayConfigGetDeviceInfo(
 				[In, Out] ref TargetDeviceName requestPacket
 			);
@@ -367,42 +341,42 @@ namespace ManagedX.Display.DisplayConfig
 		/// <para>NotSupportedException</para>
 		/// <para>UnauthorizedAccessException</para>
 		/// <para>InsufficientMemoryException</para>
-		/// <para>FormatException</para>
+		/// <para>ArgumentException</para>
+		/// <para>InvalidOperationException</para>
 		/// <para>Win32Exception</para>
 		/// </summary>
 		/// <param name="errorCode">An error code.</param>
-		/// <returns></returns>
+		/// <returns>Returns an exception, or null if <paramref name="errorCode"/> is <see cref="ErrorCode.None"/>.</returns>
 		private static Exception GetException( ErrorCode errorCode )
 		{
-			switch( errorCode )
-			{
-				case ErrorCode.None:
-					return null;
+			if( errorCode == ErrorCode.None )
+				return null;
+			
+			if( errorCode == ErrorCode.AccessDenied )
+				return new UnauthorizedAccessException( "Access denied." );
 
-				case ErrorCode.NotSupported:
-					return new NotSupportedException( "The function is only supported on a system with a WDDM driver running." );
+			if( errorCode == ErrorCode.NotSupported )
+				return new NotSupportedException( "The function is only supported on a system with a WDDM driver running." );
 
-				case ErrorCode.AccessDenied:
-					return new UnauthorizedAccessException( "Access denied." );
+			if( errorCode == ErrorCode.GenFailure )
+				return new InvalidOperationException( "A device attached to the system is not functioning." );
 
-				case ErrorCode.InsufficientBuffer:
-					return new InsufficientMemoryException( "The supplied path and mode buffers are too small." );
+			if( errorCode == ErrorCode.InsufficientBuffer )
+				return new InsufficientMemoryException( "The supplied path and mode buffers are too small." );
 
-				case ErrorCode.InvalidParameter:
-					return new FormatException( "Invalid combination of parameters and flags." );
+			if( errorCode == ErrorCode.InvalidParameter )
+				return new ArgumentException( "Invalid combination of parameters and flags." );
 
-				default: // GenFailure
-					var ex = Marshal.GetExceptionForHR( (int)errorCode );
-					if( ex == null )
-						ex = new Win32Exception( (int)errorCode );
-					return ex;
-			}
+			var ex = Marshal.GetExceptionForHR( (int)errorCode );
+			if( ex == null )
+				ex = new Win32Exception( (int)errorCode );
+			return ex;
 		}
 
 
-		/// <summary></summary>
-		/// <param name="sourceInfo"></param>
-		/// <returns></returns>
+		/// <summary>Returns a <see cref="SourceDeviceName"/> structure containing the device name of the source device.</summary>
+		/// <param name="sourceInfo">A valid <see cref="PathSourceInfo"/> structure; must not be empty.</param>
+		/// <returns>Returns a <see cref="SourceDeviceName"/> structure containing the device name of the source device.</returns>
 		/// <exception cref="ArgumentException"/>
 		/// <exception cref="Exception"/>
 		public static SourceDeviceName GetSourceDeviceName( PathSourceInfo sourceInfo )
@@ -418,9 +392,9 @@ namespace ManagedX.Display.DisplayConfig
 			throw GetException( errorCode );
 		}
 
-		/// <summary></summary>
-		/// <param name="targetInfo"></param>
-		/// <returns></returns>
+		/// <summary>Returns a <see cref="TargetDeviceName"/> structure containing information about the specified display target.</summary>
+		/// <param name="targetInfo">A valid <see cref="PathTargetInfo"/> structure; must not be empty.</param>
+		/// <returns>Returns a <see cref="TargetDeviceName"/> structure containing information about the specified display target.</returns>
 		/// <exception cref="ArgumentException"/>
 		/// <exception cref="Exception"/>
 		public static TargetDeviceName GetTargetDeviceName( PathTargetInfo targetInfo )
@@ -437,10 +411,10 @@ namespace ManagedX.Display.DisplayConfig
 		}
 
 
-		/// <summary>Returns the adapter device path for a given LUID and id.</summary>
+		/// <summary>Returns the adapter device path for a given adapter LUID and id.</summary>
 		/// <param name="adapterId">The adapter <see cref="Luid"/>.</param>
 		/// <param name="id">The adapter id.</param>
-		/// <returns></returns>
+		/// <returns>Returns the adapter device path.</returns>
 		/// <exception cref="ArgumentException"/>
 		/// <exception cref="Exception"/>
 		private static string GetAdapterDeviceName( Luid adapterId, int id )
@@ -459,7 +433,7 @@ namespace ManagedX.Display.DisplayConfig
 
 		/// <summary>Returns the device path of an adapter given its source info.</summary>
 		/// <param name="sourceInfo">A valid <see cref="PathSourceInfo"/> structure.</param>
-		/// <returns></returns>
+		/// <returns>Returns the adapter device path.</returns>
 		/// <exception cref="ArgumentException"/>
 		/// <exception cref="Exception"/>
 		public static string GetAdapterDeviceName( PathSourceInfo sourceInfo )
@@ -483,7 +457,7 @@ namespace ManagedX.Display.DisplayConfig
 
 		/// <summary>Returns the device path of an adapter given its target info.</summary>
 		/// <param name="targetInfo">A valid <see cref="PathTargetInfo"/> structure.</param>
-		/// <returns></returns>
+		/// <returns>Returns the adapter device path.</returns>
 		/// <exception cref="ArgumentException"/>
 		/// <exception cref="Exception"/>
 		public static string GetAdapterDeviceName( PathTargetInfo targetInfo )
@@ -538,20 +512,27 @@ namespace ManagedX.Display.DisplayConfig
 
 		/// <summary>Queries and returns a display configuration.</summary>
 		/// <param name="request">The request (flags?); must not be <see cref="QueryDisplayConfigRequest.None"/>.</param>
-		/// <returns></returns>
-		/// <exception cref="InvalidOperationException"/>
+		/// <returns>Returns a <see cref="DisplayConfiguration"/> object containing the requested information.</returns>
 		/// <exception cref="PlatformNotSupportedException"/>
 		/// <exception cref="InvalidEnumArgumentException"/>
+		/// <exception cref="InvalidOperationException"/>
 		public static DisplayConfiguration Query( QueryDisplayConfigRequest request )
 		{
 			if( !IsSupported )
-				throw new PlatformNotSupportedException();
+				throw new PlatformNotSupportedException( "DisplayConfig is only available on Windows 7 or greater." );
 
 			if( request == QueryDisplayConfigRequest.None )
 				throw new InvalidEnumArgumentException( "request", (int)request, typeof( QueryDisplayConfigRequest ) );
 
 			// TODO - store the DisplayConfiguration in a Dictionary<QueryDisplayConfigRequest, DisplayConfiguration> ?
-			return new DisplayConfiguration( request );
+			try
+			{
+				return new DisplayConfiguration( request );
+			}
+			catch( Exception )
+			{
+				throw;
+			}
 		}
 
 

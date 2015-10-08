@@ -83,7 +83,7 @@ namespace ManagedX.Display
 			/// To query all monitor devices associated with an adapter, call EnumDisplayDevices in a loop with <paramref name="deviceName"/> set to the adapter name, <paramref name="deviceIndex"/> set to start at 0, and <paramref name="deviceIndex"/> set to increment until the function fails. Note that <see cref="DisplayDevice"/>.DeviceName changes with each call for monitor information, so you must save the adapter name.
 			/// The function fails when there are no more monitors for the adapter.
 			/// </remarks>
-			[DllImport( LibraryName, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
+			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			[return: MarshalAs( UnmanagedType.Bool )]
 			private static extern bool EnumDisplayDevicesW(
 				[In, Optional, MarshalAs( UnmanagedType.LPWStr )] string deviceName,
@@ -160,7 +160,7 @@ namespace ManagedX.Display
 			/// </param>
 			/// <param name="options">See <see cref="EnumDisplaySettingsExOptions"/>.</param>
 			/// <returns></returns>
-			[DllImport( LibraryName, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
+			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			[return: MarshalAs( UnmanagedType.Bool )]
 			private static extern bool EnumDisplaySettingsExW(
 				[In, Optional, MarshalAs( UnmanagedType.LPWStr )] string deviceName,
@@ -211,6 +211,26 @@ namespace ManagedX.Display
 				return new ReadOnlyDisplayDeviceModeCollection( modes );
 			}
 
+			internal static DisplayDeviceMode GetCurrentDisplaySettingsEx( string deviceName, EnumDisplaySettingsExOptions options )
+			{
+				const int CurrentModeIndex = -1;
+				var output = DisplayDeviceMode.Default;
+				var success = EnumDisplaySettingsExW( deviceName, CurrentModeIndex, ref output, options );
+				if( success )
+					throw new InvalidOperationException();
+				return output;
+			}
+
+			internal static DisplayDeviceMode GetRegistryDisplaySettingsEx( string deviceName, EnumDisplaySettingsExOptions options )
+			{
+				const int RegistryModeIndex = -2;
+				var output = DisplayDeviceMode.Default;
+				var success = EnumDisplaySettingsExW( deviceName, RegistryModeIndex, ref output, options );
+				if( success )
+					throw new InvalidOperationException();
+				return output;
+			}
+
 			#endregion
 
 
@@ -256,7 +276,7 @@ namespace ManagedX.Display
 			/// <param name="callback">An application-defined <see cref="MonitorEnumProc"/> callback function.</param>
 			/// <param name="data">Application-defined data that EnumDisplayMonitors passes directly to the <see cref="MonitorEnumProc"/> function.</param>
 			/// <returns>Returns true on success, otherwise returns false (ie: the callback function interrupted the enumeration).</returns>
-			[DllImport( LibraryName, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
+			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			[return: MarshalAs( UnmanagedType.Bool )]
 			unsafe internal static extern bool EnumDisplayMonitors(
 				[In] IntPtr deviceContextHandle,

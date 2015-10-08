@@ -6,9 +6,6 @@ using System.Security;
 namespace ManagedX.Display
 {
 
-	// NOTE - since DisplayAdapter uses this class, DisplayMonitor must not refer to DisplayAdapter.
-
-
 	/// <summary>Contains information about a display monitor device.</summary>
 	public sealed class DisplayMonitor : DisplayDeviceBase
 	{
@@ -30,7 +27,7 @@ namespace ManagedX.Display
 			/// The <see cref="MonitorInfoEx"/> structure is a superset of the MONITORINFO structure. It has one additional member: a string that contains a name for the display monitor. Most applications have no use for a display monitor name, and so can save some bytes by using a MONITORINFO structure.
 			/// </param>
 			/// <returns>Returns false on failure, otherwise returns true.</returns>
-			[DllImport( LibraryName, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
+			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			[return: MarshalAs( UnmanagedType.Bool )]
 			internal static extern bool GetMonitorInfoW(
 				[In] IntPtr monitorHandle,
