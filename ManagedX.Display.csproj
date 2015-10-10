@@ -96,9 +96,7 @@
     <Compile Include="code\structures\Rational.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="LICENSE">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="LICENSE" />
     <None Include="ManagedX.snk" />
     <None Include="README.md" />
   </ItemGroup>

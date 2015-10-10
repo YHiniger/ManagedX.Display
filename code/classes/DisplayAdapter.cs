@@ -24,16 +24,16 @@ namespace ManagedX.Display
 		private enum EnumDisplaySettingsExOptions : int
 		{
 
-			/// <summary>Undefined.</summary>
+			/// <summary>The EnumDisplaySettingsEx function will return all graphics modes supported by the adapter driver and the monitor, that have the same orientation as the one currently set for the requested display.</summary>
 			None = 0x00000000,
 
 			/// <summary>If set, the EnumDisplaySettingsEx function will return all graphics modes reported by the adapter driver, regardless of monitor capabilities.
-			/// Otherwise, it will only return modes that are compatible with current monitors.
+			/// <para>Otherwise, it will only return modes that are compatible with current monitors.</para>
 			/// </summary>
 			RawMode = 0x00000001,
 
 			/// <summary>If set, the EnumDisplaySettingsEx function will return graphics modes in all orientations.
-			/// Otherwise, it will only return modes that have the same orientation as the one currently set for the requested display.
+			/// <para>Otherwise, it will only return modes that have the same orientation as the one currently set for the requested display.</para>
 			/// </summary>
 			RotatedMode = 0x00000002
 
@@ -177,10 +177,10 @@ namespace ManagedX.Display
 
 
 			/// <summary>Returns a read-only collection containing information about all the graphics modes for a display device.</summary>
-			/// <param name="deviceName">A string that specifies the display device about which graphics mode the function will obtain information.
+			/// <param name="deviceName">A string that specifies the display device about which graphics modes the function will obtain information.
 			/// <para>This parameter is either null or a <see cref="DisplayDevice.DeviceName"/> returned from <see cref="EnumDisplayDevicesW"/>.</para>
 			/// A null value specifies the current display device on the computer that the calling thread is running on.</param>
-			/// <param name="options">See <see cref="EnumDisplaySettingsExOptions"/>.</param>
+			/// <param name="options">One or more <see cref="EnumDisplaySettingsExOptions"/>.</param>
 			/// <returns>Returns a read-only collection containing information about all the graphics modes for a display device.</returns>
 			internal static ReadOnlyDisplayDeviceModeCollection EnumDisplaySettingsEx( string deviceName, EnumDisplaySettingsExOptions options )
 			{
@@ -211,23 +211,36 @@ namespace ManagedX.Display
 				return new ReadOnlyDisplayDeviceModeCollection( modes );
 			}
 
+			
+			// TODO - do they work with monitor device names ?
+
+			/// <summary>Returns information about the current display mode of a display adapter.
+			/// <para>If the adapter is not attached to the desktop, this method returns <see cref="DisplayDeviceMode.Default"/>.</para>
+			/// </summary>
+			/// <param name="deviceName">A string that specifies the display device about which graphics mode the function will obtain information.
+			/// <para>This parameter is either null or a <see cref="DisplayDevice.DeviceName"/> returned from <see cref="EnumDisplayDevicesW"/>.</para>
+			/// A null value specifies the current display device on the computer that the calling thread is running on.</param>
+			/// <param name="options">One or more <see cref="EnumDisplaySettingsExOptions"/>.</param>
+			/// <returns>Returns information about the current display mode of a display adapter.</returns>
 			internal static DisplayDeviceMode GetCurrentDisplaySettingsEx( string deviceName, EnumDisplaySettingsExOptions options )
 			{
-				const int CurrentModeIndex = -1;
 				var output = DisplayDeviceMode.Default;
-				var success = EnumDisplaySettingsExW( deviceName, CurrentModeIndex, ref output, options );
-				if( success )
-					throw new InvalidOperationException();
+				if( !EnumDisplaySettingsExW( deviceName, -1, ref output, options ) )
+					output = DisplayDeviceMode.Default;
 				return output;
 			}
 
+			/// <summary>Returns information about the display mode of a display adapter, as stored in the registry.</summary>
+			/// <param name="deviceName">A string that specifies the display device about which graphics mode the function will obtain information.
+			/// <para>This parameter is either null or a <see cref="DisplayDevice.DeviceName"/> returned from <see cref="EnumDisplayDevicesW"/>.</para>
+			/// A null value specifies the current display device on the computer that the calling thread is running on.</param>
+			/// <param name="options">One or more <see cref="EnumDisplaySettingsExOptions"/>.</param>
+			/// <returns>Returns information about the display mode of a display adapter, as stored in the registry.</returns>
 			internal static DisplayDeviceMode GetRegistryDisplaySettingsEx( string deviceName, EnumDisplaySettingsExOptions options )
 			{
-				const int RegistryModeIndex = -2;
 				var output = DisplayDeviceMode.Default;
-				var success = EnumDisplaySettingsExW( deviceName, RegistryModeIndex, ref output, options );
-				if( success )
-					throw new InvalidOperationException();
+				if( !EnumDisplaySettingsExW( deviceName, -2, ref output, options ) )
+					output = DisplayDeviceMode.Default;
 				return output;
 			}
 
@@ -406,7 +419,7 @@ namespace ManagedX.Display
 
 
 		/// <summary>Gets a read-only collection containing all (32 bpp) display modes supported by both this <see cref="DisplayAdapter"/> and the <see cref="Monitors"/>.</summary>
-		public ReadOnlyDisplayDeviceModeCollection DisplayModes { get { return NativeMethods.EnumDisplaySettingsEx( this.DeviceName, EnumDisplaySettingsExOptions.None ); } }
+		public ReadOnlyDisplayDeviceModeCollection DisplayModes { get { return NativeMethods.EnumDisplaySettingsEx( base.DeviceName, EnumDisplaySettingsExOptions.None ); } }
 
 
 		/// <summary>Gets a read-only collection containing all monitors currently connected to this <see cref="DisplayAdapter"/>.</summary>
@@ -417,11 +430,12 @@ namespace ManagedX.Display
 				var handles = new List<IntPtr>( GetMonitorHandles() );
 				var invalidHandles = new List<IntPtr>();
 				var infos = new List<MonitorInfoEx>( 1 );
+				var devName = base.DeviceName;
 
 				foreach( var handle in handles )
 				{
 					var monitorInfo = DisplayMonitor.GetMonitorInfo( handle );
-					if( !monitorInfo.DeviceName.Equals( this.DeviceName, StringComparison.Ordinal ) )
+					if( !monitorInfo.DeviceName.Equals( devName, StringComparison.Ordinal ) )
 						invalidHandles.Add( handle );
 					else
 						infos.Add( monitorInfo );
@@ -432,11 +446,11 @@ namespace ManagedX.Display
 				invalidHandles.Clear();
 
 
-				var monitors = new List<DisplayMonitor>( Math.Max( 1, handles.Count ) );
+				var monitors = new List<DisplayMonitor>( handles.Count );
 				int monitorIndex = 0;
 
 				DisplayMonitor displayMonitor;
-				foreach( var monitorDevice in NativeMethods.EnumDisplayDevices( this.DeviceName, true ) )
+				foreach( var monitorDevice in NativeMethods.EnumDisplayDevices( devName, true ) )
 				{
 					if( monitorIndex < handles.Count )
 						displayMonitor = new DisplayMonitor( monitorDevice, handles[ monitorIndex ], infos[ monitorIndex ] );
@@ -449,6 +463,15 @@ namespace ManagedX.Display
 				return new ReadOnlyDisplayMonitorCollection( monitors );
 			}
 		}
+
+
+		/// <summary>Gets the current display mode of this <see cref="DisplayAdapter"/>.
+		/// <para>Requires the adapter to be attached to the desktop.</para>
+		/// </summary>
+		public DisplayDeviceMode CurrentMode { get { return NativeMethods.GetCurrentDisplaySettingsEx( base.DeviceName, EnumDisplaySettingsExOptions.None ); } }
+
+		/// <summary>Gets the display mode associated with this <see cref="DisplayAdapter"/>, as stored in the Windows registry.</summary>
+		public DisplayDeviceMode RegistryMode { get { return NativeMethods.GetRegistryDisplaySettingsEx( base.DeviceName, EnumDisplaySettingsExOptions.None ); } }
 
 
 		/// <summary>Returns a hash code for this <see cref="DisplayAdapter"/>.</summary>
@@ -464,6 +487,9 @@ namespace ManagedX.Display
 		/// <returns>Returns true if the specified object is a <see cref="DisplayAdapter"/> which equals this <see cref="DisplayAdapter"/>, otherwise returns false.</returns>
 		public sealed override bool Equals( object obj )
 		{
+			if( obj is DisplayDevice )
+				return base.Equals( (DisplayDevice)obj );
+
 			return base.Equals( obj as DisplayAdapter );
 		}
 
