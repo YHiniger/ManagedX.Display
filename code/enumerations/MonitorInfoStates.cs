@@ -8,7 +8,7 @@
 	
 	/// <summary>Enumerates flags used in the MonitorInfo and <see cref="MonitorInfoEx"/> structures.</summary>
 	[System.Flags]
-	internal enum MonitorInfoStates
+	internal enum MonitorInfoStates : int
 	{
 		
 		/// <summary>No state specified.</summary>
