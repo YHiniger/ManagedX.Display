@@ -11,7 +11,7 @@ namespace ManagedX.Display.DisplayConfig
 
 	/// <summary>Contains the GDI device name for the source or view.</summary>
 	[System.Diagnostics.DebuggerStepThrough]
-	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 2, Size = 84 )]
+	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 4, Size = 84 )]
 	public struct SourceDeviceName : IEquatable<SourceDeviceName>
 	{
 

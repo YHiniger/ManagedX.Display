@@ -15,7 +15,7 @@ namespace ManagedX.Display
 
 	/// <summary>Contains information about the initialization and environment of a display device.</summary>
 	[System.Diagnostics.DebuggerStepThrough]
-	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 4, Size = 220 )]
+	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 2, Size = 220 )]
 	public struct DisplayDeviceMode : IEquatable<DisplayDeviceMode>, IComparable<DisplayDeviceMode>//, IFormattable
 	{
 
