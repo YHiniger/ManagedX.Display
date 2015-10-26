@@ -82,6 +82,14 @@ namespace ManagedX
 
 		#region Operators
 
+		/// <summary>Implicit conversion operator.</summary>
+		/// <param name="luid">A <see cref="Luid"/> structure.</param>
+		/// <returns>Returns a <see cref="long"/> representing the <paramref name="luid"/>.</returns>
+		public static implicit operator long( Luid luid )
+		{
+			return luid.ToInt64();
+		}
+
 
 		/// <summary>Equality comparer.</summary>
 		/// <param name="luid">A <see cref="Luid"/> structure.</param>
