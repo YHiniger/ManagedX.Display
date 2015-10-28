@@ -94,9 +94,6 @@ namespace ManagedX.Display
 		/// <returns>Returns true if the specified object is a <see cref="DisplayDevice"/> structure which equals this structure, otherwise returns false.</returns>
 		public override bool Equals( object obj )
 		{
-			if( obj == null )
-				return this.Equals( Empty );
-
 			return ( obj is DisplayDevice ) && this.Equals( (DisplayDevice)obj );
 		}
 
@@ -122,7 +119,6 @@ namespace ManagedX.Display
 
 		#region Operators
 
-
 		/// <summary>Equality comparer.</summary>
 		/// <param name="displayDevice">A <see cref="DisplayDevice"/> structure.</param>
 		/// <param name="other">A <see cref="DisplayDevice"/> structure.</param>
@@ -141,7 +137,6 @@ namespace ManagedX.Display
 		{
 			return !displayDevice.Equals( other );
 		}
-
 
 		#endregion
 

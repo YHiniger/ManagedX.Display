@@ -19,6 +19,8 @@ namespace ManagedX.Display
 		private uint denominator;
 
 
+		#region Constructors
+
 		/// <summary>Initializes a new <see cref="Rational"/> structure.</summary>
 		/// <param name="numerator">The numerator.</param>
 		/// <param name="denominator">The denominator.</param>
@@ -45,6 +47,8 @@ namespace ManagedX.Display
 			this.denominator = (uint)denominator;
 		}
 
+		#endregion
+
 
 		/// <summary>Returns a double-precision floating-point value representing this <see cref="Rational"/> structure.</summary>
 		/// <returns>Returns a double-precision floating-point value representing this <see cref="Rational"/> structure.</returns>
@@ -52,7 +56,7 @@ namespace ManagedX.Display
 		{
 			if( denominator == 0u )
 				return 1.0;
-			// this follows the rule defined in DXGI.
+			// this follows the "rule" defined in DXGI.
 			
 			return (double)numerator / (double)denominator;
 		}
@@ -95,7 +99,9 @@ namespace ManagedX.Display
 		/// <returns>Returns true if the structures are equal, otherwise returns false.</returns>
 		public bool Equals( Rational other )
 		{
-			return ( numerator == other.numerator ) && ( denominator == other.denominator );
+			return
+				( numerator == other.numerator ) &&
+				( denominator == other.denominator );
 		}
 
 
@@ -121,7 +127,7 @@ namespace ManagedX.Display
 		/// <returns>Returns a string representing this <see cref="Rational"/> structure, in the form "numerator:denominator".</returns>
 		public override string ToString()
 		{
-			return string.Format( System.Globalization.CultureInfo.InvariantCulture, "{0}:{1}", numerator, denominator );
+			return numerator.ToString( System.Globalization.CultureInfo.InvariantCulture ) + ':' + denominator.ToString( System.Globalization.CultureInfo.InvariantCulture );
 		}
 
 
@@ -132,7 +138,6 @@ namespace ManagedX.Display
 
 
 		#region Operators
-
 
 		/// <summary>Converts a <see cref="Rational"/> stucture to a double-precision floating-point value.</summary>
 		/// <param name="rational">A <see cref="Rational"/> stucture.</param>
@@ -217,7 +222,6 @@ namespace ManagedX.Display
 		{
 			return rational.CompareTo( other ) >= 0;
 		}
-
 	
 		#endregion
 

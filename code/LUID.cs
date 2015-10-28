@@ -150,7 +150,6 @@ namespace ManagedX
 			return luid.CompareTo( other ) >= 0;
 		}
 
-
 		#endregion
 
 	}

@@ -39,6 +39,7 @@ namespace ManagedX.Display
 		/// </summary>
 		public Rect Monitor { get { return monitor; } }
 
+
 		/// <summary>Gets a <see cref="Rect"/> structure that specifies the work area rectangle of the display monitor that can be used by applications, expressed in virtual-screen coordinates.
 		/// <para>Windows uses this rectangle to maximize an application on the monitor.</para>
 		/// The rest of the area in <see cref="Monitor"/> contains system windows such as the task bar and side bars.
@@ -46,13 +47,16 @@ namespace ManagedX.Display
 		/// </summary>
 		public Rect Work { get { return work; } }
 		
+
 		/// <summary>Gets a value indicating whether the monitor is the primary monitor.</summary>
 		public bool IsPrimary { get { return flags.HasFlag( MonitorInfoStates.Primary ); } }
+
 
 		/// <summary>Gets a string that specifies the device name of the monitor being used.
 		/// <para>Most applications have no use for a display monitor name, and so can save some bytes by using a MonitorInfo structure.</para>
 		/// </summary>
 		public string DeviceName { get { return string.Copy( deviceName ?? string.Empty ); } }
+
 
 
 		/// <summary>Returns a hash code for this <see cref="MonitorInfoEx"/> structure.</summary>
@@ -68,7 +72,12 @@ namespace ManagedX.Display
 		/// <returns>Returns true if the structures are equal, otherwise returns false.</returns>
 		public bool Equals( MonitorInfoEx other )
 		{
-			return ( structSize == other.structSize ) && ( monitor == other.monitor ) && ( work == other.work ) && ( flags == other.flags ) && this.DeviceName.Equals( other.DeviceName, StringComparison.Ordinal );
+			return
+				( structSize == other.structSize ) &&
+				( monitor == other.monitor ) &&
+				( work == other.work ) &&
+				( flags == other.flags ) && 
+				this.DeviceName.Equals( other.DeviceName, StringComparison.Ordinal );
 		}
 
 
