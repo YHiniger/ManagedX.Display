@@ -28,7 +28,7 @@ namespace ManagedX.Display
 		private MonitorInfoEx( int structureSize )
 		{
 			structSize = structureSize;
-			monitor = work = Rect.Empty;
+			monitor = work = Rect.Zero;
 			flags = MonitorInfoStates.None;
 			deviceName = string.Empty;
 		}
