@@ -3,10 +3,8 @@ using System.Diagnostics;
 using System.Runtime.Serialization;
 
 
-namespace ManagedX.Graphics
+namespace ManagedX
 {
-	using Properties;
-
 
 	/// <summary>A <see cref="MissingRequirementException"/> to be thrown when no graphics device can be used.</summary>
 	[Serializable, DebuggerStepThrough]
@@ -21,6 +19,7 @@ namespace ManagedX.Graphics
 		{
 		}
 
+
 		/// <summary>Instantiates a new <see cref="NoSuitableGraphicsDeviceException"/>.</summary>
 		/// <param name="message">The message associated with the exception.</param>
 		public NoSuitableGraphicsDeviceException( string message )
@@ -28,11 +27,13 @@ namespace ManagedX.Graphics
 		{
 		}
 
+
 		/// <summary>Instantiates a new <see cref="NoSuitableGraphicsDeviceException"/>.</summary>
 		public NoSuitableGraphicsDeviceException()
-			: this( Resources.NoSuitableGraphicsDeviceExceptionMessage )
+			: base( Properties.Resources.NoSuitableGraphicsDeviceExceptionMessage )
 		{
 		}
+
 
 		private NoSuitableGraphicsDeviceException( SerializationInfo info, StreamingContext context )
 			: base( info, context )
