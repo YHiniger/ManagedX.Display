@@ -108,7 +108,7 @@ namespace ManagedX.Display
 
 
 		/// <summary>The empty (and invalid) <see cref="DisplayDevice"/> structure.</summary>
-		public static readonly DisplayDevice Empty = new DisplayDevice();
+		public static readonly DisplayDevice Empty;
 
 
 		/// <summary>The default <see cref="DisplayDevice"/> structure.

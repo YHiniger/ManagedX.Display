@@ -18,7 +18,6 @@ namespace ManagedX.Display
 
 		#region Static
 
-
 		/// <summary>Enumerates flags used by EnumDisplaySettingsEx.</summary>
 		[Flags]
 		private enum EnumDisplaySettingsExOptions : int
@@ -389,8 +388,8 @@ namespace ManagedX.Display
 			return new ReadOnlyCollection<IntPtr>( handles );
 		}
 
+		#endregion Static
 
-		#endregion
 
 
 		/// <summary>Private constructor.</summary>

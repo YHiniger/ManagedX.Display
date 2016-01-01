@@ -419,7 +419,7 @@ namespace ManagedX.Display.DisplayConfig
 		/// <exception cref="Exception"/>
 		private static string GetAdapterDeviceName( Luid adapterId, int id )
 		{
-			if( adapterId == Luid.Empty )
+			if( adapterId == Luid.Zero )
 				throw new ArgumentException( "Invalid adapter id.", "adapterId" );
 
 			var adapterName = new AdapterName( adapterId, id );
