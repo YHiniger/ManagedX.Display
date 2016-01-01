@@ -6,6 +6,8 @@ using System.Security;
 
 namespace ManagedX.Display.DisplayConfig
 {
+	using Graphics;
+
 
 	// https://msdn.microsoft.com/en-us/library/windows/hardware/hh406259%28v=vs.85%29.aspx
 	// WinUser.h

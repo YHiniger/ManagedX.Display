@@ -5,6 +5,8 @@ using System.Runtime.InteropServices;
 
 namespace ManagedX.Display.DisplayConfig
 {
+	using Graphics;
+
 
 	// https://msdn.microsoft.com/en-us/library/windows/hardware/ff553983%28v=vs.85%29.aspx
 
