@@ -1,16 +1,13 @@
 ﻿namespace ManagedX.Display
 {
 
-	// https://msdn.microsoft.com/en-us/library/windows/hardware/ff553970%28v=vs.85%29.aspx
-	// WinGDI.h (DISPLAYCONFIG_ROTATION)
-
-	// https://msdn.microsoft.com/en-us/library/windows/desktop/bb173065%28v=vs.85%29.aspx
-	// DXGI.h (DXGI_MODE_ROTATION)
-
-
 	/// <summary>Specifies the clockwise rotation of the display.
-	/// <para>This enumeration is equivalent to the native <code>DISPLAYCONFIG_ROTATION</code> and <code>DXGI_MODE_ROTATION</code> enumerations.</para>
+	/// <para>This enumeration is equivalent to the native enumerations <code>DISPLAYCONFIG_ROTATION</code> (defined in WinGDI.h) and <code>DXGI_MODE_ROTATION</code> (defined in DXGI.h).</para>
 	/// </summary>
+	/// <remarks>
+	/// https://msdn.microsoft.com/en-us/library/windows/hardware/ff553970%28v=vs.85%29.aspx (DISPLAYCONFIG_ROTATION)
+	/// https://msdn.microsoft.com/en-us/library/windows/desktop/bb173065%28v=vs.85%29.aspx (DXGI_MODE_ROTATION)
+	/// </remarks>
 	public enum DisplayRotation : int
 	{
 
