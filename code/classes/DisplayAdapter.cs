@@ -126,7 +126,7 @@ namespace ManagedX.Display
 				return new ReadOnlyCollection<DisplayDevice>( list );
 			}
 
-			#endregion
+			#endregion EnumDisplayDevices
 
 
 			#region EnumDisplaySettingsEx
@@ -243,7 +243,7 @@ namespace ManagedX.Display
 				return output;
 			}
 
-			#endregion
+			#endregion EnumDisplaySettingsEx
 
 
 			#region EnumDisplayMonitors
@@ -298,7 +298,7 @@ namespace ManagedX.Display
 			);
 			// https://msdn.microsoft.com/en-us/library/dd162610%28v=vs.85%29.aspx
 
-			#endregion
+			#endregion EnumDisplayMonitors
 
 		}
 
@@ -388,6 +388,29 @@ namespace ManagedX.Display
 			return new ReadOnlyCollection<IntPtr>( handles );
 		}
 
+
+		/// <summary>Returns the <see cref="DisplayMonitor"/> corresponding to a device name.</summary>
+		/// <param name="deviceName">The device name of the requested monitor.</param>
+		/// <returns>Returns the requested <see cref="DisplayMonitor"/>, or null.</returns>
+		/// <exception cref="ArgumentNullException"/>
+		/// <exception cref="ArgumentException"/>
+		public static DisplayMonitor GetMonitorByDeviceName( string deviceName )
+		{
+			if( string.IsNullOrWhiteSpace( deviceName ) )
+			{
+				if( deviceName == null )
+					throw new ArgumentNullException( "deviceName" );
+				throw new ArgumentException( "Invalid device name.", "deviceName" );
+			}
+
+			foreach( var adapter in DisplayAdapter.All )
+				foreach( var monitor in adapter.Monitors )
+					if( deviceName.Equals( monitor.DeviceName, StringComparison.Ordinal ) )
+						return monitor;
+
+			return null;
+		}
+
 		#endregion Static
 
 
@@ -468,6 +491,7 @@ namespace ManagedX.Display
 		/// <para>Requires the adapter to be attached to the desktop.</para>
 		/// </summary>
 		public DisplayDeviceMode CurrentMode { get { return NativeMethods.GetCurrentDisplaySettingsEx( base.DeviceName, EnumDisplaySettingsExOptions.None ); } }
+
 
 		/// <summary>Gets the display mode associated with this <see cref="DisplayAdapter"/>, as stored in the Windows registry.</summary>
 		public DisplayDeviceMode RegistryMode { get { return NativeMethods.GetRegistryDisplaySettingsEx( base.DeviceName, EnumDisplaySettingsExOptions.None ); } }
