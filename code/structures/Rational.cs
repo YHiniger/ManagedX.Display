@@ -51,8 +51,8 @@ namespace ManagedX.Display
 
 
 
-		/// <summary>Returns a double-precision floating-point value representing this <see cref="Rational"/>.</summary>
-		/// <returns>Returns a double-precision floating-point value representing this <see cref="Rational"/>.</returns>
+		/// <summary>Returns a double-precision floating-point value equivalent to this <see cref="Rational"/>.</summary>
+		/// <returns>Returns a double-precision floating-point value equivalent to this <see cref="Rational"/>.</returns>
 		public double ToDouble()
 		{
 			if( denominator == 0u )
@@ -63,8 +63,8 @@ namespace ManagedX.Display
 		}
 
 
-		/// <summary>Returns a single-precision floating-point value representing this <see cref="Rational"/>.</summary>
-		/// <returns>Returns a single-precision floating-point value representing this <see cref="Rational"/>.</returns>
+		/// <summary>Returns a single-precision floating-point value equivalent to this <see cref="Rational"/>.</summary>
+		/// <returns>Returns a single-precision floating-point value equivalent to this <see cref="Rational"/>.</returns>
 		public float ToSingle()
 		{
 			if( denominator == 0u )
