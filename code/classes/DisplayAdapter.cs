@@ -346,7 +346,7 @@ namespace ManagedX.Display
 		/// <returns>Returns the <see cref="DisplayAdapter"/> whose device name matches the specified <paramref name="deviceName"/>, or null.</returns>
 		/// <exception cref="ArgumentNullException"/>
 		/// <exception cref="ArgumentException"/>
-		public static DisplayAdapter FindByDeviceName( string deviceName )
+		public static DisplayAdapter GetAdapterByDeviceName( string deviceName )
 		{
 			if( string.IsNullOrWhiteSpace( deviceName ) )
 			{
@@ -381,29 +381,6 @@ namespace ManagedX.Display
 				handles.Clear();
 
 			return new ReadOnlyCollection<IntPtr>( handles );
-		}
-
-
-		/// <summary>Returns the <see cref="DisplayMonitor"/> corresponding to a device name.</summary>
-		/// <param name="deviceName">The device name of the requested monitor.</param>
-		/// <returns>Returns the requested <see cref="DisplayMonitor"/>, or null.</returns>
-		/// <exception cref="ArgumentNullException"/>
-		/// <exception cref="ArgumentException"/>
-		public static DisplayMonitor GetMonitorByDeviceName( string deviceName )
-		{
-			if( string.IsNullOrWhiteSpace( deviceName ) )
-			{
-				if( deviceName == null )
-					throw new ArgumentNullException( "deviceName" );
-				throw new ArgumentException( "Invalid device name.", "deviceName" );
-			}
-
-			foreach( var adapter in DisplayAdapter.All )
-				foreach( var monitor in adapter.Monitors )
-					if( deviceName.Equals( monitor.DeviceName, StringComparison.Ordinal ) )
-						return monitor;
-
-			return null;
 		}
 
 		#endregion Static
