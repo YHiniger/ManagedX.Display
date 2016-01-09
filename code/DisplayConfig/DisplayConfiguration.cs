@@ -58,8 +58,8 @@ namespace ManagedX.Display.DisplayConfig
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			private static extern ErrorCode GetDisplayConfigBufferSizes(
 				[In] QueryDisplayConfigRequest flags,
-				[Out] out int pathArrayElementCount,
-				[Out] out int modeInfoArrayElementCount
+				out int pathArrayElementCount,
+				out int modeInfoArrayElementCount
 			);
 			// https://msdn.microsoft.com/en-us/library/windows/hardware/ff566772%28v=vs.85%29.aspx
 			//LONG GetDisplayConfigBufferSizes(
@@ -114,7 +114,7 @@ namespace ManagedX.Display.DisplayConfig
 				[In, Out, MarshalAs( UnmanagedType.LPArray, SizeParamIndex = 1 )] PathInfo[] pathInfoArray,
 				[In, Out] ref int modeInfoArrayElementCount,
 				[In, Out, MarshalAs( UnmanagedType.LPArray, SizeParamIndex = 3 )] ModeInfo[] modeInfoArray,
-				[In, Optional] IntPtr reserved
+				[In] IntPtr reserved
 			);
 
 
@@ -156,7 +156,7 @@ namespace ManagedX.Display.DisplayConfig
 				[In, Out, MarshalAs( UnmanagedType.LPArray, SizeParamIndex = 1 )] PathInfo[] pathInfoArray,
 				[In, Out] ref int modeInfoArrayElementCount,
 				[In, Out, MarshalAs( UnmanagedType.LPArray, SizeParamIndex = 3 )] ModeInfo[] modeInfoArray,
-				[Out] out TopologyId currentTopologyId
+				out TopologyId currentTopologyId
 			);
 
 
@@ -207,7 +207,7 @@ namespace ManagedX.Display.DisplayConfig
 					return QueryDisplayConfig( request, ref pathInfoArrayElementCount, pathInfoArray, ref modeInfoArrayElementCount, modeInfoArray, IntPtr.Zero );
 			}
 
-			#endregion
+			#endregion QueryDisplayConfig
 
 
 			#region DisplayConfigGetDeviceInfo
@@ -334,7 +334,7 @@ namespace ManagedX.Display.DisplayConfig
 			//	[In, Out] ref TargetBaseType requestPacket
 			//);
 
-			#endregion
+			#endregion DisplayConfigGetDeviceInfo
 
 		}
 

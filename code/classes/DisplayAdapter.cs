@@ -85,17 +85,12 @@ namespace ManagedX.Display
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			[return: MarshalAs( UnmanagedType.Bool )]
 			private static extern bool EnumDisplayDevicesW(
-				[In, Optional, MarshalAs( UnmanagedType.LPWStr )] string deviceName,
+				[In, MarshalAs( UnmanagedType.LPWStr )] string deviceName,
 				[In] int deviceIndex,
 				[In, Out] ref DisplayDevice displayDevice,
 				[In] EnumDisplayDevicesOptions options
 			);
 			// https://msdn.microsoft.com/en-us/library/dd162609%28v=vs.85%29.aspx
-			//BOOL EnumDisplayDevices(
-			//	_In_opt_ LPCWSTR lpDevice,
-			//	_In_ DWORD iDevNum,
-			//	_Inout_ PDISPLAY_DEVICEW lpDisplayDevice,
-			//	_In_ DWORD dwFlags);
 
 
 			/// <summary>Returns a read-only collection of <see cref="DisplayDevice"/> structures containing information about the display devices in the current session.</summary>
@@ -162,7 +157,7 @@ namespace ManagedX.Display
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			[return: MarshalAs( UnmanagedType.Bool )]
 			private static extern bool EnumDisplaySettingsExW(
-				[In, Optional, MarshalAs( UnmanagedType.LPWStr )] string deviceName,
+				[In, MarshalAs( UnmanagedType.LPWStr )] string deviceName,
 				[In] int modeIndex,
 				[In, Out] ref DisplayDeviceMode devMode,
 				[In] EnumDisplaySettingsExOptions options

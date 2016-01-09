@@ -14,12 +14,14 @@ namespace ManagedX.Display
 		private DisplayDevice device;
 
 
+
 		/// <summary>Constructor.</summary>
 		/// <param name="displayDevice">A valid <see cref="DisplayDevice"/> structure representing the adapter or monitor.</param>
 		internal DisplayDeviceBase( DisplayDevice displayDevice )
 		{
 			device = displayDevice;
 		}
+
 
 
 		internal bool Reset( DisplayDevice displayDevice )
@@ -55,7 +57,7 @@ namespace ManagedX.Display
 		/// <summary>Gets the (registry?) key associated with this display device.</summary>
 		public string DeviceKey { get { return device.DeviceKey; } }
 
-		#endregion
+		#endregion DisplayDevice members
 
 
 		/// <summary>Returns the hash code of the underlying <see cref="DisplayDevice"/> structure.</summary>
