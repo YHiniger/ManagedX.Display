@@ -386,33 +386,28 @@ namespace ManagedX.Display
 		#endregion Static
 
 
+		
+		private Dictionary<string, DisplayMonitor> monitorsByDeviceName;
 
-		/// <summary>Private constructor.</summary>
-		/// <param name="displayDevice">A valid <see cref="DisplayDevice"/> structure containing information about the display adapter.</param>
+
+
 		private DisplayAdapter( DisplayDevice displayDevice )
 			: base( displayDevice )
 		{
+			monitorsByDeviceName = new Dictionary<string, DisplayMonitor>();
 		}
 
 
 
-		/// <summary>Gets the device id associated with this adapter.</summary>
+		/// <summary>Gets the device id of this <see cref="DisplayAdapter"/>.</summary>
 		new public string DeviceId { get { return base.DeviceId; } }
 
 
-		/// <summary>Gets the device name of this adapter.</summary>
-		public sealed override string DeviceName { get { return base.DeviceName; } }
-
-
-		/// <summary>Gets a description (friendly name) of this adapter.</summary>
-		public sealed override string Description { get { return base.Description; } }
-
-
-		/// <summary>Gets a value indicating the state of the display adapter.</summary>
+		/// <summary>Gets a value indicating the state of this <see cref="DisplayAdapter"/>.</summary>
 		new public AdapterStates State { get { return (AdapterStates)base.State; } }
 
 
-		/// <summary>Gets a read-only collection containing all (32 bpp) display modes supported by both this <see cref="DisplayAdapter"/> and the <see cref="Monitors"/>.</summary>
+		/// <summary>Gets a read-only collection containing all (32 bpp) display modes supported by both this <see cref="DisplayAdapter"/> and its <see cref="Monitors"/>.</summary>
 		public ReadOnlyDisplayDeviceModeCollection DisplayModes { get { return NativeMethods.EnumDisplaySettingsEx( base.DeviceName, EnumDisplaySettingsExOptions.None ); } }
 
 
@@ -421,40 +416,40 @@ namespace ManagedX.Display
 		{
 			get
 			{
-				var handles = new List<IntPtr>( GetMonitorHandles() );
-				var invalidHandles = new List<IntPtr>();
-				var infos = new List<MonitorInfoEx>( 1 );
-				var devName = base.DeviceName;
-
-				foreach( var handle in handles )
-				{
-					var monitorInfo = DisplayMonitor.GetMonitorInfo( handle );
-					if( !monitorInfo.DeviceName.Equals( devName, StringComparison.Ordinal ) )
-						invalidHandles.Add( handle );
-					else
-						infos.Add( monitorInfo );
-				}
-
-				foreach( var invalidHandle in invalidHandles )
-					handles.Remove( invalidHandle );
-				invalidHandles.Clear();
-
-
-				var monitors = new List<DisplayMonitor>( handles.Count );
-				int monitorIndex = 0;
-
-				DisplayMonitor displayMonitor;
-				foreach( var monitorDevice in NativeMethods.EnumDisplayDevices( devName, true ) )
-				{
-					if( monitorIndex < handles.Count )
-						displayMonitor = new DisplayMonitor( monitorDevice, handles[ monitorIndex ], infos[ monitorIndex ] );
-					else
-						displayMonitor = new DisplayMonitor( monitorDevice, IntPtr.Zero );
-					monitors.Add( displayMonitor );
-					++monitorIndex;
-				}
+				var allHandles = GetMonitorHandles();
+				var deviceName = base.DeviceName;
+				var handles = new List<IntPtr>();
 				
-				return new ReadOnlyDisplayMonitorCollection( monitors );
+				for( var h = 0; h < allHandles.Count; h++ )
+				{
+					var info = DisplayMonitor.GetMonitorInfo( allHandles[ h ] );
+					if( info.DeviceName.Equals( deviceName, StringComparison.Ordinal ) )
+						handles.Add( allHandles[ h ] );
+				}
+
+				
+				var monitors = NativeMethods.EnumDisplayDevices( deviceName, true );
+				var list = new List<DisplayMonitor>();
+				var cache = new Dictionary<string, DisplayMonitor>();
+
+				for( var m = 0; m < monitors.Count; m++ )
+				{
+					var monitor = monitors[ m ];
+					
+					DisplayMonitor displayMonitor;
+					if( !monitorsByDeviceName.TryGetValue( monitor.DeviceName, out displayMonitor ) )
+						displayMonitor = new DisplayMonitor( monitor, handles[ m ] );
+					else
+						displayMonitor.Reset( monitor, handles[ m ] );
+
+					cache.Add( displayMonitor.DeviceName, displayMonitor );
+					list.Add( displayMonitor );
+				}
+
+				monitorsByDeviceName.Clear();
+				monitorsByDeviceName = cache;
+
+				return new ReadOnlyDisplayMonitorCollection( list );
 			}
 		}
 
@@ -467,26 +462,6 @@ namespace ManagedX.Display
 
 		/// <summary>Gets the display mode associated with this <see cref="DisplayAdapter"/>, as stored in the Windows registry.</summary>
 		public DisplayDeviceMode RegistryMode { get { return NativeMethods.GetRegistryDisplaySettingsEx( base.DeviceName, EnumDisplaySettingsExOptions.None ); } }
-
-
-		/// <summary>Returns a hash code for this <see cref="DisplayAdapter"/>.</summary>
-		/// <returns>Returns a hash code for this <see cref="DisplayAdapter"/>.</returns>
-		public sealed override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-
-
-		/// <summary>Returns a value indicating whether this <see cref="DisplayAdapter"/> is equivalent to an object.</summary>
-		/// <param name="obj">An object.</param>
-		/// <returns>Returns true if the specified object is a <see cref="DisplayAdapter"/> which equals this <see cref="DisplayAdapter"/>, otherwise returns false.</returns>
-		public sealed override bool Equals( object obj )
-		{
-			if( obj is DisplayDevice )
-				return base.Equals( (DisplayDevice)obj );
-
-			return base.Equals( obj as DisplayAdapter );
-		}
 
 	}
 

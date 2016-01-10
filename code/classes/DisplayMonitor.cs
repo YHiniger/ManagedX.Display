@@ -93,84 +93,43 @@ namespace ManagedX.Display
 
 
 		private IntPtr handle;
-		private MonitorInfoEx info;
 
 
 
-		#region Constructors
-
-		// The constructors are internal since they're only used by DisplayAdapter:
-
-		/// <summary>Initializes a new <see cref="DisplayMonitor"/> object.</summary>
+		/// <summary>Initializes a new <see cref="DisplayMonitor"/> instance.</summary>
 		/// <param name="displayDevice">A valid <see cref="DisplayDevice"/> structure.</param>
 		/// <param name="monitorHandle">A handle (HMONITOR) to the monitor.</param>
-		/// <param name="monitorInfo">A <see cref="MonitorInfoEx"/> structure containing information about the monitor; can be obtained with <see cref="GetMonitorInfo"/>.</param>
-		/// <exception cref="ArgumentException"/>
-		internal DisplayMonitor( DisplayDevice displayDevice, IntPtr monitorHandle, MonitorInfoEx monitorInfo )
+		internal DisplayMonitor( DisplayDevice displayDevice, IntPtr monitorHandle )
 			: base( displayDevice )
 		{
 			handle = monitorHandle;
-			info = monitorInfo;
 		}
 
 
-		/// <summary>Initializes a new <see cref="DisplayMonitor"/> object.</summary>
-		/// <param name="displayDevice">A valid <see cref="DisplayDevice"/> structure.</param>
-		/// <param name="monitorHandle">A handle (HMONITOR) to the monitor.</param>
-		/// <exception cref="ArgumentException"/>
-		internal DisplayMonitor( DisplayDevice displayDevice, IntPtr monitorHandle )
-			: this( displayDevice, monitorHandle, GetMonitorInfo( monitorHandle ) )
+
+		/// <summary>Gets a value indicating the state of this <see cref="DisplayMonitor"/>.</summary>
+		new public MonitorStates State { get { return (MonitorStates)base.State; } }
+
+
+		internal void Reset( DisplayDevice displayDevice, IntPtr monitorHandle )
 		{
+			handle = monitorHandle;
+			base.Reset( displayDevice );
 		}
 
-		#endregion Constructors
 
-
-
-		/// <summary>Gets the device name of this monitor.</summary>
-		public sealed override string DeviceName { get { return base.DeviceName; } }
-
-		
-		/// <summary>Gets a description (friendly name) of this monitor.</summary>
-		public sealed override string Description { get { return base.Description; } }
-
-
-		/// <summary>Gets the device path associated with this monitor.
+		/// <summary>Gets the device path associated with this <see cref="DisplayMonitor"/>.
 		/// <para>This string can be used with DisplayConfig and SetupAPI (not implemented).</para>
 		/// </summary>
 		public string DevicePath { get { return base.DeviceId; } }
 
 
-		/// <summary>Gets the handle (HMONITOR) associated with this monitor.</summary>
+		/// <summary>Gets the handle (HMONITOR) associated with this <see cref="DisplayMonitor"/>.</summary>
 		public IntPtr Handle { get { return handle; } }
 
 
-		/// <summary>Gets information about this monitor.</summary>
-		public MonitorInfoEx Info { get { return info; } }
-
-
-		/// <summary>Gets a value indicating the monitor state.</summary>
-		new public MonitorStates State { get { return (MonitorStates)base.State; } }
-
-
-		/// <summary>Returns the hash code of the underlying <see cref="DisplayDevice"/> structure.</summary>
-		/// <returns>Returns the hash code of the underlying <see cref="DisplayDevice"/> structure.</returns>
-		public sealed override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-
-
-		/// <summary>Returns a value indicating whether this <see cref="DisplayMonitor"/> is equivalent to an object.</summary>
-		/// <param name="obj">An object.</param>
-		/// <returns>Returns true if the specified object represents a <see cref="DisplayMonitor"/> equivalent to this <see cref="DisplayMonitor"/>, otherwise returns false.</returns>
-		public sealed override bool Equals( object obj )
-		{
-			if( obj is DisplayDevice )
-				return base.Equals( (DisplayDevice)obj );
-			
-			return base.Equals( obj as DisplayMonitor );
-		}
+		/// <summary>Gets information about this <see cref="DisplayMonitor"/>.</summary>
+		public MonitorInfoEx Info { get { return GetMonitorInfo( handle ); } }
 
 	}
 

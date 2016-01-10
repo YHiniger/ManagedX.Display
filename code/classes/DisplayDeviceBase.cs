@@ -16,7 +16,7 @@ namespace ManagedX.Display
 
 
 		/// <summary>Constructor.</summary>
-		/// <param name="displayDevice">A valid <see cref="DisplayDevice"/> structure representing the adapter or monitor.</param>
+		/// <param name="displayDevice">A valid <see cref="DisplayDevice"/> structure representing the display adapter or monitor.</param>
 		internal DisplayDeviceBase( DisplayDevice displayDevice )
 		{
 			device = displayDevice;
@@ -36,12 +36,12 @@ namespace ManagedX.Display
 
 		#region DisplayDevice members
 
-		/// <summary>Gets the device name of the display adapter.</summary>
-		public virtual string DeviceName { get { return device.DeviceName; } }
+		/// <summary>Gets the device name of this display device.</summary>
+		public string DeviceName { get { return device.DeviceName; } }
 
 
 		/// <summary>Gets a description (=friendly name) of this display device.</summary>
-		public virtual string Description { get { return device.DeviceString; } }
+		public string Description { get { return device.DeviceString; } }
 
 
 		/// <summary>Gets the state of this display device.</summary>
@@ -67,32 +67,26 @@ namespace ManagedX.Display
 			return device.GetHashCode();
 		}
 
-
-		/// <summary>Returns a value indicating whether the underlying <see cref="DisplayDevice"/> structure is equivalent to another structure of the same type.</summary>
-		/// <param name="other">A <see cref="DisplayDevice"/> structure.</param>
-		/// <returns>Returns true if the structures are equal, otherwise returns false.</returns>
-		internal bool Equals( DisplayDevice other )
-		{
-			return device.Equals( other );
-		}
-
-
+		
 		/// <summary>Returns a value indicating whether the underlying <see cref="DisplayDevice"/> structure equals the structure of another <see cref="DisplayDeviceBase"/> instance.</summary>
 		/// <param name="other">A <see cref="DisplayDeviceBase"/> instance.</param>
 		/// <returns></returns>
 		public bool Equals( DisplayDeviceBase other )
 		{
-			if( other == null )
-				return false;
-
-			return this.Equals( other.device );
+			return ( other != null ) && device.Equals( other.device );
 		}
 
 
-		/// <summary>When overridden, returns a value indicating whether this <see cref="DisplayDeviceBase"/> instance is equivalent to an object.</summary>
+		/// <summary>Returns a value indicating whether this <see cref="DisplayDeviceBase"/> instance is equivalent to an object.</summary>
 		/// <param name="obj">An object.</param>
 		/// <returns>Returns a value indicating whether this <see cref="DisplayDeviceBase"/> instance is equivalent to an object.</returns>
-		public abstract override bool Equals( object obj );
+		public override bool Equals( object obj )
+		{
+			if( obj is DisplayDevice )
+				return device.Equals( (DisplayDevice)obj );
+
+			return this.Equals( obj as DisplayDeviceBase );
+		}
 
 
 		/// <summary>Returns the description associated with the underlying <see cref="DisplayDevice"/> structure.</summary>

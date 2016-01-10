@@ -16,7 +16,7 @@ namespace ManagedX.Display
 			: base( list )
 		{
 		}
-		
+
 	}
 
 }
