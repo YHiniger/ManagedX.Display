@@ -8,15 +8,13 @@ using System.Security;
 namespace ManagedX.Display
 {
 
-	/// <summary>Encapsulates a <see cref="DisplayDevice"/> structure related to a display adapter.</summary>
+	/// <summary>Represents a display adapter.</summary>
 	public sealed class DisplayAdapter : DisplayDeviceBase
 	{
 
 		/// <summary>Defines the maximum number of display adapters supported by the system: 16.</summary>
 		public const int MaxAdapterCount = 16;
 
-
-		#region Static
 
 		/// <summary>Enumerates flags used by EnumDisplaySettingsEx.</summary>
 		[Flags]
@@ -38,6 +36,8 @@ namespace ManagedX.Display
 
 		}
 
+
+		#region Static
 
 		/// <summary>Provides access to native functions (located in user32.dll, defined in WinUser.h).
 		/// <para>Requires Windows Vista or newer.</para>
@@ -299,46 +299,55 @@ namespace ManagedX.Display
 
 		
 
-		private static readonly List<DisplayAdapter> all = new List<DisplayAdapter>( MaxAdapterCount );
+		private static readonly List<DisplayAdapter> adapterList = new List<DisplayAdapter>( MaxAdapterCount );
 
 
-		private static void RefreshAdaptersCache()
+		private static void RefreshAdapterList()
 		{
 			DisplayAdapter primary = null;
-			if( all.Count > 0 )
-				primary = all[ 0 ];
-			all.Clear();
+			if( adapterList.Count > 0 )
+				primary = adapterList[ 0 ];
+			adapterList.Clear();
 
 			foreach( var adapter in NativeMethods.EnumDisplayDevices( null, false ) )
 			{
 				if( ( (AdapterStates)adapter.State ).HasFlag( AdapterStates.PrimaryDevice ) )
 				{
 					if( primary == null )
-					{
 						primary = new DisplayAdapter( adapter );
-						all.Insert( 0, primary );
-					}
 					else
-					{
-						all.Insert( 0, primary );
 						primary.Reset( adapter );
-					}
+					adapterList.Insert( 0, primary );
 				}
 				else
-					all.Add( new DisplayAdapter( adapter ) );
+					adapterList.Add( new DisplayAdapter( adapter ) );
 			}
 		}
 
 
 		/// <summary>Gets a read-only collection containing all available display adapters.</summary>
-		public static ReadOnlyDisplayAdapterCollection All
+		public static ReadOnlyDisplayAdapterCollection AllAdapters
 		{
 			get
 			{
-				RefreshAdaptersCache();
-				return new ReadOnlyDisplayAdapterCollection( all );
+				RefreshAdapterList();
+				return new ReadOnlyDisplayAdapterCollection( adapterList );
 			}
 		}
+
+
+		/// <summary>Gets the default <see cref="DisplayAdapter"/>.</summary>
+		public static DisplayAdapter DefaultAdapter
+		{
+			get
+			{
+				RefreshAdapterList();
+				if( adapterList.Count > 0 )
+					return adapterList[ 0 ];
+				return null;
+			}
+		}
+
 
 
 		/// <summary>Returns a <see cref="DisplayAdapter"/> given its device name.</summary>
@@ -355,7 +364,7 @@ namespace ManagedX.Display
 				throw new ArgumentException( "Invalid device name.", "deviceName" );
 			}
 
-			foreach( var adapter in All )
+			foreach( var adapter in AllAdapters )
 				if( deviceName.Equals( adapter.DeviceName, StringComparison.Ordinal ) )
 					return adapter;
 

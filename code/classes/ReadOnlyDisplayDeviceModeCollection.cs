@@ -10,7 +10,7 @@ namespace ManagedX.Display
 	public sealed class ReadOnlyDisplayDeviceModeCollection : ReadOnlyCollection<DisplayDeviceMode>
 	{
 		
-		/// <summary>Instantiates and initializes a new <see cref="ReadOnlyDisplayDeviceModeCollection"/>.</summary>
+		/// <summary>Initializes a new <see cref="ReadOnlyDisplayDeviceModeCollection"/>.</summary>
 		/// <param name="list">The list to be wrapped.</param>
 		internal ReadOnlyDisplayDeviceModeCollection( IList<DisplayDeviceMode> list )
 			: base( list )

@@ -6,11 +6,9 @@ using System.Security;
 namespace ManagedX.Display
 {
 
-	/// <summary>Provides information about a display monitor device.</summary>
+	/// <summary>Represents a display monitor.</summary>
 	public sealed class DisplayMonitor : DisplayDeviceBase
 	{
-
-		#region Static methods
 
 		/// <summary>Enumerates options for use with the <see cref="GetMonitorHandleFromWindow"/> method.</summary>
 		internal enum MonitorFromWindowOption : int
@@ -27,6 +25,8 @@ namespace ManagedX.Display
 
 		}
 
+
+		#region Static methods
 
 		[SuppressUnmanagedCodeSecurity]
 		private static class SafeNativeMethods
