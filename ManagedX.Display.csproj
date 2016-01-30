@@ -56,11 +56,6 @@
     <Compile Include="code\classes\ReadOnlyDisplayAdapterCollection.cs" />
     <Compile Include="code\classes\ReadOnlyDisplayDeviceModeCollection.cs" />
     <Compile Include="code\classes\ReadOnlyDisplayMonitorCollection.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <None Include="code\DisplayConfig\structures\TargetBaseType.cs" />
     <Compile Include="code\DisplayConfig\structures\TargetPreferredMode.cs" />
     <Compile Include="code\DisplayConfig\DisplayConfiguration.cs" />
@@ -115,12 +110,6 @@
       <Project>{d69df2e9-a523-4b18-9dc2-2473033f9739}</Project>
       <Name>ManagedX</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
