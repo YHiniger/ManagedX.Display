@@ -94,7 +94,6 @@
     <Compile Include="code\enumerations\MonitorInfoStates.cs" />
     <Compile Include="code\enumerations\DisplayRotation.cs" />
     <Compile Include="code\enumerations\ScanlineOrdering.cs" />
-    <Compile Include="code\NoSuitableGraphicsDeviceException.cs" />
     <Compile Include="code\structures\DisplayDevice.cs" />
     <Compile Include="code\structures\DisplayDeviceMode.cs" />
     <Compile Include="code\structures\MonitorInfoEx.cs" />
