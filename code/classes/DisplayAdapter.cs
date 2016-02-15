@@ -365,7 +365,7 @@ namespace ManagedX.Display
 			}
 
 			foreach( var adapter in AllAdapters )
-				if( deviceName.Equals( adapter.DeviceName, StringComparison.Ordinal ) )
+				if( deviceName.Equals( adapter.Identifier, StringComparison.Ordinal ) )
 					return adapter;
 
 			return null;
@@ -413,11 +413,11 @@ namespace ManagedX.Display
 
 
 		/// <summary>Gets a value indicating the state of this <see cref="DisplayAdapter"/>.</summary>
-		new public AdapterStates State { get { return (AdapterStates)base.State; } }
+		public AdapterStates State { get { return (AdapterStates)base.RawState; } }
 
 
 		/// <summary>Gets a read-only collection containing all (32 bpp) display modes supported by both this <see cref="DisplayAdapter"/> and its <see cref="Monitors"/>.</summary>
-		public ReadOnlyDisplayDeviceModeCollection DisplayModes { get { return NativeMethods.EnumDisplaySettingsEx( base.DeviceName, EnumDisplaySettingsExOptions.None ); } }
+		public ReadOnlyDisplayDeviceModeCollection DisplayModes { get { return NativeMethods.EnumDisplaySettingsEx( base.Identifier, EnumDisplaySettingsExOptions.None ); } }
 
 
 		/// <summary>Gets a read-only collection containing all monitors currently connected to this <see cref="DisplayAdapter"/>.</summary>
@@ -426,7 +426,7 @@ namespace ManagedX.Display
 			get
 			{
 				var allHandles = GetMonitorHandles();
-				var deviceName = base.DeviceName;
+				var deviceName = base.Identifier;
 				var handles = new List<IntPtr>();
 				
 				for( var h = 0; h < allHandles.Count; h++ )
@@ -451,7 +451,7 @@ namespace ManagedX.Display
 					else
 						displayMonitor.Reset( monitor, handles[ m ] );
 
-					cache.Add( displayMonitor.DeviceName, displayMonitor );
+					cache.Add( displayMonitor.Identifier, displayMonitor );
 					list.Add( displayMonitor );
 				}
 
@@ -466,11 +466,11 @@ namespace ManagedX.Display
 		/// <summary>Gets the current display mode of this <see cref="DisplayAdapter"/>.
 		/// <para>Requires the adapter to be attached to the desktop.</para>
 		/// </summary>
-		public DisplayDeviceMode CurrentMode { get { return NativeMethods.GetCurrentDisplaySettingsEx( base.DeviceName, EnumDisplaySettingsExOptions.None ); } }
+		public DisplayDeviceMode CurrentMode { get { return NativeMethods.GetCurrentDisplaySettingsEx( base.Identifier, EnumDisplaySettingsExOptions.None ); } }
 
 
 		/// <summary>Gets the display mode associated with this <see cref="DisplayAdapter"/>, as stored in the Windows registry.</summary>
-		public DisplayDeviceMode RegistryMode { get { return NativeMethods.GetRegistryDisplaySettingsEx( base.DeviceName, EnumDisplaySettingsExOptions.None ); } }
+		public DisplayDeviceMode RegistryMode { get { return NativeMethods.GetRegistryDisplaySettingsEx( base.Identifier, EnumDisplaySettingsExOptions.None ); } }
 
 	}
 
