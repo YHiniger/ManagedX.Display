@@ -8,7 +8,7 @@ namespace ManagedX.Display
 	/// <summary>Encapsulates a <see cref="DisplayDevice"/> structure.
 	/// <para>Requires Windows Vista or newer. For Desktop applications only.</para>
 	/// </summary>
-	public abstract class DisplayDeviceBase : IEquatable<DisplayDeviceBase>
+	public abstract class DisplayDeviceBase : ManagedX.Design.IDevice, IEquatable<DisplayDeviceBase>
 	{
 
 		private DisplayDevice device;
@@ -37,15 +37,15 @@ namespace ManagedX.Display
 		#region DisplayDevice members
 
 		/// <summary>Gets the device name of this display device.</summary>
-		public string DeviceName { get { return device.DeviceName; } }
+		public string Identifier { get { return device.DeviceName; } }
 
 
 		/// <summary>Gets a description (=friendly name) of this display device.</summary>
-		public string Description { get { return device.DeviceString; } }
+		public string DisplayName { get { return device.DeviceString; } }
 
 
 		/// <summary>Gets the state of this display device.</summary>
-		protected int State { get { return device.State; } }
+		protected int RawState { get { return device.State; } }
 
 
 		/// <summary>Gets the device id of this display device.
