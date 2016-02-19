@@ -108,7 +108,7 @@ namespace ManagedX.Display
 
 
 		/// <summary>Gets a value indicating the state of this <see cref="DisplayMonitor"/>.</summary>
-		public MonitorStates State { get { return (MonitorStates)base.RawState; } }
+		public MonitorStateIndicators State { get { return (MonitorStateIndicators)base.RawState; } }
 
 
 		internal void Reset( DisplayDevice displayDevice, IntPtr monitorHandle )

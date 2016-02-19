@@ -82,11 +82,11 @@
     <Compile Include="code\DisplayConfig\enumerations\TopologyId.cs" />
     <Compile Include="code\DisplayConfig\enumerations\VideoOutputTechnology.cs" />
     <Compile Include="code\DisplayConfig\structures\VideoSignalInfo.cs" />
-    <Compile Include="code\enumerations\AdapterStates.cs" />
-    <Compile Include="code\enumerations\MonitorStates.cs" />
+    <Compile Include="code\enumerations\AdapterStateIndicators.cs" />
+    <Compile Include="code\enumerations\MonitorStateIndicators.cs" />
     <Compile Include="code\enumerations\DisplayOrientation.cs" />
     <Compile Include="code\enumerations\DisplayFixedOutput.cs" />
-    <Compile Include="code\enumerations\MonitorInfoStates.cs" />
+    <Compile Include="code\enumerations\MonitorInfoStateIndicators.cs" />
     <Compile Include="code\enumerations\DisplayRotation.cs" />
     <Compile Include="code\enumerations\ScanlineOrdering.cs" />
     <Compile Include="code\structures\DisplayDevice.cs" />

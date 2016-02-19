@@ -7,7 +7,7 @@
 
 	/// <summary>Enumerates state flags used by <see cref="DisplayDevice"/> structures related to output/target devices (ie: monitors).</summary>
 	[System.Flags]
-	public enum MonitorStates : int
+	public enum MonitorStateIndicators : int
 	{
 
 		/// <summary>No state specified.</summary>

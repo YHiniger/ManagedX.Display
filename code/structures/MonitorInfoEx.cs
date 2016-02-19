@@ -17,7 +17,7 @@ namespace ManagedX.Display
 		private int structSize;
 		private Rect monitor;
 		private Rect work;
-		private MonitorInfoStates flags;
+		private MonitorInfoStateIndicators flags;
 		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = 32 )]
 		private string deviceName;
 
@@ -27,7 +27,7 @@ namespace ManagedX.Display
 		{
 			structSize = structureSize;
 			monitor = work = Rect.Zero;
-			flags = MonitorInfoStates.None;
+			flags = MonitorInfoStateIndicators.None;
 			deviceName = string.Empty;
 		}
 
@@ -48,7 +48,7 @@ namespace ManagedX.Display
 		
 
 		/// <summary>Gets a value indicating whether the monitor is the primary monitor.</summary>
-		public bool IsPrimary { get { return flags.HasFlag( MonitorInfoStates.Primary ); } }
+		public bool IsPrimary { get { return flags.HasFlag( MonitorInfoStateIndicators.Primary ); } }
 
 
 		/// <summary>Gets the adapter device name of the monitor.

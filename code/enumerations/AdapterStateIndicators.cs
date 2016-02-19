@@ -10,7 +10,7 @@ namespace ManagedX.Display
 
 	/// <summary>Enumerates state flags used by <see cref="DisplayDevice"/> structures related to display adapters (graphics device/card).</summary>
 	[System.Flags]
-	public enum AdapterStates : int
+	public enum AdapterStateIndicators : int
 	{
 
 		/// <summary>No state specified.</summary>

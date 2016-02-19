@@ -30,7 +30,7 @@ namespace ManagedX.Display
 		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = 128 )]
 		private string deviceString;
 
-		/// <summary>The device state; can be either a combination of <see cref="AdapterStates"/> values or a combination of <see cref="MonitorStates"/> values.</summary>
+		/// <summary>The device state; can be either a combination of <see cref="AdapterStateIndicators"/> values or a combination of <see cref="MonitorStateIndicators"/> values.</summary>
 		public readonly int State;
 
 		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = 128 )]

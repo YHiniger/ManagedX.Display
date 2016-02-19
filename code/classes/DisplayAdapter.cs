@@ -311,7 +311,7 @@ namespace ManagedX.Display
 
 			foreach( var adapter in NativeMethods.EnumDisplayDevices( null, false ) )
 			{
-				if( ( (AdapterStates)adapter.State ).HasFlag( AdapterStates.PrimaryDevice ) )
+				if( ( (AdapterStateIndicators)adapter.State ).HasFlag( AdapterStateIndicators.PrimaryDevice ) )
 				{
 					if( primary == null )
 						primary = new DisplayAdapter( adapter );
@@ -413,7 +413,7 @@ namespace ManagedX.Display
 
 
 		/// <summary>Gets a value indicating the state of this <see cref="DisplayAdapter"/>.</summary>
-		public AdapterStates State { get { return (AdapterStates)base.RawState; } }
+		public AdapterStateIndicators State { get { return (AdapterStateIndicators)base.RawState; } }
 
 
 		/// <summary>Gets a read-only collection containing all (32 bpp) display modes supported by both this <see cref="DisplayAdapter"/> and its <see cref="Monitors"/>.</summary>
