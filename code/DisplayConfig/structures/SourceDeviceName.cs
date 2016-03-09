@@ -29,6 +29,7 @@ namespace ManagedX.Display.DisplayConfig
 		private string viewGdiDeviceName;
 
 
+
 		/// <summary>Initializes a new <see cref="SourceDeviceName"/> structure.</summary>
 		/// <param name="adapterId">The identifier of the source adapter device the information packet refers to.</param>
 		/// <param name="sourceId">The identifier of the source adapter to get or set the device information for.</param>
@@ -37,6 +38,7 @@ namespace ManagedX.Display.DisplayConfig
 			header = new DeviceInfoHeader( DeviceInfoType.GetSourceName, Marshal.SizeOf( typeof( SourceDeviceName ) ), adapterId, sourceId );
 			viewGdiDeviceName = string.Empty;
 		}
+
 
 
 		/// <summary>Gets the identifier of the source adapter device the information packet refers to.</summary>
@@ -48,16 +50,16 @@ namespace ManagedX.Display.DisplayConfig
 
 
 		/// <summary>Gets the GDI device name of the source or view; can't be null.
-		/// This name can be used in a call to EnumDisplaySettings to obtain a list of available modes for the specified source.
+		/// <para>This name can be used in a call to EnumDisplaySettings to obtain a list of available modes for the specified source.</para>
 		/// </summary>
-		public string Name { get { return string.Copy( viewGdiDeviceName ?? string.Empty ); } }
+		public string DeviceIdentifier { get { return string.Copy( viewGdiDeviceName ?? string.Empty ); } }
 
 
 		/// <summary>Returns a hash code for this <see cref="SourceDeviceName"/> structure.</summary>
 		/// <returns>Returns a hash code for this <see cref="SourceDeviceName"/> structure.</returns>
 		public override int GetHashCode()
 		{
-			return header.GetHashCode() ^ this.Name.GetHashCode();
+			return header.GetHashCode() ^ this.DeviceIdentifier.GetHashCode();
 		}
 
 
@@ -66,7 +68,7 @@ namespace ManagedX.Display.DisplayConfig
 		/// <returns>Returns true if this <see cref="SourceDeviceName"/> structure and the <paramref name="other"/> structure are equal, otherwise returns false.</returns>
 		public bool Equals( SourceDeviceName other )
 		{
-			return header.Equals( other.header ) && this.Name.Equals( other.Name, StringComparison.Ordinal );
+			return header.Equals( other.header ) && this.DeviceIdentifier.Equals( other.DeviceIdentifier, StringComparison.Ordinal );
 		}
 
 

@@ -538,10 +538,12 @@ namespace ManagedX.Display.DisplayConfig
 		}
 
 
+
 		private QueryDisplayConfigRequest request;
 		private PathInfo[] paths;
 		private ModeInfo[] modes;
 		private TopologyId topologyId;
+
 
 
 		/// <summary>Instantiates a new <see cref="DisplayConfiguration"/>.</summary>
@@ -560,6 +562,7 @@ namespace ManagedX.Display.DisplayConfig
 				throw new InvalidOperationException( "Failed to instantiate DisplayConfiguration.", ex );
 			}
 		}
+
 
 
 		/// <summary>Gets the request associated with this <see cref="DisplayConfiguration"/>.
