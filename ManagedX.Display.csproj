@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="code\classes\DisplayAdapter.cs" />
     <Compile Include="code\classes\DisplayDeviceBase.cs" />
+    <Compile Include="code\DisplayConfig\DisplayException.cs" />
     <Compile Include="code\classes\DisplayMonitor.cs" />
     <Compile Include="code\classes\ReadOnlyDisplayAdapterCollection.cs" />
     <Compile Include="code\classes\ReadOnlyDisplayDeviceModeCollection.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="code\DisplayConfig\enumerations\TopologyId.cs" />
     <Compile Include="code\DisplayConfig\enumerations\VideoOutputTechnology.cs" />
     <Compile Include="code\DisplayConfig\structures\VideoSignalInfo.cs" />
+    <Compile Include="code\DisplayDeviceManager.cs" />
     <Compile Include="code\enumerations\AdapterStateIndicators.cs" />
     <Compile Include="code\enumerations\MonitorStateIndicators.cs" />
     <Compile Include="code\enumerations\DisplayOrientation.cs" />
@@ -93,7 +95,6 @@
     <Compile Include="code\structures\DisplayDeviceMode.cs" />
     <Compile Include="code\structures\MonitorInfoEx.cs" />
     <Compile Include="code\structures\Rational.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="LICENSE" />
     <None Include="ManagedX.snk" />
