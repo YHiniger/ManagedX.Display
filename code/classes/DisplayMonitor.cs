@@ -77,6 +77,18 @@ namespace ManagedX.Display
 		}
 
 
+		/// <summary>Raised when this <see cref="DisplayMonitor"/> is disconnected.</summary>
+		public event EventHandler Disconnected;
+
+		/// <summary>Raises the <see cref="Disconnected"/> event.</summary>
+		internal void OnDisconnected()
+		{
+			var disconnectedEvent = this.Disconnected;
+			if( disconnectedEvent != null )
+				disconnectedEvent.Invoke( this, EventArgs.Empty );
+		}
+
+
 		/// <summary>Gets the friendly name of this <see cref="DisplayMonitor"/>.
 		/// <para>On Windows Vista, this is always "Generic PnP monitor".</para>
 		/// </summary>

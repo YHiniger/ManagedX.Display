@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace ManagedX.Display
@@ -21,47 +18,86 @@ namespace ManagedX.Display
 
 		private static readonly Dictionary<string, DisplayAdapter> adaptersByDeviceName = new Dictionary<string, DisplayAdapter>( MaxAdapterCount );
 		private static string primaryAdapterDeviceName;
+		private static bool isInitialized;
 
 
 
 		/// <summary>Refreshes the device list and raises events.</summary>
 		public static void Refresh()
 		{
-			var newList = new List<DisplayAdapter>();
-
-			bool primaryAdapterChanged = false;
+			var removedAdapters = new List<string>( adaptersByDeviceName.Keys );
+			var addedAdapters = new List<string>();
+			var adaptersToRefresh = new List<DisplayDevice>( removedAdapters.Count );
+			var primaryAdapterChanged = false;
 
 			DisplayAdapter adapter;
-			var displayAdapters = DisplayAdapter.EnumDisplayDevices( null, false );
-			for( var a = 0; a < displayAdapters.Count; a++ )
+			var displayDevices = DisplayAdapter.EnumDisplayDevices( null, false );
+			for( var a = 0; a < displayDevices.Count; a++ )
 			{
-				var displayAdapter = displayAdapters[ a ];
+				var displayDevice = displayDevices[ a ];
 
-				if( ( ( displayAdapter.State & (int)AdapterStateIndicators.PrimaryDevice ) == (int)AdapterStateIndicators.PrimaryDevice ) && ( primaryAdapterDeviceName != displayAdapter.DeviceName ) )
+				if( adaptersByDeviceName.TryGetValue( displayDevice.DeviceName, out adapter ) )
 				{
-					primaryAdapterChanged = ( primaryAdapterDeviceName != null );
-					primaryAdapterDeviceName = displayAdapter.DeviceName;
+					adaptersToRefresh.Add( displayDevice );
+					removedAdapters.Remove( adapter.DeviceIdentifier );
+				}
+				else
+				{
+					adapter = new DisplayAdapter( displayDevice );
+					adaptersByDeviceName.Add( adapter.DeviceIdentifier, adapter );
+					addedAdapters.Add( adapter.DeviceIdentifier );
 				}
 
-				if( adaptersByDeviceName.TryGetValue( displayAdapter.DeviceName, out adapter ) )
-					adapter.Refresh( displayAdapter );
-				else
-					adapter = new DisplayAdapter( displayAdapter );
-
-				newList.Add( adapter );
+				if( adapter.State.HasFlag( AdapterStateIndicators.PrimaryDevice ) && ( primaryAdapterDeviceName != adapter.DeviceIdentifier ) )
+				{
+					primaryAdapterChanged = ( primaryAdapterDeviceName != null );
+					primaryAdapterDeviceName = displayDevice.DeviceName;
+				}
 			}
 
-			adaptersByDeviceName.Clear();
-
-			while( newList.Count > 0 )
+			while( removedAdapters.Count > 0 )
 			{
-				adapter = newList[ 0 ];
-				newList.RemoveAt( 0 );
-				adaptersByDeviceName.Add( adapter.DeviceIdentifier, adapter );
+				var s = removedAdapters[ 0 ];
+				removedAdapters.RemoveAt( 0 );
+				
+				adapter = adaptersByDeviceName[ s ];
+				adaptersByDeviceName.Remove( s );
+				adapter.OnRemoved();
 			}
-			
-			if( primaryAdapterChanged && PrimaryAdapterChanged != null )
-				PrimaryAdapterChanged( null, EventArgs.Empty );
+
+
+			if( addedAdapters.Count > 0 )
+			{
+				var adapterAddedEvent = AdapterAdded;
+				if( adapterAddedEvent != null )
+				{
+					while( addedAdapters.Count > 0 )
+					{
+						adapterAddedEvent.Invoke( null, new DisplayDeviceEventArgs( addedAdapters[ 0 ] ) );
+						addedAdapters.RemoveAt( 0 );
+					}
+				}
+				addedAdapters.Clear();
+			}
+
+
+			while( adaptersToRefresh.Count > 0 )
+			{
+				var device = adaptersToRefresh[ 0 ];
+				if( adaptersByDeviceName.TryGetValue( device.DeviceName, out adapter ) )
+					adapter.Refresh( device );
+				adaptersToRefresh.RemoveAt( 0 );
+			}
+
+
+			if( primaryAdapterChanged )
+			{
+				var primaryAdapterChangedEvent = PrimaryAdapterChanged;
+				if( primaryAdapterChangedEvent != null )
+					primaryAdapterChangedEvent.Invoke( null, EventArgs.Empty );
+			}
+
+			isInitialized = true;
 		}
 
 
@@ -72,6 +108,9 @@ namespace ManagedX.Display
 		{
 			get
 			{
+				if( !isInitialized )
+					Refresh();
+				
 				if( primaryAdapterDeviceName != null )
 				{
 					DisplayAdapter adapter;
@@ -86,12 +125,19 @@ namespace ManagedX.Display
 		/// <summary>Raised when the <see cref="PrimaryAdapter"/> changed.</summary>
 		public static event EventHandler PrimaryAdapterChanged;
 
+		
+		/// <summary>Raised when a <see cref="DisplayAdapter"/> is added to the system.</summary>
+		public static event EventHandler<DisplayDeviceEventArgs> AdapterAdded;
+
 
 		/// <summary>Gets a read-only collection containing all known display adapters.</summary>
 		public static ReadOnlyDisplayAdapterCollection Adapters
 		{
 			get
 			{
+				if( !isInitialized )
+					Refresh();
+
 				var adapters = new DisplayAdapter[ adaptersByDeviceName.Count ];
 				adaptersByDeviceName.Values.CopyTo( adapters, 0 );
 				return new ReadOnlyDisplayAdapterCollection( adapters );
@@ -113,6 +159,9 @@ namespace ManagedX.Display
 				throw new ArgumentException( "Invalid device identifier.", "deviceIdentifier" );
 			}
 
+			if( !isInitialized )
+				Refresh();
+
 			DisplayAdapter adapter;
 			if( adaptersByDeviceName.TryGetValue( deviceIdentifier, out adapter ) )
 				return adapter;
@@ -129,6 +178,9 @@ namespace ManagedX.Display
 		/// <returns>Returns the monitor associated with the specified handle, or null.</returns>
 		public static DisplayMonitor GetMonitorByHandle( IntPtr monitorHandle )
 		{
+			if( !isInitialized )
+				Refresh();
+
 			var monitorInfo = DisplayMonitor.GetMonitorInfo( monitorHandle );
 
 			DisplayAdapter adapter;
@@ -153,6 +205,9 @@ namespace ManagedX.Display
 		/// <returns>Returns the monitor associated with the specified <paramref name="devicePath"/>, or null.</returns>
 		public static DisplayMonitor GetMonitorByDevicePath( string devicePath )
 		{
+			if( !isInitialized )
+				Refresh();
+
 			var adapters = new DisplayAdapter[ adaptersByDeviceName.Count ];
 			adaptersByDeviceName.Values.CopyTo( adapters, 0 );
 
@@ -166,12 +221,24 @@ namespace ManagedX.Display
 			return null;
 		}
 
+
+		/// <summary>Gets the primary <see cref="DisplayMonitor"/>.</summary>
+		public static DisplayMonitor PrimaryMonitor { get { return DisplayAdapter.PrimaryMonitor; } }
+
+
+		/// <summary>Raised when the <see cref="PrimaryMonitor"/> changed.</summary>
+		public static event EventHandler PrimaryMonitorChanged
+		{
+			add { DisplayAdapter.PrimaryMonitorChanged += value; }
+			remove { DisplayAdapter.PrimaryMonitorChanged -= value; }
+		}
+
 		#endregion Display monitors
 
 
 		#region DisplayConfig extension methods
 		
-		// Placeholder
+		// TODO !
 		
 		#endregion DisplayConfig extension methods
 

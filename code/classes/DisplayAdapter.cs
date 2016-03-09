@@ -8,7 +8,7 @@ using System.Security;
 namespace ManagedX.Display
 {
 
-	/// <summary>Represents a display adapter.</summary>
+	/// <summary>A display adapter.</summary>
 	public sealed class DisplayAdapter : DisplayDeviceBase
 	{
 
@@ -299,6 +299,9 @@ namespace ManagedX.Display
 
 		#region Static
 
+		private static DisplayMonitor primaryDisplayMonitor;
+
+
 		/// <summary>Returns a read-only collection of <see cref="DisplayDevice"/> structures containing information about the display devices in the current session.</summary>
 		/// <param name="deviceName">The device name; if null, the function returns information for the display adapters on the machine.</param>
 		/// <param name="getMonitorDeviceInterfaceName">
@@ -360,11 +363,20 @@ namespace ManagedX.Display
 			return new ReadOnlyCollection<IntPtr>( handles );
 		}
 
+
+		/// <summary>Gets the primary <see cref="DisplayMonitor"/>.</summary>
+		internal static DisplayMonitor PrimaryMonitor { get { return primaryDisplayMonitor; } }
+
+
+		/// <summary>Raised when the <see cref="PrimaryMonitor"/> changed.</summary>
+		internal static event EventHandler PrimaryMonitorChanged;
+
 		#endregion Static
 
 
 		
 		private Dictionary<string, DisplayMonitor> monitorsByDeviceName;
+		private DisplayDeviceMode currentMode;
 
 
 
@@ -372,8 +384,27 @@ namespace ManagedX.Display
 			: base( displayDevice )
 		{
 			monitorsByDeviceName = new Dictionary<string, DisplayMonitor>();
+			currentMode = NativeMethods.GetCurrentDisplaySettingsEx( base.DeviceIdentifier, EnumDisplaySettingsExOptions.None );
 		}
 
+
+
+		internal sealed override void Refresh( DisplayDevice displayDevice )
+		{
+			base.Refresh( displayDevice );
+
+			this.RefreshMonitors();
+
+			var mode = NativeMethods.GetCurrentDisplaySettingsEx( base.DeviceIdentifier, EnumDisplaySettingsExOptions.None );
+			if( !mode.Equals( currentMode ) )
+			{
+				currentMode = mode;
+				
+				var currentModeChangedEvent = this.CurrentModeChanged;
+				if( currentModeChangedEvent != null )
+					currentModeChangedEvent.Invoke( this, EventArgs.Empty );
+			}
+		}
 
 
 		/// <summary>Gets the device id of this <see cref="DisplayAdapter"/>.</summary>
@@ -388,44 +419,85 @@ namespace ManagedX.Display
 		public ReadOnlyDisplayDeviceModeCollection DisplayModes { get { return NativeMethods.EnumDisplaySettingsEx( base.DeviceIdentifier, EnumDisplaySettingsExOptions.None ); } }
 
 
+		private void RefreshMonitors()
+		{
+			var deviceName = base.DeviceIdentifier;
+			
+			var allHandles = GetMonitorHandles();
+			var handles = new List<IntPtr>();
+			for( var h = 0; h < allHandles.Count; h++ )
+			{
+				var info = DisplayMonitor.GetMonitorInfo( allHandles[ h ] );
+				if( deviceName.Equals( info.AdapterDeviceName, StringComparison.Ordinal ) )
+					handles.Add( allHandles[ h ] );
+			}
+
+
+			var removedMonitors = new List<string>( monitorsByDeviceName.Keys );
+			var addedMonitors = new List<string>();
+			var primaryMonitorChanged = false;
+
+			DisplayMonitor displayMonitor;
+			var monitors = EnumDisplayDevices( deviceName, true );
+			for( var m = 0; m < monitors.Count; m++ )
+			{
+				var monitor = monitors[ m ];
+
+				if( monitorsByDeviceName.TryGetValue( monitor.DeviceName, out displayMonitor ) )
+				{
+					displayMonitor.Refresh( monitor );
+					removedMonitors.Remove( monitor.DeviceName );
+				}
+				else
+				{
+					displayMonitor = new DisplayMonitor( monitor, handles[ m ] );
+					monitorsByDeviceName.Add( monitor.DeviceName, displayMonitor );
+					addedMonitors.Add( monitor.DeviceName );
+				}
+
+				if( displayMonitor.IsPrimary && ( primaryDisplayMonitor != displayMonitor ) )
+				{
+					primaryMonitorChanged = ( primaryDisplayMonitor != null );
+					primaryDisplayMonitor = displayMonitor;
+				}
+			}
+
+
+			while( addedMonitors.Count > 0 )
+			{
+				this.OnMonitorConnectedOrDisconnected( addedMonitors[ 0 ], true );
+				addedMonitors.RemoveAt( 0 );
+			}
+
+
+			while( removedMonitors.Count > 0 )
+			{
+				deviceName = removedMonitors[ 0 ];
+				removedMonitors.RemoveAt( 0 );
+
+				displayMonitor = monitorsByDeviceName[ deviceName ];
+				monitorsByDeviceName.Remove( deviceName );
+				displayMonitor.OnDisconnected();
+			}
+
+
+			if( primaryMonitorChanged )
+			{
+				var primaryMonitorChangedEvent = PrimaryMonitorChanged;
+				if( primaryMonitorChangedEvent != null )
+					primaryMonitorChangedEvent.Invoke( this, EventArgs.Empty );
+			}
+		}
+
+
 		/// <summary>Gets a read-only collection containing all monitors currently connected to this <see cref="DisplayAdapter"/>.</summary>
 		public ReadOnlyDisplayMonitorCollection Monitors
 		{
 			get
 			{
-				var allHandles = GetMonitorHandles();
-				var deviceName = base.DeviceIdentifier;
-				var handles = new List<IntPtr>();
+				this.RefreshMonitors();
 				
-				for( var h = 0; h < allHandles.Count; h++ )
-				{
-					var info = DisplayMonitor.GetMonitorInfo( allHandles[ h ] );
-					if( deviceName.Equals( info.AdapterDeviceName, StringComparison.Ordinal ) )
-						handles.Add( allHandles[ h ] );
-				}
-
-				
-				var monitors = EnumDisplayDevices( deviceName, true );
-				var list = new List<DisplayMonitor>();
-				var cache = new Dictionary<string, DisplayMonitor>();
-
-				for( var m = 0; m < monitors.Count; m++ )
-				{
-					var monitor = monitors[ m ];
-					
-					DisplayMonitor displayMonitor;
-					if( !monitorsByDeviceName.TryGetValue( monitor.DeviceName, out displayMonitor ) )
-						displayMonitor = new DisplayMonitor( monitor, handles[ m ] );
-					else
-						displayMonitor.Refresh( monitor );
-
-					cache.Add( displayMonitor.DeviceIdentifier, displayMonitor );
-					list.Add( displayMonitor );
-				}
-
-				monitorsByDeviceName.Clear();
-				monitorsByDeviceName = cache;
-
+				var list = new List<DisplayMonitor>( monitorsByDeviceName.Values );
 				return new ReadOnlyDisplayMonitorCollection( list );
 			}
 		}
@@ -434,11 +506,49 @@ namespace ManagedX.Display
 		/// <summary>Gets the current display mode of this <see cref="DisplayAdapter"/>.
 		/// <para>Requires the adapter to be attached to the desktop.</para>
 		/// </summary>
-		public DisplayDeviceMode CurrentMode { get { return NativeMethods.GetCurrentDisplaySettingsEx( base.DeviceIdentifier, EnumDisplaySettingsExOptions.None ); } }
+		public DisplayDeviceMode CurrentMode { get { return currentMode; } }
 
 
 		/// <summary>Gets the display mode associated with this <see cref="DisplayAdapter"/>, as stored in the Windows registry.</summary>
 		public DisplayDeviceMode RegistryMode { get { return NativeMethods.GetRegistryDisplaySettingsEx( base.DeviceIdentifier, EnumDisplaySettingsExOptions.None ); } }
+
+
+
+		#region Events
+
+		/// <summary>Raised when this <see cref="DisplayAdapter"/> is removed from the system.</summary>
+		public event EventHandler Removed;
+
+		/// <summary>Raises the <see cref="Removed"/> event.</summary>
+		internal void OnRemoved()
+		{
+			var removedEvent = this.Removed;
+			if( removedEvent != null )
+				removedEvent( this, EventArgs.Empty );
+		}
+
+
+		/// <summary>Raised when the <see cref="CurrentMode"/> of this <see cref="DisplayAdapter"/> changed.</summary>
+		public event EventHandler CurrentModeChanged;
+
+		
+		/// <summary>Raised when a display monitor is connected to this <see cref="DisplayAdapter"/>.</summary>
+		public event EventHandler<DisplayDeviceEventArgs> MonitorConnected;
+
+		/// <summary>Raised when a display monitor is disconnected from this <see cref="DisplayAdapter"/>.</summary>
+		public event EventHandler<DisplayDeviceEventArgs> MonitorDisconnected;
+
+		/// <summary>Raises the <see cref="MonitorConnected"/> or <see cref="MonitorDisconnected"/> event.</summary>
+		/// <param name="deviceIdentifier">The device name of the display monitor of interest.</param>
+		/// <param name="connected">True to raise the <see cref="MonitorConnected"/> event, false to raise the <see cref="MonitorDisconnected"/> event.</param>
+		private void OnMonitorConnectedOrDisconnected( string deviceIdentifier, bool connected )
+		{
+			var eventHandler = ( connected ? this.MonitorConnected : this.MonitorDisconnected );
+			if( eventHandler != null )
+				eventHandler.Invoke( this, new DisplayDeviceEventArgs( deviceIdentifier ) );
+		}
+
+		#endregion Events
 
 	}
 
