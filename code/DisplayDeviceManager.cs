@@ -55,16 +55,22 @@ namespace ManagedX.Display
 				}
 			}
 
-			while( removedAdapters.Count > 0 )
+			if( removedAdapters.Count > 0 )
 			{
-				var s = removedAdapters[ 0 ];
-				removedAdapters.RemoveAt( 0 );
-				
-				adapter = adaptersByDeviceName[ s ];
-				adaptersByDeviceName.Remove( s );
-				adapter.OnRemoved();
-			}
+				var adapterRemovedEvent = AdapterRemoved;
+				while( removedAdapters.Count > 0 )
+				{
+					var s = removedAdapters[ 0 ];
+					removedAdapters.RemoveAt( 0 );
 
+					adapter = adaptersByDeviceName[ s ];
+					adaptersByDeviceName.Remove( s );
+
+					adapter.OnRemoved();
+					if( adapterRemovedEvent != null )
+						adapterRemovedEvent.Invoke( null, new DisplayDeviceEventArgs( adapter.DeviceIdentifier ) );
+				}
+			}
 
 			if( addedAdapters.Count > 0 )
 			{
@@ -122,14 +128,6 @@ namespace ManagedX.Display
 		}
 
 
-		/// <summary>Raised when the <see cref="PrimaryAdapter"/> changed.</summary>
-		public static event EventHandler PrimaryAdapterChanged;
-
-		
-		/// <summary>Raised when a <see cref="DisplayAdapter"/> is added to the system.</summary>
-		public static event EventHandler<DisplayDeviceEventArgs> AdapterAdded;
-
-
 		/// <summary>Gets a read-only collection containing all known display adapters.</summary>
 		public static ReadOnlyDisplayAdapterCollection Adapters
 		{
@@ -167,6 +165,18 @@ namespace ManagedX.Display
 				return adapter;
 			return null;
 		}
+
+
+		/// <summary>Raised when the <see cref="PrimaryAdapter"/> changed.</summary>
+		public static event EventHandler PrimaryAdapterChanged;
+
+
+		/// <summary>Raised when a <see cref="DisplayAdapter"/> is added to the system.</summary>
+		public static event EventHandler<DisplayDeviceEventArgs> AdapterAdded;
+
+
+		/// <summary>Raised when a <see cref="DisplayAdapter"/> is removed from the system.</summary>
+		public static event EventHandler<DisplayDeviceEventArgs> AdapterRemoved;
 
 		#endregion Display adapters
 

@@ -52,7 +52,7 @@
   <ItemGroup>
     <Compile Include="code\classes\DisplayAdapter.cs" />
     <Compile Include="code\classes\DisplayDeviceBase.cs" />
-    <Compile Include="code\DisplayDeviceAddedEventArgs.cs" />
+    <Compile Include="code\DisplayDeviceEventArgs.cs" />
     <Compile Include="code\DisplayConfig\DisplayException.cs" />
     <Compile Include="code\classes\DisplayMonitor.cs" />
     <Compile Include="code\classes\ReadOnlyDisplayAdapterCollection.cs" />

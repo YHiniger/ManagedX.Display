@@ -455,6 +455,7 @@ namespace ManagedX.Display
 					addedMonitors.Add( monitor.DeviceName );
 				}
 
+
 				if( displayMonitor.IsPrimary && ( primaryDisplayMonitor != displayMonitor ) )
 				{
 					primaryMonitorChanged = ( primaryDisplayMonitor != null );
@@ -477,7 +478,9 @@ namespace ManagedX.Display
 
 				displayMonitor = monitorsByDeviceName[ deviceName ];
 				monitorsByDeviceName.Remove( deviceName );
+
 				displayMonitor.OnDisconnected();
+				this.OnMonitorConnectedOrDisconnected( deviceName, false );
 			}
 
 
@@ -513,7 +516,6 @@ namespace ManagedX.Display
 		public DisplayDeviceMode RegistryMode { get { return NativeMethods.GetRegistryDisplaySettingsEx( base.DeviceIdentifier, EnumDisplaySettingsExOptions.None ); } }
 
 
-
 		#region Events
 
 		/// <summary>Raised when this <see cref="DisplayAdapter"/> is removed from the system.</summary>
@@ -522,6 +524,11 @@ namespace ManagedX.Display
 		/// <summary>Raises the <see cref="Removed"/> event.</summary>
 		internal void OnRemoved()
 		{
+			foreach( var monitor in monitorsByDeviceName.Values )
+				monitor.OnDisconnected();
+			
+			monitorsByDeviceName.Clear();
+			
 			var removedEvent = this.Removed;
 			if( removedEvent != null )
 				removedEvent( this, EventArgs.Empty );
