@@ -11,7 +11,7 @@ namespace ManagedX.Display
 	/// <remarks>https://msdn.microsoft.com/en-us/library/dd145066%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
 	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 4, Size = 104 )]
-	public struct MonitorInfoEx : IEquatable<MonitorInfoEx>
+	internal struct MonitorInfoEx : IEquatable<MonitorInfoEx>
 	{
 
 		private int structSize;
@@ -54,7 +54,7 @@ namespace ManagedX.Display
 		/// <summary>Gets the adapter device name of the monitor.
 		/// <para>Most applications have no use for a display monitor name, and so can save some bytes by using a MonitorInfo structure.</para>
 		/// </summary>
-		public string DeviceName { get { return string.Copy( deviceName ?? string.Empty ); } }
+		public string AdapterDeviceName { get { return string.Copy( deviceName ?? string.Empty ); } }
 
 
 
@@ -62,7 +62,7 @@ namespace ManagedX.Display
 		/// <returns>Returns a hash code for this <see cref="MonitorInfoEx"/> structure.</returns>
 		public override int GetHashCode()
 		{
-			return structSize ^ monitor.GetHashCode() ^ work.GetHashCode() ^ (int)flags ^ this.DeviceName.GetHashCode();
+			return structSize ^ monitor.GetHashCode() ^ work.GetHashCode() ^ (int)flags ^ this.AdapterDeviceName.GetHashCode();
 		}
 
 
@@ -76,7 +76,7 @@ namespace ManagedX.Display
 				( monitor == other.monitor ) &&
 				( work == other.work ) &&
 				( flags == other.flags ) && 
-				this.DeviceName.Equals( other.DeviceName, StringComparison.Ordinal );
+				this.AdapterDeviceName.Equals( other.AdapterDeviceName, StringComparison.Ordinal );
 		}
 
 
@@ -89,11 +89,11 @@ namespace ManagedX.Display
 		}
 
 
-		/// <summary>Returns the <see cref="DeviceName"/> of this <see cref="MonitorInfoEx"/> structure.</summary>
-		/// <returns>Returns the <see cref="DeviceName"/> of this <see cref="MonitorInfoEx"/> structure.</returns>
+		/// <summary>Returns the <see cref="AdapterDeviceName"/> of this <see cref="MonitorInfoEx"/> structure.</summary>
+		/// <returns>Returns the <see cref="AdapterDeviceName"/> of this <see cref="MonitorInfoEx"/> structure.</returns>
 		public override string ToString()
 		{
-			return this.DeviceName;
+			return this.AdapterDeviceName;
 		}
 
 

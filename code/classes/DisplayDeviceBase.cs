@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 
 namespace ManagedX.Display
@@ -15,7 +14,7 @@ namespace ManagedX.Display
 
 
 
-		/// <summary>Constructor.</summary>
+		/// <summary>Base constructor.</summary>
 		/// <param name="displayDevice">A valid <see cref="DisplayDevice"/> structure representing the display adapter or monitor.</param>
 		internal DisplayDeviceBase( DisplayDevice displayDevice )
 		{
@@ -24,26 +23,26 @@ namespace ManagedX.Display
 
 
 
-		internal bool Reset( DisplayDevice displayDevice )
+		#region IDevice implementation
+
+		/// <summary>Gets the device name of this display device.
+		/// <para>The device name is in the form "\\.\DISPLAY1" for an adapter, and "\\.\DISPLAY1\Monitor0" for a monitor.</para>
+		/// </summary>
+		public string DeviceIdentifier { get { return device.DeviceName; } }
+
+
+		/// <summary>Gets the friendly name of this display device.</summary>
+		public virtual string DisplayName
 		{
-			if( device.Equals( displayDevice ) )
-				return false;
-			
-			device = displayDevice;
-			return true;
+			get { return device.DeviceString; }
+			internal set { } // for DisplayMonitor to get a chance to receive a more friendly name than "Generic PnP Monitor"
 		}
 
-
-		#region DisplayDevice members
-
-		/// <summary>Gets the device name of this display device.</summary>
-		public string Identifier { get { return device.DeviceName; } }
+		#endregion IDevice implementation
 
 
-		/// <summary>Gets a description (=friendly name) of this display device.</summary>
-		public string DisplayName { get { return device.DeviceString; } }
-
-
+		#region Protected properties
+		
 		/// <summary>Gets the state of this display device.</summary>
 		protected int RawState { get { return device.State; } }
 
@@ -53,11 +52,35 @@ namespace ManagedX.Display
 		/// </summary>
 		protected string DeviceId { get { return device.DeviceId; } }
 
+		#endregion Protected properties
+
+
+		/// <summary>Resets, if relevant, the underlying <see cref="DisplayDevice"/> structure and raises events when required.</summary>
+		internal virtual void Refresh( DisplayDevice displayDevice )
+		{
+			if( !device.Equals( displayDevice ) )
+			{
+				var stateChanged = ( device.State != displayDevice.State );
+				
+				device = displayDevice;
+
+				if( stateChanged )
+				{
+					var evt = this.StateChanged;
+					if( evt != null )
+						evt( this, EventArgs.Empty );
+				}
+			}
+		}
+
+
+		/// <summary>Raised when the state of this display device changed.</summary>
+		public event EventHandler StateChanged;
+
+
 
 		/// <summary>Gets the (registry?) key associated with this display device.</summary>
 		public string DeviceKey { get { return device.DeviceKey; } }
-
-		#endregion DisplayDevice members
 
 
 		/// <summary>Returns the hash code of the underlying <see cref="DisplayDevice"/> structure.</summary>
@@ -77,7 +100,7 @@ namespace ManagedX.Display
 		}
 
 
-		/// <summary>Returns a value indicating whether this <see cref="DisplayDeviceBase"/> instance is equivalent to an object.</summary>
+		/// <summary>Returns a value indicating whether this display device is equivalent to another display device or a native <see cref="DisplayDevice"/> structure.</summary>
 		/// <param name="obj">An object.</param>
 		/// <returns>Returns a value indicating whether this <see cref="DisplayDeviceBase"/> instance is equivalent to an object.</returns>
 		public override bool Equals( object obj )
@@ -93,7 +116,7 @@ namespace ManagedX.Display
 		/// <returns>Returns the description associated with the underlying <see cref="DisplayDevice"/> structure.</returns>
 		public sealed override string ToString()
 		{
-			return device.DeviceString;
+			return this.DisplayName;
 		}
 
 	}

@@ -6,25 +6,9 @@ using System.Security;
 namespace ManagedX.Display
 {
 
-	/// <summary>Represents a display monitor.</summary>
+	/// <summary>A display monitor.</summary>
 	public sealed class DisplayMonitor : DisplayDeviceBase
 	{
-
-		/// <summary>Enumerates options for use with the <see cref="GetMonitorHandleFromWindow"/> method.</summary>
-		internal enum MonitorFromWindowOption : int
-		{
-
-			/// <summary>Causes the method to return <see cref="IntPtr.Zero"/>.</summary>
-			DefaultToNull,
-
-			/// <summary>Causes the method to return a handle to the primary display monitor.</summary>
-			DefaultToPrimary,
-			
-			/// <summary>Causes the method to return a handle to the display monitor that is nearest to the window.</summary>
-			DefaultToNearest
-
-		}
-
 
 		#region Static methods
 
@@ -36,20 +20,6 @@ namespace ManagedX.Display
 			// WinUser.h
 
 			
-			/// <summary>Retrieves a handle to the display monitor that has the largest area of intersection with the bounding rectangle of a specified window.</summary>
-			/// <param name="windowHandle">A handle to the window of interest.</param>
-			/// <param name="option">Determines the function's return value if the window does not intersect any display monitor.</param>
-			/// <returns>If the window intersects one or more display monitor rectangles, the return value is an HMONITOR handle to the display monitor that has the largest area of intersection with the window.
-			/// <para>If the window does not intersect a display monitor, the return value depends on the value of <paramref name="option"/>.</para>
-			/// </returns>
-			/// <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/dd145064%28v=vs.85%29.aspx</remarks>
-			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
-			internal static extern IntPtr MonitorFromWindow(
-				[In] IntPtr windowHandle,
-				[In] MonitorFromWindowOption option
-			);
-
-
 			/// <summary>Retrieves information about a display monitor.</summary>
 			/// <param name="monitorHandle">A handle to the display monitor of interest.</param>
 			/// <param name="info">A (pointer to a) MonitorInfo or a <see cref="MonitorInfoEx"/> structure that receives information about the specified display monitor.
@@ -68,19 +38,10 @@ namespace ManagedX.Display
 		}
 
 
-		/// <summary>Returns a handle to the display monitor that has the largest area of intersection with the bounding rectangle of a specified window.</summary>
-		/// <param name="windowHandle">A handle to the window of interest.</param>
-		/// <returns>Returns an HMONITOR handle to the display monitor that has the largest area of intersection with the window, or to the nearest display monitor.</returns>
-		public static IntPtr GetMonitorHandleFromWindow( IntPtr windowHandle )
-		{
-			return SafeNativeMethods.MonitorFromWindow( windowHandle, MonitorFromWindowOption.DefaultToNearest );
-		}
-
-
 		/// <summary>Retrieves information about a display monitor.</summary>
 		/// <param name="monitorHandle">A handle (HMONITOR) to the display monitor of interest.</param>
 		/// <returns>Returns a <see cref="MonitorInfoEx"/> structure containing information about the display monitor associated with the specified <paramref name="monitorHandle"/>.</returns>
-		public static MonitorInfoEx GetMonitorInfo( IntPtr monitorHandle )
+		internal static MonitorInfoEx GetMonitorInfo( IntPtr monitorHandle )
 		{
 			var info = MonitorInfoEx.Default;
 			if( monitorHandle == IntPtr.Zero || !SafeNativeMethods.GetMonitorInfoW( monitorHandle, ref info ) )
@@ -93,6 +54,8 @@ namespace ManagedX.Display
 
 
 		private IntPtr handle;
+		private MonitorInfoEx info;
+		private string moreFriendlyName;	// comes from DisplayConfig, if supported (and used, hence the need of a DisplayDeviceManager)
 
 
 
@@ -102,20 +65,35 @@ namespace ManagedX.Display
 		internal DisplayMonitor( DisplayDevice displayDevice, IntPtr monitorHandle )
 			: base( displayDevice )
 		{
-			handle = monitorHandle;
+			info = GetMonitorInfo( handle = monitorHandle );
 		}
 
+
+
+		internal sealed override void Refresh( DisplayDevice displayDevice )
+		{
+			base.Refresh( displayDevice );
+			info = GetMonitorInfo( handle );
+		}
+
+
+		/// <summary>Gets the friendly name of this <see cref="DisplayMonitor"/>.
+		/// <para>On Windows Vista, this is always "Generic PnP monitor".</para>
+		/// </summary>
+		public sealed override string DisplayName
+		{
+			get
+			{
+				if( moreFriendlyName != null )
+					return string.Copy( moreFriendlyName );
+				return base.DisplayName;
+			}
+			internal set { moreFriendlyName = value; }
+		}
 
 
 		/// <summary>Gets a value indicating the state of this <see cref="DisplayMonitor"/>.</summary>
 		public MonitorStateIndicators State { get { return (MonitorStateIndicators)base.RawState; } }
-
-
-		internal void Reset( DisplayDevice displayDevice, IntPtr monitorHandle )
-		{
-			handle = monitorHandle;
-			base.Reset( displayDevice );
-		}
 
 
 		/// <summary>Gets the device path associated with this <see cref="DisplayMonitor"/>.
@@ -128,9 +106,25 @@ namespace ManagedX.Display
 		public IntPtr Handle { get { return handle; } }
 
 
-		/// <summary>Gets information about this <see cref="DisplayMonitor"/>.</summary>
-		public MonitorInfoEx Info { get { return GetMonitorInfo( handle ); } }
+		#region MonitorInfoEx properties
 
+		/// <summary>Gets a value indicating whether this <see cref="DisplayMonitor"/> is the primary monitor.</summary>
+		public bool IsPrimary { get { return info.IsPrimary; } }
+
+		
+		/// <summary>Gets a <see cref="Rect"/> representing the monitor screen, expressed in virtual screen coordinates.</summary>
+		public Rect Screen { get { return info.Monitor; } }
+
+
+		/// <summary>Gets a <see cref="Rect"/> representing the monitor's workspace, expressed in virtual screen coordinates.</summary>
+		public Rect Workspace { get { return info.Workspace; } }
+
+		
+		/// <summary>Gets the device name of the display adapter this <see cref="DisplayMonitor"/> is connected to.</summary>
+		public string AdapterDeviceName { get { return info.AdapterDeviceName; } }
+
+		#endregion MonitorInfoEx properties
+	
 	}
 
 }

@@ -16,6 +16,17 @@ namespace ManagedX.Display
 		public const int MaxAdapterCount = 16;
 
 
+		#region Native
+
+		/// <summary>Enumerates flags used by EnumDisplayDevices.</summary>
+		[Flags]
+		private enum EnumDisplayDevicesOptions : int
+		{
+			None = 0x00000000,
+			GetDeviceInterfaceName = 0x00000001
+		}
+
+
 		/// <summary>Enumerates flags used by EnumDisplaySettingsEx.</summary>
 		[Flags]
 		private enum EnumDisplaySettingsExOptions : int
@@ -37,7 +48,20 @@ namespace ManagedX.Display
 		}
 
 
-		#region Static
+		private enum MonitorFromWindowOption : int
+		{
+
+			/// <summary>Causes the method to return <see cref="IntPtr.Zero"/>.</summary>
+			DefaultToNull,
+
+			/// <summary>Causes the method to return a handle to the primary display monitor.</summary>
+			DefaultToPrimary,
+
+			/// <summary>Causes the method to return a handle to the display monitor that is nearest to the window.</summary>
+			DefaultToNearest
+
+		}
+
 
 		/// <summary>Provides access to native functions (located in user32.dll, defined in WinUser.h).
 		/// <para>Requires Windows Vista or newer.</para>
@@ -47,17 +71,7 @@ namespace ManagedX.Display
 		{
 
 			private const string LibraryName = "User32.dll";
-
-
-			#region EnumDisplayDevices
-
-			/// <summary>Enumerates flags used by EnumDisplayDevices.</summary>
-			[Flags]
-			private enum EnumDisplayDevicesOptions : int
-			{
-				None = 0x00000000,
-				GetDeviceInterfaceName = 0x00000001
-			}
+			// WinUser.h
 
 
 			/// <summary>Retrieves information about the display devices in the current session.</summary>
@@ -84,44 +98,13 @@ namespace ManagedX.Display
 			/// </remarks>
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			[return: MarshalAs( UnmanagedType.Bool )]
-			private static extern bool EnumDisplayDevicesW(
+			internal static extern bool EnumDisplayDevicesW(
 				[In, MarshalAs( UnmanagedType.LPWStr )] string deviceName,
 				[In] int deviceIndex,
 				[In, Out] ref DisplayDevice displayDevice,
 				[In] EnumDisplayDevicesOptions options
 			);
 			// https://msdn.microsoft.com/en-us/library/dd162609%28v=vs.85%29.aspx
-
-
-			/// <summary>Returns a read-only collection of <see cref="DisplayDevice"/> structures containing information about the display devices in the current session.</summary>
-			/// <param name="deviceName">The device name; if null, the function returns information for the display adapters on the machine.</param>
-			/// <param name="getMonitorDeviceInterfaceName">
-			/// true to retrieve the device interface name for GUID_DEVINTERFACE_MONITOR, which is registered by the operating system on a per monitor basis.
-			/// The value is placed in the <code>DeviceID</code> member of the returned <see cref="DisplayDevice"/> structure.
-			/// The resulting device interface name can be used with SetupAPI functions and serves as a link between GDI monitor devices and SetupAPI monitor devices.
-			/// </param>
-			/// <returns>Returns a read-only collection of <see cref="DisplayDevice"/> structures containing information about the display devices in the current session.</returns>
-			internal static ReadOnlyCollection<DisplayDevice> EnumDisplayDevices( string deviceName, bool getMonitorDeviceInterfaceName )
-			{
-				if( string.IsNullOrWhiteSpace( deviceName ) )
-					deviceName = null;
-
-				var list = new List<DisplayDevice>( MaxAdapterCount );
-
-				var options = EnumDisplayDevicesOptions.None;
-				if( getMonitorDeviceInterfaceName )
-					options = EnumDisplayDevicesOptions.GetDeviceInterfaceName;
-
-				int deviceIndex = 0;
-				var device = DisplayDevice.Default;
-
-				while( EnumDisplayDevicesW( deviceName, deviceIndex++, ref device, options ) )
-					list.Add( device );
-
-				return new ReadOnlyCollection<DisplayDevice>( list );
-			}
-
-			#endregion EnumDisplayDevices
 
 
 			#region EnumDisplaySettingsEx
@@ -258,7 +241,7 @@ namespace ManagedX.Display
 			/// <param name="param">Application-defined data that <see cref="EnumDisplayMonitors"/> passes directly to the enumeration function.</param>
 			/// <returns>To continue the enumeration, returns true. Otherwise returns false, which causes <see cref="EnumDisplayMonitors"/> to return false.</returns>
 			[return: MarshalAs( UnmanagedType.Bool )]
-			unsafe internal delegate bool MonitorEnumProc(
+			internal unsafe delegate bool MonitorEnumProc(
 				[In] IntPtr monitorHandle,
 				[In] IntPtr deviceContextHandle,
 				[In] Rect* monitor,
@@ -285,7 +268,7 @@ namespace ManagedX.Display
 			/// <returns>Returns true on success, otherwise returns false (ie: the callback function interrupted the enumeration).</returns>
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			[return: MarshalAs( UnmanagedType.Bool )]
-			unsafe internal static extern bool EnumDisplayMonitors(
+			internal unsafe static extern bool EnumDisplayMonitors(
 				[In] IntPtr deviceContextHandle,
 				[In] Rect* clipRect,
 				[In] MonitorEnumProc callback,
@@ -295,80 +278,65 @@ namespace ManagedX.Display
 
 			#endregion EnumDisplayMonitors
 
+
+			/// <summary>Retrieves a handle to the display monitor that has the largest area of intersection with the bounding rectangle of a specified window.</summary>
+			/// <param name="windowHandle">A handle to the window of interest.</param>
+			/// <param name="option">Determines the function's return value if the window does not intersect any display monitor.</param>
+			/// <returns>If the window intersects one or more display monitor rectangles, the return value is an HMONITOR handle to the display monitor that has the largest area of intersection with the window.
+			/// <para>If the window does not intersect a display monitor, the return value depends on the value of <paramref name="option"/>.</para>
+			/// </returns>
+			/// <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/dd145064%28v=vs.85%29.aspx</remarks>
+			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
+			internal static extern IntPtr MonitorFromWindow(
+				[In] IntPtr windowHandle,
+				[In] MonitorFromWindowOption option
+			);
+
 		}
 
-		
-
-		private static readonly List<DisplayAdapter> adapterList = new List<DisplayAdapter>( MaxAdapterCount );
+		#endregion Native
 
 
-		private static void RefreshAdapterList()
-		{
-			DisplayAdapter primary = null;
-			if( adapterList.Count > 0 )
-				primary = adapterList[ 0 ];
-			adapterList.Clear();
+		#region Static
 
-			foreach( var adapter in NativeMethods.EnumDisplayDevices( null, false ) )
-			{
-				if( ( (AdapterStateIndicators)adapter.State ).HasFlag( AdapterStateIndicators.PrimaryDevice ) )
-				{
-					if( primary == null )
-						primary = new DisplayAdapter( adapter );
-					else
-						primary.Reset( adapter );
-					adapterList.Insert( 0, primary );
-				}
-				else
-					adapterList.Add( new DisplayAdapter( adapter ) );
-			}
-		}
-
-
-		/// <summary>Gets a read-only collection containing all available display adapters.</summary>
-		public static ReadOnlyDisplayAdapterCollection AllAdapters
-		{
-			get
-			{
-				RefreshAdapterList();
-				return new ReadOnlyDisplayAdapterCollection( adapterList );
-			}
-		}
-
-
-		/// <summary>Gets the default <see cref="DisplayAdapter"/>.</summary>
-		public static DisplayAdapter DefaultAdapter
-		{
-			get
-			{
-				RefreshAdapterList();
-				if( adapterList.Count > 0 )
-					return adapterList[ 0 ];
-				return null;
-			}
-		}
-
-
-
-		/// <summary>Returns a <see cref="DisplayAdapter"/> given its device name.</summary>
-		/// <param name="deviceName">The name of the display adapter device.</param>
-		/// <returns>Returns the <see cref="DisplayAdapter"/> whose device name matches the specified <paramref name="deviceName"/>, or null.</returns>
-		/// <exception cref="ArgumentNullException"/>
-		/// <exception cref="ArgumentException"/>
-		public static DisplayAdapter GetAdapterByDeviceName( string deviceName )
+		/// <summary>Returns a read-only collection of <see cref="DisplayDevice"/> structures containing information about the display devices in the current session.</summary>
+		/// <param name="deviceName">The device name; if null, the function returns information for the display adapters on the machine.</param>
+		/// <param name="getMonitorDeviceInterfaceName">
+		/// true to retrieve the device interface name for GUID_DEVINTERFACE_MONITOR, which is registered by the operating system on a per monitor basis.
+		/// The value is placed in the <code>DeviceID</code> member of the returned <see cref="DisplayDevice"/> structure.
+		/// The resulting device interface name can be used with SetupAPI functions and serves as a link between GDI monitor devices and SetupAPI monitor devices.
+		/// </param>
+		/// <returns>Returns a read-only collection of <see cref="DisplayDevice"/> structures containing information about the display devices in the current session.</returns>
+		internal static ReadOnlyCollection<DisplayDevice> EnumDisplayDevices( string deviceName, bool getMonitorDeviceInterfaceName )
 		{
 			if( string.IsNullOrWhiteSpace( deviceName ) )
-			{
-				if( deviceName == null )
-					throw new ArgumentNullException( "deviceName" );
-				throw new ArgumentException( "Invalid device name.", "deviceName" );
-			}
+				deviceName = null;
 
-			foreach( var adapter in AllAdapters )
-				if( deviceName.Equals( adapter.Identifier, StringComparison.Ordinal ) )
-					return adapter;
+			var list = new List<DisplayDevice>( MaxAdapterCount );
 
-			return null;
+			var options = EnumDisplayDevicesOptions.None;
+			if( getMonitorDeviceInterfaceName )
+				options = EnumDisplayDevicesOptions.GetDeviceInterfaceName;
+
+			int deviceIndex = 0;
+			var device = DisplayDevice.Default;
+
+			while( NativeMethods.EnumDisplayDevicesW( deviceName, deviceIndex++, ref device, options ) )
+				list.Add( device );
+
+			return new ReadOnlyCollection<DisplayDevice>( list );
+		}
+
+
+		/// <summary>Returns a handle to the display monitor that has the largest area of intersection with the bounding rectangle of a specified window.</summary>
+		/// <param name="windowHandle">A handle to the window of interest.</param>
+		/// <returns>If the window intersects one or more display monitor rectangles, the return value is an HMONITOR handle to the display monitor that has the largest area of intersection with the window.
+		/// <para>If the window does not intersect a display monitor, the return value is the nearest monitor.</para>
+		/// </returns>
+		/// <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/dd145064%28v=vs.85%29.aspx</remarks>
+		internal static IntPtr GetMonitorHandleFromWindow( IntPtr windowHandle )
+		{
+			return NativeMethods.MonitorFromWindow( windowHandle, MonitorFromWindowOption.DefaultToNearest );
 		}
 
 
@@ -400,7 +368,7 @@ namespace ManagedX.Display
 
 
 
-		private DisplayAdapter( DisplayDevice displayDevice )
+		internal DisplayAdapter( DisplayDevice displayDevice )
 			: base( displayDevice )
 		{
 			monitorsByDeviceName = new Dictionary<string, DisplayMonitor>();
@@ -417,7 +385,7 @@ namespace ManagedX.Display
 
 
 		/// <summary>Gets a read-only collection containing all (32 bpp) display modes supported by both this <see cref="DisplayAdapter"/> and its <see cref="Monitors"/>.</summary>
-		public ReadOnlyDisplayDeviceModeCollection DisplayModes { get { return NativeMethods.EnumDisplaySettingsEx( base.Identifier, EnumDisplaySettingsExOptions.None ); } }
+		public ReadOnlyDisplayDeviceModeCollection DisplayModes { get { return NativeMethods.EnumDisplaySettingsEx( base.DeviceIdentifier, EnumDisplaySettingsExOptions.None ); } }
 
 
 		/// <summary>Gets a read-only collection containing all monitors currently connected to this <see cref="DisplayAdapter"/>.</summary>
@@ -426,18 +394,18 @@ namespace ManagedX.Display
 			get
 			{
 				var allHandles = GetMonitorHandles();
-				var deviceName = base.Identifier;
+				var deviceName = base.DeviceIdentifier;
 				var handles = new List<IntPtr>();
 				
 				for( var h = 0; h < allHandles.Count; h++ )
 				{
 					var info = DisplayMonitor.GetMonitorInfo( allHandles[ h ] );
-					if( info.DeviceName.Equals( deviceName, StringComparison.Ordinal ) )
+					if( deviceName.Equals( info.AdapterDeviceName, StringComparison.Ordinal ) )
 						handles.Add( allHandles[ h ] );
 				}
 
 				
-				var monitors = NativeMethods.EnumDisplayDevices( deviceName, true );
+				var monitors = EnumDisplayDevices( deviceName, true );
 				var list = new List<DisplayMonitor>();
 				var cache = new Dictionary<string, DisplayMonitor>();
 
@@ -449,9 +417,9 @@ namespace ManagedX.Display
 					if( !monitorsByDeviceName.TryGetValue( monitor.DeviceName, out displayMonitor ) )
 						displayMonitor = new DisplayMonitor( monitor, handles[ m ] );
 					else
-						displayMonitor.Reset( monitor, handles[ m ] );
+						displayMonitor.Refresh( monitor );
 
-					cache.Add( displayMonitor.Identifier, displayMonitor );
+					cache.Add( displayMonitor.DeviceIdentifier, displayMonitor );
 					list.Add( displayMonitor );
 				}
 
@@ -466,11 +434,11 @@ namespace ManagedX.Display
 		/// <summary>Gets the current display mode of this <see cref="DisplayAdapter"/>.
 		/// <para>Requires the adapter to be attached to the desktop.</para>
 		/// </summary>
-		public DisplayDeviceMode CurrentMode { get { return NativeMethods.GetCurrentDisplaySettingsEx( base.Identifier, EnumDisplaySettingsExOptions.None ); } }
+		public DisplayDeviceMode CurrentMode { get { return NativeMethods.GetCurrentDisplaySettingsEx( base.DeviceIdentifier, EnumDisplaySettingsExOptions.None ); } }
 
 
 		/// <summary>Gets the display mode associated with this <see cref="DisplayAdapter"/>, as stored in the Windows registry.</summary>
-		public DisplayDeviceMode RegistryMode { get { return NativeMethods.GetRegistryDisplaySettingsEx( base.Identifier, EnumDisplaySettingsExOptions.None ); } }
+		public DisplayDeviceMode RegistryMode { get { return NativeMethods.GetRegistryDisplaySettingsEx( base.DeviceIdentifier, EnumDisplaySettingsExOptions.None ); } }
 
 	}
 
