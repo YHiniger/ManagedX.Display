@@ -88,9 +88,7 @@ namespace ManagedX.Display
 		/// <returns>Returns true if the rationals are equal, otherwise returns false.</returns>
 		public bool Equals( Rational other )
 		{
-			return
-				( numerator == other.numerator ) &&
-				( denominator == other.denominator );
+			return ( numerator * other.denominator == other.numerator * denominator );
 		}
 
 
@@ -108,7 +106,9 @@ namespace ManagedX.Display
 		/// <returns>Returns -1 if this structure is smaller than the <paramref name="other"/> <see cref="Rational"/>, +1 if it's greater, or 0 if they are equal.</returns>
 		public int CompareTo( Rational other )
 		{
-			return this.ToDouble().CompareTo( other.ToDouble() );
+			var n1 = numerator * other.denominator;
+			var n2 = other.numerator * denominator;
+			return n1.CompareTo( n2 );
 		}
 
 
