@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 
 namespace ManagedX.Display
 {
-	//using DisplayConfig;
+	using DisplayConfig;
 
 
 	/// <summary>ManagedX display device manager.</summary>
@@ -19,6 +20,7 @@ namespace ManagedX.Display
 		private static readonly Dictionary<string, DisplayAdapter> adaptersByDeviceName = new Dictionary<string, DisplayAdapter>( MaxAdapterCount );
 		private static string primaryAdapterDeviceName;
 		private static bool isInitialized;
+		private static DisplayConfiguration displayConfiguration;
 
 
 
@@ -54,6 +56,16 @@ namespace ManagedX.Display
 					primaryAdapterDeviceName = displayDevice.DeviceName;
 				}
 			}
+
+
+			if( DisplayConfiguration.IsSupported )
+			{
+				if( displayConfiguration == null )
+					displayConfiguration = DisplayConfiguration.Query( QueryDisplayConfigRequest.DatabaseCurrent );
+				else
+					displayConfiguration.Refresh();
+			}
+
 
 			if( removedAdapters.Count > 0 )
 			{
@@ -247,9 +259,78 @@ namespace ManagedX.Display
 
 
 		#region DisplayConfig extension methods
-		
+
 		// TODO !
-		
+
+		/// <summary></summary>
+		/// <param name="adapter"></param>
+		/// <returns></returns>
+		/// <exception cref="ArgumentNullException"/>
+		/// <exception cref="InvalidOperationException"/>
+		[SuppressMessage( "Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters" )]
+		public static DisplayConfigAdapterInfo GetDisplayConfigInfo( this DisplayAdapter adapter )
+		{
+			if( adapter == null )
+				throw new ArgumentNullException( "adapter" );
+
+			if( DisplayConfiguration.IsSupported )
+			{
+				if( displayConfiguration == null )
+					displayConfiguration = DisplayConfiguration.Query( QueryDisplayConfigRequest.DatabaseCurrent );
+				else
+					displayConfiguration.Refresh();
+
+				var paths = displayConfiguration.PathInfo;
+				for( var p = 0; p < paths.Count; p++ )
+				{
+					var source = paths[ p ].SourceInfo;
+					
+					var sourceDeviceName = DisplayConfiguration.GetSourceDeviceName( source );
+					if( sourceDeviceName.DeviceIdentifier == adapter.DeviceIdentifier )
+						return new DisplayConfigAdapterInfo( displayConfiguration, source );
+				}
+			}
+
+			return null;
+		}
+
+
+		/// <summary></summary>
+		/// <param name="monitor"></param>
+		/// <returns></returns>
+		/// <exception cref="ArgumentNullException"/>
+		/// <exception cref="InvalidOperationException"/>
+		[SuppressMessage( "Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters" )]
+		public static DisplayConfigMonitorInfo GetDisplayConfigInfo( this DisplayMonitor monitor )
+		{
+			if( monitor == null )
+				throw new ArgumentNullException( "monitor" );
+
+			if( DisplayConfiguration.IsSupported )
+			{
+				if( displayConfiguration == null )
+					displayConfiguration = DisplayConfiguration.Query( QueryDisplayConfigRequest.DatabaseCurrent );
+				else
+					displayConfiguration.Refresh();
+
+				var paths = displayConfiguration.PathInfo;
+				for( var p = 0; p < paths.Count; p++ )
+				{
+					var target = paths[ p ].TargetInfo;
+					var targetDeviceName = DisplayConfiguration.GetTargetDeviceName( target );
+					
+					var monitor2 = GetMonitorByDevicePath( targetDeviceName.DevicePath );
+					if( monitor2 != null )
+					{
+						monitor.DisplayName = targetDeviceName.FriendlyName;
+						return new DisplayConfigMonitorInfo( displayConfiguration, target );
+					}
+				}
+			}
+
+			return null;
+		}
+
 		#endregion DisplayConfig extension methods
 
 	}

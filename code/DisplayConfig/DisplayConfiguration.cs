@@ -9,13 +9,10 @@ namespace ManagedX.Display.DisplayConfig
 	using Graphics;
 
 
-	// https://msdn.microsoft.com/en-us/library/windows/hardware/hh406259%28v=vs.85%29.aspx
-	// WinUser.h
-
-
-	/// <summary>Provides access to DisplayConfig.
+	/// <summary>Provides access to DisplayConfig (defined in WinUser.h).
 	/// <para>Requires Windows 7 or newer.</para>
 	/// </summary>
+	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/hh406259%28v=vs.85%29.aspx</remarks>
 	public sealed class DisplayConfiguration
 	{
 
@@ -23,7 +20,7 @@ namespace ManagedX.Display.DisplayConfig
 		private const int MaxClonePerSource = 4;
 
 		/// <summary>Defines the maximum number of paths: 1024.</summary>
-		public const int MaxPathCount = DisplayAdapter.MaxAdapterCount * MaxSourceCount * MaxClonePerSource;
+		public const int MaxPathCount = MaxSourceCount * DisplayAdapter.MaxAdapterCount * MaxClonePerSource;
 
 
 		/// <summary>Provides access to native functions (located in User32.dll, defined in WinUser.h) related to DisplayConfig.
@@ -508,8 +505,21 @@ namespace ManagedX.Display.DisplayConfig
 		private static readonly Version MinimumOSVersion = new Version( 6, 1 );
 
 		/// <summary>Gets a value indicating whether DisplayConfig is supported by the operating system.</summary>
-		/// <exception cref="InvalidOperationException"/>
-		public static bool IsSupported { get { return ( Environment.OSVersion.Platform == PlatformID.Win32NT ) && ( Environment.OSVersion.Version >= MinimumOSVersion ); } }
+		public static bool IsSupported
+		{
+			get
+			{
+				try
+				{
+					var osVersion = Environment.OSVersion;
+					return ( osVersion.Platform == PlatformID.Win32NT ) && ( osVersion.Version >= MinimumOSVersion );
+				}
+				catch( InvalidOperationException )
+				{
+					return false;
+				}
+			}
+		}
 
 
 		/// <summary>Queries and returns a display configuration.</summary>

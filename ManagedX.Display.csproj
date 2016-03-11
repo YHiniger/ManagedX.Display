@@ -52,6 +52,9 @@
   <ItemGroup>
     <Compile Include="code\classes\DisplayAdapter.cs" />
     <Compile Include="code\classes\DisplayDeviceBase.cs" />
+    <Compile Include="code\DisplayConfig\DisplayConfigMonitorInfo.cs" />
+    <Compile Include="code\DisplayConfig\DisplayConfigInfo.cs" />
+    <Compile Include="code\DisplayConfig\DisplayConfigAdapterInfo.cs" />
     <Compile Include="code\DisplayDeviceEventArgs.cs" />
     <Compile Include="code\DisplayConfig\DisplayException.cs" />
     <Compile Include="code\classes\DisplayMonitor.cs" />
@@ -110,7 +113,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\ManagedX\trunk\ManagedX.csproj">
       <Project>{d69df2e9-a523-4b18-9dc2-2473033f9739}</Project>
-      <Name>ManagedX</Name>
+      <Name>ManagedX %28ManagedX\ManagedX%29</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

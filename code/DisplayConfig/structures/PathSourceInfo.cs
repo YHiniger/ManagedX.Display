@@ -34,10 +34,12 @@ namespace ManagedX.Display.DisplayConfig
 		}
 
 
+
 		private Luid adapterId;
 		private int id;
 		private int modeInfoIdx;
 		private PathSourceInfoStatus statusFlags;
+
 
 
 		/// <summary>Gets the identifier of the adapter that this source information relates to.</summary>
