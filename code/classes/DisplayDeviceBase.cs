@@ -25,7 +25,7 @@ namespace ManagedX.Display
 
 		#region IDevice implementation
 
-		/// <summary>Gets the device name of this display device.
+		/// <summary>Gets the <see cref="DeviceName"/> of this display device.
 		/// <para>The device name is in the form "\\.\DISPLAY1" for an adapter, and "\\.\DISPLAY1\Monitor0" for a monitor.</para>
 		/// </summary>
 		public string DeviceIdentifier { get { return device.DeviceName; } }
@@ -40,7 +40,7 @@ namespace ManagedX.Display
 
 		#endregion IDevice implementation
 
-
+		
 		#region Protected properties
 		
 		/// <summary>Gets the state of this display device.</summary>
@@ -53,6 +53,12 @@ namespace ManagedX.Display
 		protected string DeviceId { get { return device.DeviceId; } }
 
 		#endregion Protected properties
+
+
+		/// <summary>Gets the device name of this display device.
+		/// <para>The device name is in the form "\\.\DISPLAY1" for an adapter, and "\\.\DISPLAY1\Monitor0" for a monitor.</para>
+		/// </summary>
+		public string DeviceName { get { return device.DeviceName; } }
 
 
 		/// <summary>Resets, if relevant, the underlying <see cref="DisplayDevice"/> structure and raises events when required.</summary>

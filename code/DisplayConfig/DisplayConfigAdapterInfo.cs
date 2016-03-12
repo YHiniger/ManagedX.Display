@@ -23,8 +23,12 @@
 
 
 
-		/// <summary>Gets the desktop-space coordinates of the source surface.</summary>
-		public Rect Surface { get { return new Rect( mode.Position, mode.Size ); } }
+		/// <summary>Gets the position, in desktop-space coordinates, of the source surface.</summary>
+		public Point SurfacePosition { get { return mode.Position; } }
+
+
+		/// <summary>Gets the size, in pixels, of the source surface.</summary>
+		public Size SurfaceSize { get { return mode.Size; } }
 
 
 		/// <summary>Gets the pixel format of the source surface.</summary>

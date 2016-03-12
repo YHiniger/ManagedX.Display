@@ -24,7 +24,7 @@ namespace ManagedX.Display
 
 
 
-		/// <summary>Refreshes the device list and raises events.</summary>
+		/// <summary>Refreshes the device list and states, and raises events.</summary>
 		public static void Refresh()
 		{
 			var removedAdapters = new List<string>( adaptersByDeviceName.Keys );
@@ -260,10 +260,10 @@ namespace ManagedX.Display
 
 		#region DisplayConfig extension methods
 
-		// TODO !
-
-		/// <summary></summary>
-		/// <param name="adapter"></param>
+		/// <summary>Gets DisplayConfig information about a <see cref="DisplayAdapter"/>.
+		/// <para>Requires Windows 7 or greater.</para>
+		/// </summary>
+		/// <param name="adapter">A <see cref="DisplayAdapter"/>.</param>
 		/// <returns></returns>
 		/// <exception cref="ArgumentNullException"/>
 		/// <exception cref="InvalidOperationException"/>
@@ -295,8 +295,11 @@ namespace ManagedX.Display
 		}
 
 
-		/// <summary></summary>
-		/// <param name="monitor"></param>
+		/// <summary>Gets DisplayConfig information about a <see cref="DisplayMonitor"/>.
+		/// <para>Requires Windows 7 or greater.</para>
+		/// <note type="note">Calling this method will change the monitor's display name to a more friendly name than "Generic PnP Monitor".</note>
+		/// </summary>
+		/// <param name="monitor">A <see cref="DisplayMonitor"/>.</param>
 		/// <returns></returns>
 		/// <exception cref="ArgumentNullException"/>
 		/// <exception cref="InvalidOperationException"/>
