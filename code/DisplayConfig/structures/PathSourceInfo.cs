@@ -7,10 +7,8 @@ namespace ManagedX.Display.DisplayConfig
 	using Graphics;
 
 
-	// https://msdn.microsoft.com/en-us/library/windows/hardware/ff553951%28v=vs.85%29.aspx
-
-
 	/// <summary>Contains source information for a single path.</summary>
+	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553951%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 20 )]
 	public struct PathSourceInfo : IEquatable<PathSourceInfo>

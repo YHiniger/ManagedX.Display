@@ -1,11 +1,11 @@
 ﻿namespace ManagedX.Display.DisplayConfig
 {
 	
-	// https://msdn.microsoft.com/en-us/library/windows/hardware/ff553924%28v=vs.85%29.aspx
-	// WinGDI.h
-
-
-	/// <summary>Specifies the type of display device info to configure or obtain through the DisplayConfigSetDeviceInfo or DisplayConfigGetDeviceInfo function.</summary>
+	/// <summary>Enumerates the types of display device info to configure or obtain through the DisplayConfigSetDeviceInfo or DisplayConfigGetDeviceInfo function.
+	/// <para>This enumeration is equivalent to the native <code>DISPLAYCONFIG_DEVICE_INFO_TYPE</code> enumeration (defined in WinGDI.h).</para>
+	/// </summary>
+	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553924%28v=vs.85%29.aspx</remarks>
+	[Design.Native( "WinGDI.h", "DISPLAYCONFIG_DEVICE_INFO_TYPE" )]
 	public enum DeviceInfoType : int
 	{
 

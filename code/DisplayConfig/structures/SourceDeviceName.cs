@@ -8,10 +8,8 @@ namespace ManagedX.Display.DisplayConfig
 	using Graphics;
 
 
-	// https://msdn.microsoft.com/en-us/library/windows/hardware/ff553983%28v=vs.85%29.aspx
-
-
 	/// <summary>Contains the GDI device name for the source or view.</summary>
+	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553983%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
 	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 4, Size = 84 )]
 	public struct SourceDeviceName : IEquatable<SourceDeviceName>

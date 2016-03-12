@@ -3,18 +3,14 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
-// Comments checked (2015/09/24)
-
 
 namespace ManagedX.Display
 {
 
-	// https://msdn.microsoft.com/en-us/library/dd183565%28v=vs.85%29.aspx
-	// WinGDI.h
-
-
 	/// <summary>Contains information about the initialization and environment of a display device.</summary>
+	/// <remarks>https://msdn.microsoft.com/en-us/library/dd183565%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
+	[Design.Native( "WinGDI.h", "DEVMODE" )]
 	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 2, Size = 220 )]
 	public struct DisplayDeviceMode : IEquatable<DisplayDeviceMode>, IComparable<DisplayDeviceMode>//, IFormattable
 	{

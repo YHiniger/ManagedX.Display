@@ -8,11 +8,8 @@ namespace ManagedX.Display.DisplayConfig
 	using Graphics;
 
 
-	// https://msdn.microsoft.com/en-us/library/windows/hardware/ff553989%28v=vs.85%29.aspx
-	// WinGDI.h
-
-
-	/// <summary>Contains information about the target.</summary>
+	/// <summary>Contains information about the target (defined in WinGDI.h).</summary>
+	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553989%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
 	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 2, Size = 420 )]
 	public struct TargetDeviceName : IEquatable<TargetDeviceName>

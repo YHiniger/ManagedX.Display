@@ -6,9 +6,17 @@ namespace ManagedX.Display
 {
 
 	/// <summary>Represents a rational number (unsigned).
-	/// <para>This structure is also used by DXGI.</para>
+	/// <para>This structure is equivalent to the native 
+	/// <code>DISPLAYCONFIG_RATIONAL</code> (defined in WinGDI.h) and
+	/// <code>DXGI_RATIONAL</code> (defined in DXGI.h) structures.</para>
 	/// </summary>
+	/// <remarks>
+	/// https://msdn.microsoft.com/en-us/library/windows/hardware/ff553968%28v=vs.85%29.aspx (DISPLAYCONFIG_RATIONAL)
+	/// https://msdn.microsoft.com/en-us/library/windows/desktop/bb173069%28v=vs.85%29.aspx (DXGI_RATIONAL)
+	/// </remarks>
 	[System.Diagnostics.DebuggerStepThrough]
+	[Design.Native( "DXGI.h", "DXGI_RATIONAL" )]
+	[Design.Native( "WinGDI.h", "DISPLAYCONFIG_RATIONAL" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 8 )]
 	public struct Rational : IEquatable<Rational>, IComparable<Rational>
 	{
@@ -32,15 +40,15 @@ namespace ManagedX.Display
 
 
 		/// <summary>Initializes a new <see cref="Rational"/> structure.</summary>
-		/// <param name="numerator">The numerator; must be greater than or equal to 0.</param>
-		/// <param name="denominator">The denominator; must be greater than or equal to 0.</param>
+		/// <param name="numerator">The numerator, within the range [0,<see cref="uint.MaxValue"/>].</param>
+		/// <param name="denominator">The denominator, within the range [0,<see cref="uint.MaxValue"/>].</param>
 		/// <exception cref="ArgumentOutOfRangeException"/>
-		public Rational( int numerator, int denominator )
+		public Rational( long numerator, long denominator )
 		{
-			if( numerator < 0 )
+			if( numerator < 0 || numerator > int.MaxValue )
 				throw new ArgumentOutOfRangeException( "numerator" );
 			
-			if( denominator < 0 )
+			if( denominator < 0 || denominator > int.MaxValue )
 				throw new ArgumentOutOfRangeException( "denominator" );
 			
 			this.numerator = (uint)numerator;

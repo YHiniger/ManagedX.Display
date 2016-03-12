@@ -7,15 +7,14 @@ using System.Runtime.InteropServices;
 namespace ManagedX.Display
 {
 
-	// https://msdn.microsoft.com/en-us/library/dd183569%28v=vs.85%29.aspx
-	// WinGDI.h
-
-
 	/// <summary>This structure receives information about the display device specified by the <code>deviceIndex</code> parameter of the EnumDisplayDevices function.
 	/// <para>The four string members are set based on the parameters passed to EnumDisplayDevices.</para>
-	/// If the <code>device</code> param is null, then the structure is filled in with information about the display adapter(s); if it is a valid device name, then it is filled in with information about the monitor(s) for that device.
+	/// If the <code>device</code> param is null, then the structure is filled in with information about the display adapter(s); if it is a valid device name, then
+	/// it's filled in with information about the monitor(s) for that device.
 	/// </summary>
+	/// <remarks>https://msdn.microsoft.com/en-us/library/dd183569%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
+	[Design.Native( "WinGDI.h", "DISPLAY_DEVICE" )]
 	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 4, Size = 840 )]
 	internal struct DisplayDevice : IEquatable<DisplayDevice>
 	{

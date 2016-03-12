@@ -5,11 +5,8 @@ using System.Runtime.InteropServices;
 namespace ManagedX.Display.DisplayConfig
 {
 
-	// https://msdn.microsoft.com/en-us/library/windows/hardware/ff553986%28v=vs.85%29.aspx
-	// WinGDI.h
-
-
-	/// <summary>Contains information about a source display mode.</summary>
+	/// <summary>Contains information about a source display mode (defined in WinGDI.h).</summary>
+	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553986%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 20 )]
 	public struct SourceMode : IEquatable<SourceMode>

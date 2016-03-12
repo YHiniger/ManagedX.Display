@@ -7,11 +7,8 @@ namespace ManagedX.Display.DisplayConfig
 	using Graphics;
 
 
-	// https://msdn.microsoft.com/en-us/library/windows/hardware/ff553920%28v=vs.85%29.aspx
-	// WinGDI.h
-
-
-	/// <summary>Contains display information about the device.</summary>
+	/// <summary>Contains display information about the device (defined in WinGDI.h).</summary>
+	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553920%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 20 )]
 	internal struct DeviceInfoHeader : IEquatable<DeviceInfoHeader>

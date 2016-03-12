@@ -5,11 +5,8 @@ using System.Runtime.InteropServices;
 namespace ManagedX.Display.DisplayConfig
 {
 
-	// https://msdn.microsoft.com/en-us/library/windows/hardware/ff553993%28v=vs.85%29.aspx
-	// WinGDI.h
-
-
-	/// <summary>Describes a display path target mode.</summary>
+	/// <summary>Describes a display path target mode (defined in WinGDI.h).</summary>
+	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553993%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 48 )]
 	public struct TargetMode : IEquatable<TargetMode>

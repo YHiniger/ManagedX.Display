@@ -7,13 +7,10 @@ namespace ManagedX.Display.DisplayConfig
 	using Graphics;
 
 
-	// https://msdn.microsoft.com/en-us/library/windows/hardware/dn362043%28v=vs.85%29.aspx
-	// WinGDI.h
-
-
-	/// <summary>Specifies base output technology info for a given target ID.
+	/// <summary>Specifies base output technology info for a given target ID (defined in WinGDI.h).
 	/// <para>Requires Windows 8.1 or newer.</para>
 	/// </summary>
+	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/dn362043%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 24 )]
 	internal struct TargetBaseType : IEquatable<TargetBaseType>

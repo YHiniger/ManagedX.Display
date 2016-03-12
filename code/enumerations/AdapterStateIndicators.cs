@@ -4,19 +4,19 @@
 namespace ManagedX.Display
 {
 
-	// https://msdn.microsoft.com/en-us/library/dd183569%28v=vs.85%29.aspx
-	// WinGDI.h
-
-
-	/// <summary>Enumerates state flags used by <see cref="DisplayDevice"/> structures related to display adapters (graphics device/card).</summary>
+	/// <summary>Enumerates state flags used by <see cref="DisplayDevice"/> structures related to display adapters.
+	/// <para>This enumeration is equivalent to the native <code>DISPLAY_DEVICE_*</code> constants (defined in WinGDI.h).</para>
+	/// </summary>
+	/// <remarks>https://msdn.microsoft.com/en-us/library/dd183569%28v=vs.85%29.aspx</remarks>
 	[System.Flags]
+	[Design.Native( "WinGDI.h", "DISPLAY_DEVICE_*" )]
 	public enum AdapterStateIndicators : int
 	{
 
-		/// <summary>No state specified.</summary>
+		/// <summary>No states specified.</summary>
 		None = 0x00000000,
 
-		/// <summary>Specifies whether the device is attached to the desktop.</summary>
+		/// <summary>The device is attached to the desktop.</summary>
 		AttachedToDesktop = 0x00000001,
 
 		/// <summary>No documentation.</summary>

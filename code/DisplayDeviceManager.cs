@@ -20,7 +20,8 @@ namespace ManagedX.Display
 		private static readonly Dictionary<string, DisplayAdapter> adaptersByDeviceName = new Dictionary<string, DisplayAdapter>( MaxAdapterCount );
 		private static string primaryAdapterDeviceName;
 		private static bool isInitialized;
-		private static DisplayConfiguration displayConfiguration;
+		private static DisplayConfiguration currentConfiguration;
+		//private static DisplayConfiguration registryConfiguration;
 
 
 
@@ -60,10 +61,10 @@ namespace ManagedX.Display
 
 			if( DisplayConfiguration.IsSupported )
 			{
-				if( displayConfiguration == null )
-					displayConfiguration = DisplayConfiguration.Query( QueryDisplayConfigRequest.DatabaseCurrent );
+				if( currentConfiguration == null )
+					currentConfiguration = DisplayConfiguration.Query( QueryDisplayConfigRequest.DatabaseCurrent );
 				else
-					displayConfiguration.Refresh();
+					currentConfiguration.Refresh();
 			}
 
 
@@ -275,19 +276,19 @@ namespace ManagedX.Display
 
 			if( DisplayConfiguration.IsSupported )
 			{
-				if( displayConfiguration == null )
-					displayConfiguration = DisplayConfiguration.Query( QueryDisplayConfigRequest.DatabaseCurrent );
+				if( currentConfiguration == null )
+					currentConfiguration = DisplayConfiguration.Query( QueryDisplayConfigRequest.DatabaseCurrent );
 				else
-					displayConfiguration.Refresh();
+					currentConfiguration.Refresh();
 
-				var paths = displayConfiguration.PathInfo;
+				var paths = currentConfiguration.PathInfo;
 				for( var p = 0; p < paths.Count; p++ )
 				{
 					var source = paths[ p ].SourceInfo;
 					
 					var sourceDeviceName = DisplayConfiguration.GetSourceDeviceName( source );
 					if( sourceDeviceName.DeviceIdentifier == adapter.DeviceIdentifier )
-						return new DisplayConfigAdapterInfo( displayConfiguration, source );
+						return new DisplayConfigAdapterInfo( currentConfiguration, source );
 				}
 			}
 
@@ -311,12 +312,12 @@ namespace ManagedX.Display
 
 			if( DisplayConfiguration.IsSupported )
 			{
-				if( displayConfiguration == null )
-					displayConfiguration = DisplayConfiguration.Query( QueryDisplayConfigRequest.DatabaseCurrent );
+				if( currentConfiguration == null )
+					currentConfiguration = DisplayConfiguration.Query( QueryDisplayConfigRequest.DatabaseCurrent );
 				else
-					displayConfiguration.Refresh();
+					currentConfiguration.Refresh();
 
-				var paths = displayConfiguration.PathInfo;
+				var paths = currentConfiguration.PathInfo;
 				for( var p = 0; p < paths.Count; p++ )
 				{
 					var target = paths[ p ].TargetInfo;
@@ -326,7 +327,7 @@ namespace ManagedX.Display
 					if( monitor2 != null )
 					{
 						monitor.DisplayName = targetDeviceName.FriendlyName;
-						return new DisplayConfigMonitorInfo( displayConfiguration, target );
+						return new DisplayConfigMonitorInfo( currentConfiguration, target, targetDeviceName );
 					}
 				}
 			}

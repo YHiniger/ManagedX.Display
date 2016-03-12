@@ -1,11 +1,11 @@
 ﻿namespace ManagedX.Display.DisplayConfig
 {
 
-	// https://msdn.microsoft.com/en-us/library/windows/hardware/ff553942%28v=vs.85%29.aspx
-	// WinGDI.h
-
-
-	/// <summary>Specifies whether the information contained within the <see cref="ModeInfo"/> structure is source or target mode.</summary>
+	/// <summary>Specifies whether the information contained within the <see cref="ModeInfo"/> structure is source or target mode.
+	/// <para>This enumeration is equivalent to the native <code>DISPLAYCONFIG_MODE_INFO_TYPE</code> enumeration (defined in WinGDI.h).</para>
+	/// </summary>
+	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553942%28v=vs.85%29.aspx</remarks>
+	[Design.Native( "WinGDI.h", "DISPLAYCONFIG_MODE_INFO_TYPE" )]
 	public enum ModeInfoType : int
 	{
 

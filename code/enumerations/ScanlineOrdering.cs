@@ -3,21 +3,25 @@
 	using DisplayConfig; // for comments
 	
 
-	// https://msdn.microsoft.com/en-us/library/windows/hardware/ff553977%28v=vs.85%29.aspx
-	// WinGDI.h (DISPLAYCONFIG_SCANLINE_ORDERING)
-
-	// https://msdn.microsoft.com/en-us/library/windows/desktop/bb173067%28v=vs.85%29.aspx
-	// DXGI.h (DXGI_SCANLINE_ORDER)
-
-
 	/// <summary>Specifies the method the display uses to create an image on a screen, or the raster uses to create an image on a surface.
-	/// <para>This enumeration is equivalent to the native <code>DISPLAYCONFIG_SCANLINE_ORDERING</code> and <code>DXGI_SCANLINE_ORDER</code> enumerations.</para>
+	/// <para>This enumeration is equivalent to the native
+	/// <code>DISPLAYCONFIG_SCANLINE_ORDERING</code> (defined in WinGDI.h) and
+	/// <code>DXGI_SCANLINE_ORDER</code> (defined in DXGI.h) enumerations.
+	/// </para>
 	/// </summary>
+	/// <remarks>
+	/// https://msdn.microsoft.com/en-us/library/windows/hardware/ff553977%28v=vs.85%29.aspx (DISPLAYCONFIG_SCANLINE_ORDERING)
+	/// https://msdn.microsoft.com/en-us/library/windows/desktop/bb173067%28v=vs.85%29.aspx (DXGI_SCANLINE_ORDER)
+	/// </remarks>
+	[Design.Native( "WinGDI.h", "DISPLAYCONFIG_SCANLINE_ORDERING" )]
+	[Design.Native( "DXGI.h", "DXGI_SCANLINE_ORDER" )]
 	public enum ScanlineOrdering : int
 	{
 
 		/// <summary>Scan-line ordering of the output is unspecified.
-		/// <para>The caller can only set the scanLineOrdering member of the <see cref="PathTargetInfo"/> structure in a call to the SetDisplayConfig function to <see cref="ScanlineOrdering.Unspecified"/> if the caller also set the refresh rate denominator and numerator of the refreshRate member both to zero.</para>
+		/// <para>The caller can only set the scanLineOrdering member of the <see cref="PathTargetInfo"/> structure in a call to the
+		/// SetDisplayConfig function to <see cref="ScanlineOrdering.Unspecified"/> if the caller also set the refresh rate denominator and
+		/// numerator of the refreshRate member both to zero.</para>
 		/// In this case, SetDisplayConfig uses the best refresh rate it can find.
 		/// </summary>
 		Unspecified = 0,

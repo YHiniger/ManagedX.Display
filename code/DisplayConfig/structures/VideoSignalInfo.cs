@@ -5,10 +5,8 @@ using System.Runtime.InteropServices;
 namespace ManagedX.Display.DisplayConfig
 {
 
-	// https://msdn.microsoft.com/en-us/library/windows/hardware/ff554007%28v=vs.85%29.aspx
-
-
 	/// <summary>Contains information about the video signal for a display.</summary>
+	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff554007%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 48 )]
 	public struct VideoSignalInfo : IEquatable<VideoSignalInfo>

@@ -26,12 +26,12 @@ namespace ManagedX.Display.DisplayConfig
 		/// <summary>Provides access to native functions (located in User32.dll, defined in WinUser.h) related to DisplayConfig.
 		/// <para>Requires Windows 7 or newer.</para>
 		/// </summary>
+		[ManagedX.Design.Native( "WinUser.h" )]
 		[SuppressUnmanagedCodeSecurity]
 		private static class SafeNativeMethods
 		{
 
 			private const string LibraryName = "User32.dll";
-			// WinUser.h
 
 
 			/// <summary>Retrieves the size of the buffers that are required to call the QueryDisplayConfig function.
@@ -336,40 +336,37 @@ namespace ManagedX.Display.DisplayConfig
 		}
 
 
-		/// <summary>Returns an exception for the specified error code:
-		/// <para>NotSupportedException</para>
-		/// <para>UnauthorizedAccessException</para>
-		/// <para>InsufficientMemoryException</para>
-		/// <para>ArgumentException</para>
-		/// <para>InvalidOperationException</para>
-		/// <para>Win32Exception</para>
-		/// </summary>
-		/// <param name="errorCode">An error code.</param>
+		/// <summary>Returns a <see cref="DisplayException"/> for a given error code.</summary>
+		/// <param name="errorCode">An error code (HRESULT).</param>
 		/// <returns>Returns an exception, or null if <paramref name="errorCode"/> is <see cref="ErrorCode.None"/>.</returns>
-		private static Exception GetException( ErrorCode errorCode )
+		private static DisplayException GetException( ErrorCode errorCode )
 		{
 			if( errorCode == ErrorCode.None )
 				return null;
 			
-			if( errorCode == ErrorCode.AccessDenied )
-				return new UnauthorizedAccessException( "Access denied." );
+			switch( errorCode )
+			{
+				case ErrorCode.AccessDenied:
+					return new DisplayException( "Access denied." );
 
-			if( errorCode == ErrorCode.NotSupported )
-				return new NotSupportedException( "The function is only supported on a system with a WDDM driver running." );
+				case ErrorCode.NotSupported:
+					return new DisplayException( "The function is only supported on a system with a WDDM driver running." );
 
-			if( errorCode == ErrorCode.GenFailure )
-				return new InvalidOperationException( "A device attached to the system is not functioning." );
+				case ErrorCode.GenFailure:
+					return new DisplayException( "A device attached to the system is not functioning." );
 
-			if( errorCode == ErrorCode.InsufficientBuffer )
-				return new InsufficientMemoryException( "The supplied path and mode buffers are too small." );
+				case ErrorCode.InsufficientBuffer:
+					return new DisplayException( "The supplied path and mode buffers are too small." );
 
-			if( errorCode == ErrorCode.InvalidParameter )
-				return new ArgumentException( "Invalid combination of parameters and flags." );
+				case ErrorCode.InvalidParameter:
+					return new DisplayException( "Invalid combination of parameters and flags." );
 
-			var ex = Marshal.GetExceptionForHR( (int)errorCode );
-			if( ex == null )
-				ex = new Win32Exception( (int)errorCode );
-			return ex;
+				default:
+					var ex = Marshal.GetExceptionForHR( (int)errorCode );
+					if( ex == null )
+						ex = new Win32Exception( (int)errorCode );
+					return new DisplayException( ex.Message, ex );
+			}
 		}
 
 

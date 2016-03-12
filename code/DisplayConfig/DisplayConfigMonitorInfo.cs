@@ -7,10 +7,13 @@
 
 		private PathTargetInfo info;
 		private VideoSignalInfo mode;
+		private string displayName;
+		private int connectorInstance;
+		private string devicePath;
 
 
-
-		internal DisplayConfigMonitorInfo( DisplayConfiguration displayConfiguration, PathTargetInfo info )
+		
+		internal DisplayConfigMonitorInfo( DisplayConfiguration displayConfiguration, PathTargetInfo info, TargetDeviceName targetDeviceName )
 			: base( info.AdapterId, info.Id, displayConfiguration.Topology )
 		{
 			if( info.ModeInfoIndex > -1 )
@@ -19,6 +22,10 @@
 				mode = VideoSignalInfo.Empty;
 
 			this.info = info;
+			
+			displayName = targetDeviceName.FriendlyName;
+			connectorInstance = targetDeviceName.ConnectorInstance;
+			devicePath = targetDeviceName.DevicePath;
 		}
 
 
@@ -80,6 +87,22 @@
 		public int VideoStandard { get { return mode.VideoStandard; } }
 
 		#endregion VideoSignalInfo properties
+
+
+		#region TargetDeviceName properties
+
+		/// <summary>Gets the one-based instance number of this target when the adapter has multiple targets of this type, or 0.</summary>
+		public int ConnectorInstance { get { return connectorInstance; } }
+		
+
+		/// <summary>Gets the path to the monitor's device name.</summary>
+		public string DevicePath { get { return string.Copy( devicePath ?? string.Empty ); } }
+		
+
+		/// <summary>Gets the display monitor's friendly name.</summary>
+		public string DisplayName { get { return string.Copy( displayName ?? string.Empty ); } }
+
+		#endregion TargetDeviceName properties
 
 	}
 

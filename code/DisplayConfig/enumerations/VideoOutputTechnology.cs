@@ -4,16 +4,15 @@
 namespace ManagedX.Display.DisplayConfig
 {
 
-	// https://msdn.microsoft.com/en-us/library/windows/hardware/ff554003%28v=vs.85%29.aspx
-	// WinGDI.h
-
-
-	/// <summary>Enumerates video output technologies.
+	/// <summary>Enumerates video output technologies, as defined in WinGDI.h.
 	/// <para>Values with "Embedded" in their names indicate that the graphics adapter's video output device connects internally to the display device.
 	/// In those cases, the <see cref="VideoOutputTechnology.Internal"/> value is redundant.
-	/// The caller should ignore <see cref="VideoOutputTechnology.Internal"/> and just process the embedded values, <see cref="VideoOutputTechnology.DisplayPortEmbedded"/> and <see cref="VideoOutputTechnology.UDIEmbedded"/>.</para>
+	/// The caller should ignore <see cref="VideoOutputTechnology.Internal"/> and just process the embedded values,
+	/// <see cref="VideoOutputTechnology.DisplayPortEmbedded"/> and <see cref="VideoOutputTechnology.UDIEmbedded"/>.</para>
 	/// <para>An embedded display port or UDI is also known as an integrated display port or UDI.</para>
 	/// </summary>
+	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff554003%28v=vs.85%29.aspx</remarks>
+	[Design.Native( "WinGDI.h", "DISPLAYCONFIG_VIDEO_OUTPUT_TECHNOLOGY" )]
 	public enum VideoOutputTechnology : int
 	{
 

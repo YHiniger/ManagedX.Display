@@ -7,13 +7,10 @@ namespace ManagedX.Display.DisplayConfig
 	using Graphics;
 
 
-	// https://msdn.microsoft.com/en-us/library/windows/hardware/ff553915%28v=vs.85%29.aspx
-	// WinGDI.h
-
-
 	/// <summary>Contains information about the display adapter.
-	/// <para>The native name of this structure is DISPLAYCONFIG_ADAPTER_NAME.</para>
+	/// <para>The native name of this structure is <code>DISPLAYCONFIG_ADAPTER_NAME</code> (defined in WinGDI.h).</para>
 	/// </summary>
+	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553915%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
 	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 4, Size = 276 )]
 	internal struct AdapterName : IEquatable<AdapterName>
@@ -22,6 +19,7 @@ namespace ManagedX.Display.DisplayConfig
 		private DeviceInfoHeader header;
 		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = 128 )]
 		private string adapterDevicePath;
+
 
 
 		/// <summary>Initializes a new <see cref="AdapterName"/> structure.</summary>
@@ -34,11 +32,14 @@ namespace ManagedX.Display.DisplayConfig
 		}
 
 
+
 		/// <summary>Gets the identifier of the adapter the device information packet refers to.</summary>
 		public Luid AdapterId { get { return header.AdapterId; } }
 
+
 		/// <summary>Gets the source or target identifier to get or set the adapter device information for.</summary>
 		public int Id { get { return header.Id; } }
+
 
 		/// <summary>Gets the device name for the adapter; can't be null.</summary>
 		public string DeviceName { get { return string.Copy( adapterDevicePath ?? string.Empty ); } }
@@ -80,7 +81,6 @@ namespace ManagedX.Display.DisplayConfig
 
 		#region Operators
 
-
 		/// <summary>Equality comparer.</summary>
 		/// <param name="adapterName">An <see cref="AdapterName"/> structure.</param>
 		/// <param name="other">An <see cref="AdapterName"/> structure.</param>
@@ -109,7 +109,7 @@ namespace ManagedX.Display.DisplayConfig
 		//	return adapterName.ToString();
 		//}
 
-		#endregion
+		#endregion Operators
 
 	}
 
