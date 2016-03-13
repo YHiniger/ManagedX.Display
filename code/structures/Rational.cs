@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 
 
-namespace ManagedX.Display
+namespace ManagedX
 {
 
 	/// <summary>Represents a rational number (unsigned).
@@ -15,7 +15,7 @@ namespace ManagedX.Display
 	/// https://msdn.microsoft.com/en-us/library/windows/desktop/bb173069%28v=vs.85%29.aspx (DXGI_RATIONAL)
 	/// </remarks>
 	[System.Diagnostics.DebuggerStepThrough]
-	[Design.Native( "DXGI.h", "DXGI_RATIONAL" )]
+	[Design.Native( "DXGIType.h", "DXGI_RATIONAL" )]
 	[Design.Native( "WinGDI.h", "DISPLAYCONFIG_RATIONAL" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 8 )]
 	public struct Rational : IEquatable<Rational>, IComparable<Rational>
