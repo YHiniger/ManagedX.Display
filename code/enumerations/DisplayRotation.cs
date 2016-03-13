@@ -12,7 +12,7 @@
 	/// https://msdn.microsoft.com/en-us/library/windows/desktop/bb173065%28v=vs.85%29.aspx (DXGI_MODE_ROTATION)
 	/// </remarks>
 	[Design.Native( "WinGDI.h", "DISPLAYCONFIG_ROTATION" )]
-	[Design.Native( "DXGI.h", "DXGI_MODE_ROTATION" )]
+	[Design.Native( "DXGIType.h", "DXGI_MODE_ROTATION" )]
 	public enum DisplayRotation : int
 	{
 

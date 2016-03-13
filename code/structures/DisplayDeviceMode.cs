@@ -134,7 +134,7 @@ namespace ManagedX.Display
 			/// <para>For example, if a display device's resolution is fixed at 1024 x 768 pixels but its mode is set to 640 x 480 pixels, the device can either display a 640 x 480 image somewhere in the interior of the 1024 x 768 screen space or stretch the 640 x 480 image to fill the larger screen space.</para>
 			/// If <see cref="FieldFlags.DisplayFixedOutput"/> is not set, this member must be zero.
 			/// </summary>
-			internal DisplayFixedOutput DisplayFixedOutput;
+			internal ModeScaling DisplayFixedOutput;
 
 
 			/// <summary>Returns a hash code for this <see cref="DisplayInfo"/> structure.</summary>
@@ -296,14 +296,14 @@ namespace ManagedX.Display
 
 		/// <summary>For fixed-resolution display devices only: gets a value indicating how the display presents a low-resolution mode on a higher-resolution display.
 		/// <para>For example, if a display device's resolution is fixed at 1024×768 pixels but its mode is set to 640×480 pixels, the device can either display a 640×480 image somewhere in the interior of the 1024×768 screen space or stretch the 640×480 image to fill the larger screen space.</para>
-		/// If <see cref="FieldFlags.DisplayFixedOutput"/> is not set, this member must be <see cref="DisplayFixedOutput.Default"/>.
+		/// If <see cref="FieldFlags.DisplayFixedOutput"/> is not set, this member must be <see cref="ModeScaling.Default"/>.
 		/// </summary>
-		public DisplayFixedOutput FixedOutput
+		public ModeScaling FixedOutput
 		{
 			get
 			{
 				if( !fields.HasFlag( FieldFlags.DisplayFixedOutput ) )
-					return DisplayFixedOutput.Default;
+					return ModeScaling.Default;
 				
 				return displayInfo.DisplayFixedOutput;
 			}
