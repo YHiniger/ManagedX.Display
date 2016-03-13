@@ -9,8 +9,8 @@ namespace ManagedX.Display.DisplayConfig
 	using Graphics;
 
 
-	/// <summary>Provides access to DisplayConfig (defined in WinUser.h).
-	/// <para>Requires Windows 7 or newer.</para>
+	/// <summary>Provides access to DisplayConfig.
+	/// <para>Requires Windows 7 or greater.</para>
 	/// </summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/hh406259%28v=vs.85%29.aspx</remarks>
 	public sealed class DisplayConfiguration
@@ -20,7 +20,7 @@ namespace ManagedX.Display.DisplayConfig
 		private const int MaxClonePerSource = 4;
 
 		/// <summary>Defines the maximum number of paths: 1024.</summary>
-		public const int MaxPathCount = MaxSourceCount * DisplayAdapter.MaxAdapterCount * MaxClonePerSource;
+		public const int MaxPathCount = DisplayAdapter.MaxAdapterCount * MaxSourceCount * MaxClonePerSource;
 
 
 		/// <summary>Provides access to native functions (located in User32.dll, defined in WinUser.h) related to DisplayConfig.

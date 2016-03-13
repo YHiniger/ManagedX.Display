@@ -246,7 +246,16 @@ namespace ManagedX.Display
 
 
 		/// <summary>Gets the primary <see cref="DisplayMonitor"/>.</summary>
-		public static DisplayMonitor PrimaryMonitor { get { return DisplayAdapter.PrimaryMonitor; } }
+		public static DisplayMonitor PrimaryMonitor
+		{
+			get
+			{
+				if( !isInitialized )
+					Refresh();
+
+				return DisplayAdapter.PrimaryMonitor;
+			}
+		}
 
 
 		/// <summary>Raised when the <see cref="PrimaryMonitor"/> changed.</summary>
