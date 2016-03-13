@@ -91,7 +91,7 @@
     <Compile Include="code\enumerations\AdapterStateIndicators.cs" />
     <Compile Include="code\enumerations\MonitorStateIndicators.cs" />
     <Compile Include="code\enumerations\DisplayOrientation.cs" />
-    <Compile Include="code\enumerations\DisplayFixedOutput.cs" />
+    <Compile Include="code\enumerations\ModeScaling.cs" />
     <Compile Include="code\enumerations\MonitorInfoStateIndicators.cs" />
     <Compile Include="code\enumerations\DisplayRotation.cs" />
     <Compile Include="code\enumerations\ScanlineOrdering.cs" />
