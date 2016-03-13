@@ -7,6 +7,7 @@ using System.Security;
 namespace ManagedX.Display.DisplayConfig
 {
 	using Graphics;
+	using Win32;
 
 
 	/// <summary>Provides access to DisplayConfig.
