@@ -19,11 +19,15 @@ namespace ManagedX.Display
 	internal struct DisplayDevice : IEquatable<DisplayDevice>
 	{
 
+		/// <summary>Defines the maximum length, in chars, of the <see cref="DeviceName"/>.</summary>
+		public const int MaxDeviceNameChars = 32;
+
+
 		#region Fields
 
 		private int structureSize;
 
-		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = 32 )]
+		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = MaxDeviceNameChars )]
 		private string deviceName;
 
 		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = 128 )]
@@ -38,7 +42,7 @@ namespace ManagedX.Display
 		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = 128 )]
 		private string deviceKey;
 
-		#endregion
+		#endregion Fields
 
 
 		private DisplayDevice( int structSize )

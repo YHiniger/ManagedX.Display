@@ -7,8 +7,11 @@ namespace ManagedX.Display
 {
 	using DisplayConfig;
 
+	
+	// "GDI": Graphics Device Interface
 
-	/// <summary>ManagedX display device manager.</summary>
+
+	/// <summary>ManagedX GDI display device manager.</summary>
 	public static class DisplayDeviceManager
 	{
 
@@ -16,11 +19,14 @@ namespace ManagedX.Display
 		public const int MaxAdapterCount = DisplayAdapter.MaxAdapterCount;
 
 
+		/// <summary>Defines the maximum length, in chars, of a GDI device name.</summary>
+		public const int MaxDeviceNameChars = DisplayDeviceBase.MaxDeviceNameChars;
+
 
 		private static readonly Dictionary<string, DisplayAdapter> adaptersByDeviceName = new Dictionary<string, DisplayAdapter>( MaxAdapterCount );
 		private static string primaryAdapterDeviceName;
 		private static bool isInitialized;
-		private static DisplayConfiguration currentConfiguration;
+		private static DisplayConfiguration currentConfiguration;	// not supported on Windows Vista
 		//private static DisplayConfiguration registryConfiguration;
 
 
@@ -156,27 +162,49 @@ namespace ManagedX.Display
 		}
 
 
-		/// <summary>Returns a display adapter given its device name.</summary>
-		/// <param name="deviceIdentifier">The adapter device name.</param>
-		/// <returns>Returns the <see cref="DisplayAdapter"/> whose device identifier matches the specified <paramref name="deviceIdentifier"/>, or null.</returns>
+		/// <summary>Returns a GDI display adapter given its device name (ie: \\.\DISPLAY1).</summary>
+		/// <param name="deviceName">The adapter device name.</param>
+		/// <returns>Returns the <see cref="DisplayAdapter"/> whose device identifier matches the specified <paramref name="deviceName"/>, or null.</returns>
 		/// <exception cref="ArgumentNullException"/>
 		/// <exception cref="ArgumentException"/>
-		public static DisplayAdapter GetAdapterByDeviceIdentifier( string deviceIdentifier )
+		public static DisplayAdapter GetAdapterByGdiDeviceName( string deviceName )
 		{
-			if( string.IsNullOrWhiteSpace( deviceIdentifier ) )
+			if( string.IsNullOrWhiteSpace( deviceName ) )
 			{
-				if( deviceIdentifier == null )
-					throw new ArgumentNullException( "deviceIdentifier" );
-				throw new ArgumentException( "Invalid device identifier.", "deviceIdentifier" );
+				if( deviceName == null )
+					throw new ArgumentNullException( "deviceName" );
+				throw new ArgumentException( "Invalid device identifier.", "deviceName" );
 			}
 
 			if( !isInitialized )
 				Refresh();
 
 			DisplayAdapter adapter;
-			if( adaptersByDeviceName.TryGetValue( deviceIdentifier, out adapter ) )
+			if( adaptersByDeviceName.TryGetValue( deviceName, out adapter ) )
 				return adapter;
 			return null;
+		}
+
+
+		/// <summary>Returns a read-only collection of GDI display adapters, given their device id.</summary>
+		/// <param name="gdiDeviceId">A GDI device id.</param>
+		/// <returns>Returns a read-only collection of GDI display adapters, given their device id.</returns>
+		public static ReadOnlyDisplayAdapterCollection GetAdaptersByDeviceId( string gdiDeviceId )
+		{
+			if( !isInitialized )
+				Refresh();
+
+			var adapters = new List<DisplayAdapter>( adaptersByDeviceName.Values );
+			var adapterIndex = 0;
+			while( adapterIndex < adapters.Count )
+			{
+				if( adapters[ adapterIndex ].DeviceId == gdiDeviceId )
+					++adapterIndex;
+				else
+					adapters.RemoveAt( adapterIndex );
+			}
+			
+			return new ReadOnlyDisplayAdapterCollection( adapters );
 		}
 
 

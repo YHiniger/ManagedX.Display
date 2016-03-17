@@ -4,11 +4,15 @@
 namespace ManagedX.Display
 {
 
-	/// <summary>Encapsulates a <see cref="DisplayDevice"/> structure.
+	/// <summary>Base class for GDI display devices (adapters, monitors).
 	/// <para>Requires Windows Vista or newer. For Desktop applications only.</para>
 	/// </summary>
 	public abstract class DisplayDeviceBase : ManagedX.Design.IDevice, IEquatable<DisplayDeviceBase>
 	{
+
+		/// <summary>Defines the maximum length, in chars, of the GDI <see cref="DeviceName"/>.</summary>
+		public const int MaxDeviceNameChars = DisplayDevice.MaxDeviceNameChars;
+
 
 		private DisplayDevice device;
 
