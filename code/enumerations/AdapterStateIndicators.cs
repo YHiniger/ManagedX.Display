@@ -9,7 +9,7 @@ namespace ManagedX.Display
 	/// </summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/dd183569%28v=vs.85%29.aspx</remarks>
 	[System.Flags]
-	[Design.Native( "WinGDI.h", "DISPLAY_DEVICE_*" )]
+	[Win32.Native( "WinGDI.h", "DISPLAY_DEVICE_*" )]
 	public enum AdapterStateIndicators : int
 	{
 

@@ -5,7 +5,7 @@
 	/// <para>This enumeration is equivalent to the native <code>DISPLAY_DEVICE_</code> constants (defined in WinGDI.h).</para>
 	/// </summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/dd183569%28v=vs.85%29.aspx</remarks>
-	[Design.Native( "WinGDI.h", "DISPLAY_DEVICE_*" )]
+	[Win32.Native( "WinGDI.h", "DISPLAY_DEVICE_*" )]
 	[System.Flags]
 	public enum MonitorStateIndicators : int
 	{

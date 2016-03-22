@@ -15,8 +15,8 @@ namespace ManagedX
 	/// https://msdn.microsoft.com/en-us/library/windows/desktop/bb173069%28v=vs.85%29.aspx (DXGI_RATIONAL)
 	/// </remarks>
 	[System.Diagnostics.DebuggerStepThrough]
-	[Design.Native( "DXGIType.h", "DXGI_RATIONAL" )]
-	[Design.Native( "WinGDI.h", "DISPLAYCONFIG_RATIONAL" )]
+	[Win32.Native( "DXGIType.h", "DXGI_RATIONAL" )]
+	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_RATIONAL" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 8 )]
 	public struct Rational : IEquatable<Rational>, IComparable<Rational>
 	{

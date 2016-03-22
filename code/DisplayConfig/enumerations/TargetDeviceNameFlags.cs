@@ -7,7 +7,7 @@ namespace ManagedX.Display.DisplayConfig
 	/// <summary>Enumerates flags used in the <see cref="TargetDeviceName"/> structure (as defined in WinGDI.h).</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553990%28v=vs.85%29.aspx</remarks>
 	[SuppressMessage( "Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flags" )]
-	[Design.Native( "WinGDI.h", "DISPLAYCONFIG_TARGET_DEVICE_NAME_FLAGS" )]
+	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_TARGET_DEVICE_NAME_FLAGS" )]
 	[System.Flags]
 	public enum TargetDeviceNameFlags : int
 	{

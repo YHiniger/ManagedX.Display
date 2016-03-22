@@ -4,7 +4,7 @@
 	/// <summary>Enumerates requests for the QueryDisplayConfig function (as defined in WinUser.h).</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff569215%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.CodeAnalysis.SuppressMessage( "Microsoft.Design", "CA1027:MarkEnumsWithFlags" )]
-	[Design.Native( "WinUser.h" )]
+	[Win32.Native( "WinUser.h" )]
 	public enum QueryDisplayConfigRequest : int
 	{
 

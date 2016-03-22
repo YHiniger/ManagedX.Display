@@ -5,7 +5,7 @@
 	/// <para>This enumeration is equivalent to the native <code>DISPLAYCONFIG_PATH_TARGET_INFO</code> (defined in WinGDI.h).</para>
 	/// </summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553954%28v=vs.85%29.aspx</remarks>
-	[Design.Native( "WinGDI.h", "DISPLAYCONFIG_PATH_TARGET_INFO" )]
+	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_PATH_TARGET_INFO" )]
 	[System.Flags]
 	public enum PathTargetInfoStatus : int
 	{

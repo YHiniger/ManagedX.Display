@@ -4,7 +4,7 @@
 	/// <summary>Enumerates the types of display topology (as defined in WinGDI.h).</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff554001%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.CodeAnalysis.SuppressMessage( "Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Unspecified is the zero value." )]
-	[Design.Native( "WinGDI.h", "DISPLAYCONFIG_TOPOLOGY_ID" )]
+	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_TOPOLOGY_ID" )]
 	[System.Flags]
 	public enum TopologyId : int
 	{

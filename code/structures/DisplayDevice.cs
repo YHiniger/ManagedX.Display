@@ -14,7 +14,7 @@ namespace ManagedX.Display
 	/// </summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/dd183569%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
-	[Design.Native( "WinGDI.h", "DISPLAY_DEVICE" )]
+	[Win32.Native( "WinGDI.h", "DISPLAY_DEVICE" )]
 	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 4, Size = 840 )]
 	internal struct DisplayDevice : IEquatable<DisplayDevice>
 	{

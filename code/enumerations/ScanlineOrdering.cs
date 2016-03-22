@@ -13,8 +13,8 @@
 	/// https://msdn.microsoft.com/en-us/library/windows/hardware/ff553977%28v=vs.85%29.aspx (DISPLAYCONFIG_SCANLINE_ORDERING)
 	/// https://msdn.microsoft.com/en-us/library/windows/desktop/bb173067%28v=vs.85%29.aspx (DXGI_SCANLINE_ORDER)
 	/// </remarks>
-	[Design.Native( "DXGIType.h", "DXGI_MODE_SCANLINE_ORDER" )]
-	[Design.Native( "WinGDI.h", "DISPLAYCONFIG_SCANLINE_ORDERING" )]
+	[Win32.Native( "DXGIType.h", "DXGI_MODE_SCANLINE_ORDER" )]
+	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_SCANLINE_ORDERING" )]
 	public enum ScanlineOrdering : int
 	{
 

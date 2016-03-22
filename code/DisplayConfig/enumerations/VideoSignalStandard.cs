@@ -8,7 +8,7 @@ namespace ManagedX.Display.DisplayConfig
 	/// <para>This enumeration reflects the native <code>D3DKMDT_VIDEO_SIGNAL_STANDARD</code> enumeration (defined in D3Dkmdt.h).</para>
 	/// </summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff546632%28v=vs.85%29.aspx</remarks>
-	[Design.Native( "D3Dkmdt.h", "D3DKMDT_VIDEO_SIGNAL_STANDARD" )]
+	[Win32.Native( "D3Dkmdt.h", "D3DKMDT_VIDEO_SIGNAL_STANDARD" )]
 	public enum VideoSignalStandard : int
 	{
 

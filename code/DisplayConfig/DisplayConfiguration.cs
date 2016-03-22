@@ -27,7 +27,7 @@ namespace ManagedX.Display.DisplayConfig
 		/// <summary>Provides access to native functions (located in User32.dll, defined in WinUser.h) related to DisplayConfig.
 		/// <para>Requires Windows 7 or newer.</para>
 		/// </summary>
-		[ManagedX.Design.Native( "WinUser.h" )]
+		[Native( "WinUser.h" )]
 		[SuppressUnmanagedCodeSecurity]
 		private static class SafeNativeMethods
 		{
@@ -337,10 +337,10 @@ namespace ManagedX.Display.DisplayConfig
 		}
 
 
-		/// <summary>Returns a <see cref="DisplayException"/> for a given error code.</summary>
+		/// <summary>Returns a <see cref="DisplayConfigException"/> for a given error code.</summary>
 		/// <param name="errorCode">An error code (HRESULT).</param>
 		/// <returns>Returns an exception, or null if <paramref name="errorCode"/> is <see cref="ErrorCode.None"/>.</returns>
-		private static DisplayException GetException( ErrorCode errorCode )
+		private static DisplayConfigException GetException( ErrorCode errorCode )
 		{
 			if( errorCode == ErrorCode.None )
 				return null;
@@ -348,25 +348,25 @@ namespace ManagedX.Display.DisplayConfig
 			switch( errorCode )
 			{
 				case ErrorCode.AccessDenied:
-					return new DisplayException( "Access denied." );
+					return new DisplayConfigException( "Access denied." );
 
 				case ErrorCode.NotSupported:
-					return new DisplayException( "The function is only supported on a system with a WDDM driver running." );
+					return new DisplayConfigException( "The function is only supported on a system with a WDDM driver running." );
 
 				case ErrorCode.GenFailure:
-					return new DisplayException( "A device attached to the system is not functioning." );
+					return new DisplayConfigException( "A device attached to the system is not functioning." );
 
 				case ErrorCode.InsufficientBuffer:
-					return new DisplayException( "The supplied path and mode buffers are too small." );
+					return new DisplayConfigException( "The supplied path and mode buffers are too small." );
 
 				case ErrorCode.InvalidParameter:
-					return new DisplayException( "Invalid combination of parameters and flags." );
+					return new DisplayConfigException( "Invalid combination of parameters and flags." );
 
 				default:
 					var ex = Marshal.GetExceptionForHR( (int)errorCode );
 					if( ex == null )
 						ex = new Win32Exception( (int)errorCode );
-					return new DisplayException( ex.Message, ex );
+					return new DisplayConfigException( ex.Message, ex );
 			}
 		}
 

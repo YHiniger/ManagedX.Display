@@ -5,7 +5,7 @@
 	/// <para>This enumeration is equivalent to the native <code>DISPLAYCONFIG_PIXELFORMAT</code> enumeration (defined in WinGDI.h).</para>
 	/// </summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553963%28v=vs.85%29.aspx</remarks>
-	[Design.Native( "WinGDI.h", "DISPLAYCONFIG_PIXELFORMAT" )]
+	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_PIXELFORMAT" )]
 	public enum PixelFormat : int
 	{
 

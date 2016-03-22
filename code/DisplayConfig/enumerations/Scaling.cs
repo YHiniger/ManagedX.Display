@@ -4,7 +4,7 @@
 	/// <summary>Specifies the scaling transformation applied to content displayed on a video present network (VidPN) present path (as defined in WinGDI.h).</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553974%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.CodeAnalysis.SuppressMessage( "Microsoft.Design", "CA1027:MarkEnumsWithFlags" )]
-	[Design.Native( "WinGDI.h", "DISPLAYCONFIG_SCALING" )]
+	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_SCALING" )]
 	public enum Scaling : int
 	{
 

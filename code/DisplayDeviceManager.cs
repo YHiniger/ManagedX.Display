@@ -363,7 +363,8 @@ namespace ManagedX.Display
 					var monitor2 = GetMonitorByDevicePath( targetDeviceName.DevicePath );
 					if( monitor2 != null )
 					{
-						monitor.DisplayName = targetDeviceName.FriendlyName;
+						if( !string.IsNullOrWhiteSpace( targetDeviceName.FriendlyName ) )
+							monitor.DisplayName = targetDeviceName.FriendlyName;
 						return new DisplayConfigMonitorInfo( currentConfiguration, target, targetDeviceName );
 					}
 				}

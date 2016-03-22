@@ -12,7 +12,7 @@ namespace ManagedX.Display.DisplayConfig
 	/// <para>An embedded display port or UDI is also known as an integrated display port or UDI.</para>
 	/// </summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff554003%28v=vs.85%29.aspx</remarks>
-	[Design.Native( "WinGDI.h", "DISPLAYCONFIG_VIDEO_OUTPUT_TECHNOLOGY" )]
+	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_VIDEO_OUTPUT_TECHNOLOGY" )]
 	public enum VideoOutputTechnology : int
 	{
 

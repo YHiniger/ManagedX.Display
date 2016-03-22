@@ -5,7 +5,7 @@
 	/// <para>This enumeration is equivalent to the native <code>DISPLAYCONFIG_ROTATION</code> enumeration (defined in WinGDI.h).</para>
 	/// </summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/dd183565%28v=vs.85%29.aspx</remarks>
-	[Design.Native( "WinGDI.h", "DISPLAYCONFIG_ROTATION" )]
+	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_ROTATION" )]
 	internal enum DisplayOrientation : int
 	{
 
