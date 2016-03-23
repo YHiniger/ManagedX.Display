@@ -68,7 +68,7 @@ namespace ManagedX.Display
 			if( DisplayConfiguration.IsSupported )
 			{
 				if( currentConfiguration == null )
-					currentConfiguration = DisplayConfiguration.Query( QueryDisplayConfigRequest.DatabaseCurrent );
+					currentConfiguration = DisplayConfiguration.Query( QueryDisplayConfigRequest.OnlyActivePaths );
 				else
 					currentConfiguration.Refresh();
 			}

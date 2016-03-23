@@ -7,7 +7,7 @@ namespace ManagedX.Display
 	/// <summary>Base class for GDI display devices (adapters, monitors).
 	/// <para>Requires Windows Vista or newer. For Desktop applications only.</para>
 	/// </summary>
-	public abstract class DisplayDeviceBase : ManagedX.Design.IDevice, IEquatable<DisplayDeviceBase>
+	public abstract class DisplayDeviceBase : IEquatable<DisplayDeviceBase>
 	{
 
 		/// <summary>Defines the maximum length, in chars, of the GDI <see cref="DeviceName"/>.</summary>
@@ -27,8 +27,6 @@ namespace ManagedX.Display
 
 
 
-		#region IDevice implementation
-
 		/// <summary>Gets the <see cref="DeviceName"/> of this display device.
 		/// <para>The device name is in the form "\\.\DISPLAY1" for an adapter, and "\\.\DISPLAY1\Monitor0" for a monitor.</para>
 		/// </summary>
@@ -41,8 +39,6 @@ namespace ManagedX.Display
 			get { return device.DeviceString; }
 			internal set { } // for DisplayMonitor to get a chance to receive a more friendly name than "Generic PnP Monitor"
 		}
-
-		#endregion IDevice implementation
 
 		
 		#region Protected properties
