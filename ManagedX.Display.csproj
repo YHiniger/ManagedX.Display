@@ -98,7 +98,6 @@
     <Compile Include="code\structures\DisplayDevice.cs" />
     <Compile Include="code\structures\DisplayDeviceMode.cs" />
     <Compile Include="code\structures\MonitorInfoEx.cs" />
-    <Compile Include="code\structures\Rational.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="LICENSE" />
     <None Include="ManagedX.snk" />

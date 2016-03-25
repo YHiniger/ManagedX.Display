@@ -238,6 +238,7 @@ namespace ManagedX.Display
 		#endregion
 
 
+
 		private DisplayDeviceMode( ushort structSize )
 			: this()
 		{

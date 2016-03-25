@@ -1,7 +1,8 @@
 ﻿namespace ManagedX.Display
 {
 	using DisplayConfig; // for comments
-	
+	using Win32;
+
 
 	/// <summary>Specifies the method the display uses to create an image on a screen, or the raster uses to create an image on a surface.
 	/// <para>This enumeration is equivalent to the native
@@ -13,8 +14,8 @@
 	/// https://msdn.microsoft.com/en-us/library/windows/hardware/ff553977%28v=vs.85%29.aspx (DISPLAYCONFIG_SCANLINE_ORDERING)
 	/// https://msdn.microsoft.com/en-us/library/windows/desktop/bb173067%28v=vs.85%29.aspx (DXGI_SCANLINE_ORDER)
 	/// </remarks>
-	[Win32.Native( "DXGIType.h", "DXGI_MODE_SCANLINE_ORDER" )]
-	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_SCANLINE_ORDERING" )]
+	[Native( "DXGIType.h", "DXGI_MODE_SCANLINE_ORDER" )]
+	[Native( "WinGDI.h", "DISPLAYCONFIG_SCANLINE_ORDERING" )]
 	public enum ScanlineOrdering : int
 	{
 
