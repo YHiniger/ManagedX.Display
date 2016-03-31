@@ -41,9 +41,10 @@ namespace ManagedX.Display.DisplayConfig
 		/// <para>For a list of possible values, see the <see cref="VideoSignalStandard"/> enumerated type.</para>
 		/// </summary>
 		public int VideoStandard { get { return videoStandard; } }
-		
-		/// <summary>The scan-line ordering (for example, progressive or interlaced) of the video signal.</summary>
-		public ScanlineOrdering ScanlingOrdering { get { return scanLineOrdering; } }
+
+        /// <summary>The scan-line ordering (for example, progressive or interlaced) of the video signal.</summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Scanline")]
+        public ScanlineOrdering ScanlineOrdering { get { return scanLineOrdering; } }
 
 
 		/// <summary>Returns a hash code for this <see cref="VideoSignalInfo"/> structure.</summary>

@@ -162,12 +162,13 @@ namespace ManagedX.Display
 		}
 
 
-		/// <summary>Returns a GDI display adapter given its device name (ie: \\.\DISPLAY1).</summary>
-		/// <param name="deviceName">The adapter device name.</param>
-		/// <returns>Returns the <see cref="DisplayAdapter"/> whose device identifier matches the specified <paramref name="deviceName"/>, or null.</returns>
-		/// <exception cref="ArgumentNullException"/>
-		/// <exception cref="ArgumentException"/>
-		public static DisplayAdapter GetAdapterByGdiDeviceName( string deviceName )
+        /// <summary>Returns a GDI display adapter given its device name (ie: \\.\DISPLAY1).</summary>
+        /// <param name="deviceName">The adapter device name.</param>
+        /// <returns>Returns the <see cref="DisplayAdapter"/> whose device identifier matches the specified <paramref name="deviceName"/>, or null.</returns>
+        /// <exception cref="ArgumentNullException"/>
+        /// <exception cref="ArgumentException"/>
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gdi")]
+        public static DisplayAdapter GetAdapterByGdiDeviceName( string deviceName )
 		{
 			if( string.IsNullOrWhiteSpace( deviceName ) )
 			{
@@ -186,10 +187,11 @@ namespace ManagedX.Display
 		}
 
 
-		/// <summary>Returns a read-only collection of GDI display adapters, given their device id.</summary>
-		/// <param name="gdiDeviceId">A GDI device id.</param>
-		/// <returns>Returns a read-only collection of GDI display adapters, given their device id.</returns>
-		public static ReadOnlyDisplayAdapterCollection GetAdaptersByDeviceId( string gdiDeviceId )
+        /// <summary>Returns a read-only collection of GDI display adapters, given their device id.</summary>
+        /// <param name="gdiDeviceId">A GDI device id.</param>
+        /// <returns>Returns a read-only collection of GDI display adapters, given their device id.</returns>
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "gdi")]
+        public static ReadOnlyDisplayAdapterCollection GetAdaptersByDeviceId( string gdiDeviceId )
 		{
 			if( !isInitialized )
 				Refresh();

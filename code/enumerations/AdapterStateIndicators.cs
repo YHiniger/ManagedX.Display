@@ -19,8 +19,9 @@ namespace ManagedX.Display
 		/// <summary>The device is attached to the desktop.</summary>
 		AttachedToDesktop = 0x00000001,
 
-		/// <summary>No documentation.</summary>
-		MultiDriver = 0x00000002,
+        /// <summary>No documentation.</summary>
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Multi")]
+        MultiDriver = 0x00000002,
 
 		/// <summary>The primary desktop is on the device.
 		/// <para>For a system with a single display card, this is always set.</para>
@@ -45,10 +46,11 @@ namespace ManagedX.Display
 		/// </summary>
 		Removable = 0x00000020,
 
-		/// <summary>No documentation.
-		/// <para>This value is present since Windows 8.</para>
-		/// </summary>
-		AccDriver = 0x00000040,
+        /// <summary>No documentation.
+        /// <para>This value is present since Windows 8.</para>
+        /// </summary>
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Acc")]
+        AccDriver = 0x00000040,
 
 
 		/// <summary>No documentation.

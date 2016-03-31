@@ -9,11 +9,11 @@
 
 		private Luid adapterId;
 		private int id;
-		private TopologyId topology;
+		private TopologyIndicators topology;
 		
 
 
-		internal DisplayConfigInfo( Luid adapterId, int id, TopologyId topology )
+		internal DisplayConfigInfo( Luid adapterId, int id, TopologyIndicators topology )
 		{
 			this.adapterId = adapterId;
 			this.id = id;
@@ -31,7 +31,7 @@
 
 
 		/// <summary>Gets the display topology.</summary>
-		public TopologyId Topology { get { return topology; } }
+		public TopologyIndicators Topology { get { return topology; } }
 
 	}
 

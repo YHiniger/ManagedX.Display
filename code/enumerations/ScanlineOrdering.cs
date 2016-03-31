@@ -4,17 +4,18 @@
 	using Win32;
 
 
-	/// <summary>Specifies the method the display uses to create an image on a screen, or the raster uses to create an image on a surface.
-	/// <para>This enumeration is equivalent to the native
-	/// <code>DISPLAYCONFIG_SCANLINE_ORDERING</code> (defined in WinGDI.h) and
-	/// <code>DXGI_MODE_SCANLINE_ORDER</code> (defined in DXGIType.h) enumerations.
-	/// </para>
-	/// </summary>
-	/// <remarks>
-	/// https://msdn.microsoft.com/en-us/library/windows/hardware/ff553977%28v=vs.85%29.aspx (DISPLAYCONFIG_SCANLINE_ORDERING)
-	/// https://msdn.microsoft.com/en-us/library/windows/desktop/bb173067%28v=vs.85%29.aspx (DXGI_SCANLINE_ORDER)
-	/// </remarks>
-	[Native( "DXGIType.h", "DXGI_MODE_SCANLINE_ORDER" )]
+    /// <summary>Specifies the method the display uses to create an image on a screen, or the raster uses to create an image on a surface.
+    /// <para>This enumeration is equivalent to the native
+    /// <code>DISPLAYCONFIG_SCANLINE_ORDERING</code> (defined in WinGDI.h) and
+    /// <code>DXGI_MODE_SCANLINE_ORDER</code> (defined in DXGIType.h) enumerations.
+    /// </para>
+    /// </summary>
+    /// <remarks>
+    /// https://msdn.microsoft.com/en-us/library/windows/hardware/ff553977%28v=vs.85%29.aspx (DISPLAYCONFIG_SCANLINE_ORDERING)
+    /// https://msdn.microsoft.com/en-us/library/windows/desktop/bb173067%28v=vs.85%29.aspx (DXGI_SCANLINE_ORDER)
+    /// </remarks>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Scanline")]
+    [Native( "DXGIType.h", "DXGI_MODE_SCANLINE_ORDER" )]
 	[Native( "WinGDI.h", "DISPLAYCONFIG_SCANLINE_ORDERING" )]
 	public enum ScanlineOrdering : int
 	{

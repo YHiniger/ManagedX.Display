@@ -167,11 +167,11 @@ namespace ManagedX.Display
 
 				while( EnumDisplaySettingsExW( deviceName, modeIndex++, ref devMode, options ) )
 				{
-					if( !devMode.PelsWidth.HasValue || !devMode.PelsHeight.HasValue || !devMode.DisplayFrequency.HasValue )
+					if( !devMode.Width.HasValue || !devMode.Height.HasValue || !devMode.DisplayFrequency.HasValue )
 						continue;
 					// basic filtering: we don't need display modes whose width, height or frequency is missing.
 
-					if( !devMode.BitsPerPel.HasValue || devMode.BitsPerPel.Value != 32 )
+					if( !devMode.BitsPerPixel.HasValue || devMode.BitsPerPixel.Value != 32 )
 						continue;
 					// 8, 16, and even 24 bpp modes are no more supported, since Windows 7 (to be confirmed).
 

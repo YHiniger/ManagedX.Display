@@ -134,7 +134,7 @@ namespace ManagedX.Display.DisplayConfig
 			/// </param>
 			/// <param name="modeInfoArray">Pointer to a variable that contains an array of <see cref="ModeInfo"/> elements. This parameter cannot be null.</param>
 			/// <param name="currentTopologyId">Pointer to a variable that receives the identifier of the currently active topology in the CCD database.
-			/// For a list of possible values, see the <see cref="TopologyId"/> enumerated type.
+			/// For a list of possible values, see the <see cref="TopologyIndicators"/> enumerated type.
 			/// The currentTopologyId parameter is only set when the <paramref name="flags"/> parameter value is QDC_DATABASE_CURRENT.
 			/// If the <paramref name="flags"/> parameter value is set to QDC_DATABASE_CURRENT, the currentTopologyId parameter must not be null.
 			/// If the <paramref name="flags"/> parameter value is not set to QDC_DATABASE_CURRENT, the currentTopologyId parameter value must be null.
@@ -154,7 +154,7 @@ namespace ManagedX.Display.DisplayConfig
 				[In, Out, MarshalAs( UnmanagedType.LPArray, SizeParamIndex = 1 )] PathInfo[] pathInfoArray,
 				[In, Out] ref int modeInfoArrayElementCount,
 				[In, Out, MarshalAs( UnmanagedType.LPArray, SizeParamIndex = 3 )] ModeInfo[] modeInfoArray,
-				out TopologyId currentTopologyId
+				out TopologyIndicators currentTopologyId
 			);
 
 
@@ -178,12 +178,12 @@ namespace ManagedX.Display.DisplayConfig
 			/// <see cref="ErrorCode.InsufficientBuffer"/>.
 			/// </returns>
 			/// <exception cref="InvalidEnumArgumentException"/>
-			internal static ErrorCode QueryDisplayConfig( QueryDisplayConfigRequest request, out PathInfo[] pathInfoArray, out ModeInfo[] modeInfoArray, out TopologyId currentTopologyId )
+			internal static ErrorCode QueryDisplayConfig( QueryDisplayConfigRequest request, out PathInfo[] pathInfoArray, out ModeInfo[] modeInfoArray, out TopologyIndicators currentTopologyId )
 			{
 				if( request == QueryDisplayConfigRequest.None )
 					throw new InvalidEnumArgumentException( "request", (int)request, typeof( QueryDisplayConfigRequest ) );
 
-				currentTopologyId = TopologyId.Unspecified;
+				currentTopologyId = TopologyIndicators.Unspecified;
 
 				int pathInfoArrayElementCount;
 				int modeInfoArrayElementCount;
@@ -520,13 +520,14 @@ namespace ManagedX.Display.DisplayConfig
 		}
 
 
-		/// <summary>Queries and returns a display configuration.</summary>
-		/// <param name="request">The request (flags?); must not be <see cref="QueryDisplayConfigRequest.None"/>.</param>
-		/// <returns>Returns a <see cref="DisplayConfiguration"/> object containing the requested information.</returns>
-		/// <exception cref="PlatformNotSupportedException"/>
-		/// <exception cref="InvalidEnumArgumentException"/>
-		/// <exception cref="InvalidOperationException"/>
-		public static DisplayConfiguration Query( QueryDisplayConfigRequest request )
+        /// <summary>Queries and returns a display configuration.</summary>
+        /// <param name="request">The request (flags?); must not be <see cref="QueryDisplayConfigRequest.None"/>.</param>
+        /// <returns>Returns a <see cref="DisplayConfiguration"/> object containing the requested information.</returns>
+        /// <exception cref="PlatformNotSupportedException"/>
+        /// <exception cref="InvalidEnumArgumentException"/>
+        /// <exception cref="InvalidOperationException"/>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "DisplayConfig")]
+        public static DisplayConfiguration Query( QueryDisplayConfigRequest request )
 		{
 			if( !IsSupported )
 				throw new PlatformNotSupportedException( "DisplayConfig is only available on Windows 7 or greater." );
@@ -550,14 +551,15 @@ namespace ManagedX.Display.DisplayConfig
 		private QueryDisplayConfigRequest request;
 		private PathInfo[] paths;
 		private ModeInfo[] modes;
-		private TopologyId topologyId;
+		private TopologyIndicators topologyId;
 
 
 
-		/// <summary>Instantiates a new <see cref="DisplayConfiguration"/>.</summary>
-		/// <param name="request">A value of the <see cref="QueryDisplayConfigRequest"/> enumeration; must not be <see cref="QueryDisplayConfigRequest.None"/>.</param>
-		/// <exception cref="InvalidOperationException"/>
-		private DisplayConfiguration( QueryDisplayConfigRequest request )
+        /// <summary>Instantiates a new <see cref="DisplayConfiguration"/>.</summary>
+        /// <param name="request">A value of the <see cref="QueryDisplayConfigRequest"/> enumeration; must not be <see cref="QueryDisplayConfigRequest.None"/>.</param>
+        /// <exception cref="InvalidOperationException"/>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "DisplayConfiguration")]
+        private DisplayConfiguration( QueryDisplayConfigRequest request )
 		{
 			this.request = request;
 
@@ -598,7 +600,7 @@ namespace ManagedX.Display.DisplayConfig
 
 
 		/// <summary>Gets the type of display topology.</summary>
-		public TopologyId Topology { get { return topologyId; } }
+		public TopologyIndicators Topology { get { return topologyId; } }
 
 	}
 

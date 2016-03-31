@@ -66,10 +66,11 @@ namespace ManagedX.Display.DisplayConfig
 		public Rational RefreshRate { get { return refreshRate; } }
 
 
-		/// <summary>Gets a value that specifies the scan-line ordering of the output on the target.
-		/// If the caller specifies target mode information, the operating system will instead use the scan-line ordering that is stored in the scanLineOrdering member of the <see cref="VideoSignalInfo"/> structure.
-		/// In this case, the caller specifies this value in the targetVideoSignalInfo member of the <see cref="TargetMode"/> structure.</summary>
-		public ScanlineOrdering ScanlineOrdering { get { return scanLineOrdering; } }
+        /// <summary>Gets a value that specifies the scan-line ordering of the output on the target.
+        /// If the caller specifies target mode information, the operating system will instead use the scan-line ordering that is stored in the scanLineOrdering member of the <see cref="VideoSignalInfo"/> structure.
+        /// In this case, the caller specifies this value in the targetVideoSignalInfo member of the <see cref="TargetMode"/> structure.</summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Scanline")]
+        public ScanlineOrdering ScanlineOrdering { get { return scanLineOrdering; } }
 
 
 		/// <summary>Gets a value that specifies whether the target is available.

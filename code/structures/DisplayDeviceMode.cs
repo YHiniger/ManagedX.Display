@@ -78,13 +78,13 @@ namespace ManagedX.Display
 			/// <summary><see cref="DisplayDeviceMode.LogPixels"/> is initialized.</summary>
 			LogPixels = 131072,
 
-			/// <summary><see cref="DisplayDeviceMode.BitsPerPel"/> is initialized.</summary>
+			/// <summary><see cref="DisplayDeviceMode.BitsPerPixel"/> is initialized.</summary>
 			BitsPerPixel = 262144,
 
-			/// <summary><see cref="DisplayDeviceMode.PelsWidth"/> is initialized.</summary>
+			/// <summary><see cref="DisplayDeviceMode.Width"/> is initialized.</summary>
 			PelsWidth = 524288,
 
-			/// <summary><see cref="DisplayDeviceMode.PelsHeight"/> is initialized.</summary>
+			/// <summary><see cref="DisplayDeviceMode.Height"/> is initialized.</summary>
 			PelsHeight = 1048576,
 
 			/// <summary><see cref="DisplayDeviceMode.displayFlags"/> is initialized.</summary>
@@ -281,7 +281,7 @@ namespace ManagedX.Display
 
 
 		/// <summary>Gets the orientation images should be presented at. If <see cref="FieldFlags.DisplayOrientation"/> is not set, this member must be <see cref="DisplayRotation.Unspecified"/>.
-		/// <para>To determine whether the display orientation is portrait or landscape orientation, check the <see cref="PelsWidth"/>:<see cref="PelsHeight"/> ratio.</para>
+		/// <para>To determine whether the display orientation is portrait or landscape orientation, check the <see cref="Width"/>:<see cref="Height"/> ratio.</para>
 		/// </summary>
 		public DisplayRotation DisplayOrientation
 		{
@@ -351,7 +351,7 @@ namespace ManagedX.Display
 
 
 		/// <summary>Gets the color resolution, in bits per pixel, of the display device (for example: 4 bits for 16 colors, 8 bits for 256 colors, or 16 bits for 65'536 colors).</summary>
-		public int? BitsPerPel
+		public int? BitsPerPixel
 		{
 			get
 			{
@@ -363,7 +363,7 @@ namespace ManagedX.Display
 
 
 		/// <summary>Gets the width, in pixels, of the visible device surface.</summary>
-		public int? PelsWidth
+		public int? Width
 		{
 			get
 			{
@@ -375,7 +375,7 @@ namespace ManagedX.Display
 
 
 		/// <summary>Gets the height, in pixels, of the visible device surface.</summary>
-		public int? PelsHeight
+		public int? Height
 		{
 			get
 			{
@@ -412,10 +412,11 @@ namespace ManagedX.Display
 		}
 
 
-		/// <summary>Returns a value indicating whether this <see cref="DisplayDeviceMode"/> structure equals another structure of the same type.</summary>
-		/// <param name="other">A <see cref="DisplayDeviceMode"/> structure.</param>
-		/// <returns>Returns true if this structure equals the <paramref name="other"/> structure, otherwise returns false.</returns>
-		public bool Equals( DisplayDeviceMode other )
+        /// <summary>Returns a value indicating whether this <see cref="DisplayDeviceMode"/> structure equals another structure of the same type.</summary>
+        /// <param name="other">A <see cref="DisplayDeviceMode"/> structure.</param>
+        /// <returns>Returns true if this structure equals the <paramref name="other"/> structure, otherwise returns false.</returns>
+        [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
+        public bool Equals( DisplayDeviceMode other )
 		{
 			return this.DeviceName.Equals( other.DeviceName, StringComparison.Ordinal ) &&
 				( specVersion == other.specVersion ) && ( driverVersion == other.driverVersion ) && ( structureSize == other.structureSize ) && ( driverExtra == other.driverExtra ) &&
@@ -439,7 +440,7 @@ namespace ManagedX.Display
 
 
 		/// <summary>Returns a string representing this <see cref="DisplayDeviceMode"/> structure, in the form:
-		/// <para>{<see cref="PelsWidth"/>}×{<see cref="PelsHeight"/>}@{<see cref="DisplayFrequency"/>}Hz</para>
+		/// <para>{<see cref="Width"/>}×{<see cref="Height"/>}@{<see cref="DisplayFrequency"/>}Hz</para>
 		/// </summary>
 		/// <returns>Returns a string representing this <see cref="DisplayDeviceMode"/> structure.</returns>
 		public override string ToString()

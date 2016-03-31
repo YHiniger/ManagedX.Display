@@ -6,7 +6,7 @@
 	[System.Diagnostics.CodeAnalysis.SuppressMessage( "Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Unspecified is the zero value." )]
 	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_TOPOLOGY_ID" )]
 	[System.Flags]
-	public enum TopologyId : int
+	public enum TopologyIndicators : int
 	{
 		
 		/// <summary>Unspecified topology.</summary>
@@ -22,7 +22,7 @@
 		Extend = 0x00000004,
 
 		/// <summary>The display topology is an external configuration.</summary>
-		External = 0x00000008
+		External = 0x00000008,
 
 	}
 

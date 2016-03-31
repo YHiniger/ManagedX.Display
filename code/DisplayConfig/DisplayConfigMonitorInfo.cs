@@ -75,10 +75,11 @@
 
 		/// <summary>Gets the pixel clock rate.</summary>
 		public long PixelRate { get { return mode.PixelRate; } }
-		
 
-		/// <summary>Gets the scan-line ordering of the video signal.</summary>
-		public ScanlineOrdering ScanlineOrdering { get { return mode.ScanlingOrdering; } }
+
+        /// <summary>Gets the scan-line ordering of the video signal.</summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Scanline")]
+        public ScanlineOrdering ScanlineOrdering { get { return mode.ScanlineOrdering; } }
 		
 
 		/// <summary>On Windows 8.1 and greater (WDDM 1.3 or greater), gets additional video signal information.

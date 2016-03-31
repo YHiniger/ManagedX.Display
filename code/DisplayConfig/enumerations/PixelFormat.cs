@@ -12,17 +12,21 @@
 		/// <summary>Undefined.</summary>
 		None = 0,
 
-		/// <summary>8 bits per pixel format.</summary>
-		EightBpp = 1,
+        /// <summary>8 bits per pixel format.</summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Bpp")]
+        EightBpp = 1,
 
-		/// <summary>16 bits per pixel format.</summary>
-		SixteenBpp = 2,
+        /// <summary>16 bits per pixel format.</summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Bpp")]
+        SixteenBpp = 2,
 
-		/// <summary>24 bits per pixel format.</summary>
-		TwentyFourBpp = 3,
+        /// <summary>24 bits per pixel format.</summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Bpp")]
+        TwentyFourBpp = 3,
 
-		/// <summary>32 bits per pixel format. </summary>
-		ThirtyTwoBpp = 4,
+        /// <summary>32 bits per pixel format. </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Bpp")]
+        ThirtyTwoBpp = 4,
 
 		/// <summary>The current display is not an 8, 16, 24, or 32 BPP GDI desktop mode.
 		/// <para>For example, a call to the QueryDisplayConfig function returns NonGDI if a DirectX application previously set the desktop to A2R10G10B10 format.</para>

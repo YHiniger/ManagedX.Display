@@ -46,8 +46,9 @@ namespace ManagedX.Display.DisplayConfig
 		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "LVDS" )]
 		LVDS = 6,
 
-		/// <summary>Indicates a Japanese D connector.</summary>
-		DJpn = 8,
+        /// <summary>Indicates a Japanese D connector.</summary>
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Jpn")]
+        DJpn = 8,
 
 		/// <summary>Indicates an SDI connector.</summary>
 		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "SDI" )]
@@ -71,8 +72,9 @@ namespace ManagedX.Display.DisplayConfig
 		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "SDTV" )]
 		SDTVDongle = 14,
 
-		/// <summary>Indicates that the VidPN target is a Miracast wireless display device. Supported starting in Windows 8.1.</summary>
-		Miracast = 15
+        /// <summary>Indicates that the VidPN target is a Miracast wireless display device. Supported starting in Windows 8.1.</summary>
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Miracast")]
+        Miracast = 15
 
 	}
 
