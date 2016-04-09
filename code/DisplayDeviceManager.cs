@@ -221,6 +221,25 @@ namespace ManagedX.Display
 		/// <summary>Raised when a <see cref="DisplayAdapter"/> is removed from the system.</summary>
 		public static event EventHandler<DisplayDeviceEventArgs> AdapterRemoved;
 
+
+		/// <summary>Returns a <see cref="DisplayAdapter"/> given its adapter id, or null.
+		/// <para>Requires Windows 7 or newer.</para>
+		/// </summary>
+		/// <param name="adapterId">The adapter id of the requested adapter.</param>
+		/// <returns>Returns the requested <see cref="DisplayAdapter"/>, or null if it doesn't exit.</returns>
+		public static DisplayAdapter GetAdapterById( Graphics.Luid adapterId )
+		{
+			var adapters = Adapters;
+			for( var a = 0; a < adapters.Count; a++ )
+			{
+				var adapter = adapters[ a ];
+				var info = adapter.GetDisplayConfigInfo();
+				if( info.AdapterId.Equals( adapterId ) )
+					return adapter;
+			}
+			return null;
+		}
+
 		#endregion Display adapters
 
 
