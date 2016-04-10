@@ -18,7 +18,7 @@ namespace ManagedX.Display.DisplayConfig
 		private Size activeSize;
 		private Size totalSize;
 		private int videoStandard;
-		private ScanlineOrdering scanLineOrdering;
+		private ScanLineOrdering scanLineOrdering;
 
 
 		/// <summary>Gets the pixel clock rate.</summary>
@@ -44,7 +44,7 @@ namespace ManagedX.Display.DisplayConfig
 
         /// <summary>The scan-line ordering (for example, progressive or interlaced) of the video signal.</summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Scanline")]
-        public ScanlineOrdering ScanlineOrdering { get { return scanLineOrdering; } }
+        public ScanLineOrdering ScanlineOrdering { get { return scanLineOrdering; } }
 
 
 		/// <summary>Returns a hash code for this <see cref="VideoSignalInfo"/> structure.</summary>

@@ -14,15 +14,14 @@
     /// https://msdn.microsoft.com/en-us/library/windows/hardware/ff553977%28v=vs.85%29.aspx (DISPLAYCONFIG_SCANLINE_ORDERING)
     /// https://msdn.microsoft.com/en-us/library/windows/desktop/bb173067%28v=vs.85%29.aspx (DXGI_SCANLINE_ORDER)
     /// </remarks>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Scanline")]
     [Native( "DXGIType.h", "DXGI_MODE_SCANLINE_ORDER" )]
 	[Native( "WinGDI.h", "DISPLAYCONFIG_SCANLINE_ORDERING" )]
-	public enum ScanlineOrdering : int
+	public enum ScanLineOrdering : int
 	{
 
 		/// <summary>Scan-line ordering of the output is unspecified.
 		/// <para>The caller can only set the scanLineOrdering member of the <see cref="PathTargetInfo"/> structure in a call to the
-		/// SetDisplayConfig function to <see cref="ScanlineOrdering.Unspecified"/> if the caller also set the refresh rate denominator and
+		/// SetDisplayConfig function to <see cref="ScanLineOrdering.Unspecified"/> if the caller also set the refresh rate denominator and
 		/// numerator of the refreshRate member both to zero.</para>
 		/// In this case, SetDisplayConfig uses the best refresh rate it can find.
 		/// </summary>

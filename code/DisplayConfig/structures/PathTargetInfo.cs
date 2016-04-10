@@ -27,7 +27,7 @@ namespace ManagedX.Display.DisplayConfig
 		private DisplayRotation rotation;
 		private Scaling scaling;
 		private Rational refreshRate;
-		private ScanlineOrdering scanLineOrdering;
+		private ScanLineOrdering scanLineOrdering;
 		[MarshalAs( UnmanagedType.Bool )]
 		private bool targetAvailable;
 		private PathTargetInfoStatus statusFlags;
@@ -62,7 +62,7 @@ namespace ManagedX.Display.DisplayConfig
 		/// If the caller specifies target mode information, the operating system will instead use the refresh rate that is stored in the vSyncFreq member of the <see cref="VideoSignalInfo"/> structure.
 		/// In this case, the caller specifies this value in the targetVideoSignalInfo member of the <see cref="TargetMode"/> structure.
 		/// A refresh rate with both the numerator and denominator set to zero (<see cref="Rational.Empty"/>) indicates that the caller does not specify a refresh rate and the operating system should use the most optimal refresh rate available.
-		/// For this case, in a call to the SetDisplayConfig function, the caller must set the scanLineOrdering member to <see cref="ManagedX.Display.ScanlineOrdering.Unspecified"/>; otherwise, SetDisplayConfig fails.</summary>
+		/// For this case, in a call to the SetDisplayConfig function, the caller must set the scanLineOrdering member to <see cref="ManagedX.Display.ScanLineOrdering.Unspecified"/>; otherwise, SetDisplayConfig fails.</summary>
 		public Rational RefreshRate { get { return refreshRate; } }
 
 
@@ -70,7 +70,7 @@ namespace ManagedX.Display.DisplayConfig
         /// If the caller specifies target mode information, the operating system will instead use the scan-line ordering that is stored in the scanLineOrdering member of the <see cref="VideoSignalInfo"/> structure.
         /// In this case, the caller specifies this value in the targetVideoSignalInfo member of the <see cref="TargetMode"/> structure.</summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Scanline")]
-        public ScanlineOrdering ScanlineOrdering { get { return scanLineOrdering; } }
+        public ScanLineOrdering ScanlineOrdering { get { return scanLineOrdering; } }
 
 
 		/// <summary>Gets a value that specifies whether the target is available.
