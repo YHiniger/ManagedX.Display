@@ -23,14 +23,17 @@
 		Unspecified,
 
 		/// <summary>Rotation is 0 degrees—landscape mode.</summary>
+		[Native( "WinGDI.h", "DISPLAYCONFIG_ROTATION_IDENTITY" )]
 		[Native( "DXGIType.h", "DXGI_MODE_ROTATION_IDENTITY" )]
 		Identity,
 
 		/// <summary>Rotation is 90 degrees clockwise—portrait mode.</summary>
+		[Native( "WinGDI.h", "DISPLAYCONFIG_ROTATION_ROTATE90" )]
 		[Native( "DXGIType.h", "DXGI_MODE_ROTATION_ROTATE90" )]
 		Rotate90,
 
 		/// <summary>Rotation is 180 degrees clockwise—inverted landscape mode.</summary>
+		[Native( "WinGDI.h", "DISPLAYCONFIG_ROTATION_ROTATE180" )]
 		[Native( "DXGIType.h", "DXGI_MODE_ROTATION_ROTATE180" )]
 		Rotate180,
 
