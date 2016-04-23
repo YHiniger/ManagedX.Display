@@ -7,7 +7,7 @@ namespace ManagedX.Display
 {
 	using DisplayConfig;
 
-	
+
 	// "GDI": Graphics Device Interface
 
 
@@ -128,7 +128,7 @@ namespace ManagedX.Display
 
 		#region Display adapters
 
-		/// <summary>Gets the default display adapter.</summary>
+		/// <summary>Gets the primary display adapter.</summary>
 		public static DisplayAdapter PrimaryAdapter
 		{
 			get
