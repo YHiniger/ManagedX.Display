@@ -63,39 +63,42 @@ namespace ManagedX.Display
 		}
 
 
-		/// <summary>Provides access to native functions (located in user32.dll, defined in WinUser.h).
-		/// <para>Requires Windows Vista or newer.</para>
-		/// </summary>
 		[SuppressUnmanagedCodeSecurity]
 		private static class NativeMethods
 		{
 
 			private const string LibraryName = "User32.dll";
-			// WinUser.h
 
 
-			/// <summary>Retrieves information about the display devices in the current session.</summary>
-			/// <param name="deviceName">The device name. If null, the function returns information for the display adapter(s) on the machine, based on <paramref name="deviceIndex"/>.
+			/// <summary>Retrieves information about the display devices in the current session.
+			/// <para>To query all display devices in the current session, call this function in a loop, starting with <paramref name="deviceIndex"/> set to 0, and incrementing <paramref name="deviceIndex"/> until the function fails.
+			/// To select all display devices in the desktop, use only the display devices that have the <see cref="AdapterStateIndicators.AttachedToDesktop"/> flag in the <see cref="DisplayDevice"/> structure.
+			/// To get information on the display adapter, call this function with <paramref name="deviceName"/> set to null.
+			/// </para>
+			/// <para>To obtain information on a display monitor, first call this function with <paramref name="deviceName"/> set to null.
+			/// Then call this function with <paramref name="deviceName"/> set to <see cref="DisplayDevice.DeviceName"/> from the first call to EnumDisplayDevices and with <paramref name="deviceIndex"/> set to zero.
+			/// </para>
+			/// <para>To query all monitor devices associated with an adapter, call EnumDisplayDevices in a loop with <paramref name="deviceName"/> set to the adapter name, <paramref name="deviceIndex"/> set to start at 0, and <paramref name="deviceIndex"/> set to increment until the function fails.
+			/// Note that <see cref="DisplayDevice.DeviceName"/> changes with each call for monitor information, so you must save the adapter name.
+			/// The function fails when there are no more monitors for the adapter.
+			/// </para>
+			/// </summary>
+			/// <param name="deviceName">The device name.
+			/// <para>If null, the function returns information for the display adapter(s) on the machine, based on <paramref name="deviceIndex"/>.</para>
 			/// </param>
 			/// <param name="deviceIndex">An index value that specifies the display device of interest.
-			/// The operating system identifies each display device in the current session with an index value.
+			/// <para>The operating system identifies each display device in the current session with an index value.</para>
 			/// The index values are consecutive integers, starting at 0. If the current session has three display devices, for example, they are specified by the index values 0, 1, and 2.
 			/// </param>
 			/// <param name="displayDevice">A pointer to a <see cref="DisplayDevice"/> structure that receives information about the display device specified by <paramref name="deviceIndex"/>.
-			/// Before calling this function, you must initialize the <code>cb</code> member of <paramref name="displayDevice"/> to the size, in bytes, of <see cref="DisplayDevice"/>.
+			/// <para>Before calling this function, you must initialize the <code>cb</code> member of <paramref name="displayDevice"/> to the size, in bytes, of <see cref="DisplayDevice"/>.</para>
 			/// </param>
 			/// <param name="options">Set this flag to <see cref="EnumDisplayDevicesOptions.GetDeviceInterfaceName"/> to retrieve the device interface name for GUID_DEVINTERFACE_MONITOR, which is registered by the operating system on a per monitor basis.
-			/// The value is placed in the <see cref="DisplayDevice.DeviceId"/> member of the returned <paramref name="displayDevice"/> structure.
+			/// <para>The value is placed in the <see cref="DisplayDevice.DeviceId"/> member of the returned <paramref name="displayDevice"/> structure.</para>
 			/// The resulting device interface name can be used with SetupAPI functions and serves as a link between GDI monitor devices and SetupAPI monitor devices.
 			/// </param>
 			/// <returns>Returns true on success, otherwise false (<paramref name="deviceIndex"/> is out-of-range).</returns>
-			/// <remarks>
-			/// To query all display devices in the current session, call this function in a loop, starting with <paramref name="deviceIndex"/> set to 0, and incrementing <paramref name="deviceIndex"/> until the function fails. To select all display devices in the desktop, use only the display devices that have the DISPLAY_DEVICE_ATTACHED_TO_DESKTOP flag in the <see cref="DisplayDevice"/> structure.
-			/// To get information on the display adapter, call EnumDisplayDevices with <paramref name="deviceName"/> set to null. For example, <see cref="DisplayDevice"/>.DeviceString contains the adapter name.
-			/// To obtain information on a display monitor, first call EnumDisplayDevices with <paramref name="deviceName"/> set to null. Then call EnumDisplayDevices with <paramref name="deviceName"/> set to <see cref="DisplayDevice"/>.DeviceName from the first call to EnumDisplayDevices and with <paramref name="deviceIndex"/> set to zero. Then <see cref="DisplayDevice"/>.DeviceString is the monitor name.
-			/// To query all monitor devices associated with an adapter, call EnumDisplayDevices in a loop with <paramref name="deviceName"/> set to the adapter name, <paramref name="deviceIndex"/> set to start at 0, and <paramref name="deviceIndex"/> set to increment until the function fails. Note that <see cref="DisplayDevice"/>.DeviceName changes with each call for monitor information, so you must save the adapter name.
-			/// The function fails when there are no more monitors for the adapter.
-			/// </remarks>
+			/// <remarks>https://msdn.microsoft.com/en-us/library/dd162609%28v=vs.85%29.aspx</remarks>
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			[return: MarshalAs( UnmanagedType.Bool )]
 			internal static extern bool EnumDisplayDevicesW(
@@ -104,7 +107,6 @@ namespace ManagedX.Display
 				[In, Out] ref DisplayDevice displayDevice,
 				[In] EnumDisplayDevicesOptions options
 			);
-			// https://msdn.microsoft.com/en-us/library/dd162609%28v=vs.85%29.aspx
 
 
 			#region EnumDisplaySettingsEx
@@ -137,6 +139,7 @@ namespace ManagedX.Display
 			/// </param>
 			/// <param name="options">See <see cref="EnumDisplaySettingsExOptions"/>.</param>
 			/// <returns></returns>
+			/// <remarks>https://msdn.microsoft.com/en-us/library/dd162612(v=vs.85).aspx</remarks>
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			[return: MarshalAs( UnmanagedType.Bool )]
 			private static extern bool EnumDisplaySettingsExW(
@@ -145,7 +148,6 @@ namespace ManagedX.Display
 				[In, Out] ref DisplayDeviceMode devMode,
 				[In] EnumDisplaySettingsExOptions options
 			);
-			// https://msdn.microsoft.com/en-us/library/dd162612(v=vs.85).aspx
 			//BOOL EnumDisplaySettingsEx(
 			//	_In_opt_ LPCWSTR lpszDeviceName,
 			//	_In_ DWORD iModeNum,
@@ -163,7 +165,7 @@ namespace ManagedX.Display
 			{
 				var modes = new List<DisplayDeviceMode>();
 				var devMode = DisplayDeviceMode.Default;
-				int modeIndex = 0;
+				var modeIndex = 0;
 
 				while( EnumDisplaySettingsExW( deviceName, modeIndex++, ref devMode, options ) )
 				{
@@ -173,7 +175,7 @@ namespace ManagedX.Display
 
 					if( !devMode.BitsPerPixel.HasValue || devMode.BitsPerPixel.Value != 32 )
 						continue;
-					// 8, 16, and even 24 bpp modes are no more supported, since Windows 7 (to be confirmed).
+					// 8, 16 and 24 bpp modes are no more supported, since Windows 7.
 
 					if( devMode.IsGrayscale.HasValue && devMode.IsGrayscale.Value )
 						continue;
@@ -224,7 +226,7 @@ namespace ManagedX.Display
 			#endregion EnumDisplaySettingsEx
 
 
-			#region EnumDisplayMonitors
+			#region EnumDisplayMonitors (unsafe)
 
 			/// <summary>Application-defined callback function for use with <see cref="EnumDisplayMonitors"/>.</summary>
 			/// <param name="monitorHandle">A handle to the display monitor. This value will always be non-NULL.</param>
@@ -266,6 +268,7 @@ namespace ManagedX.Display
 			/// <param name="callback">An application-defined <see cref="MonitorEnumProc"/> callback function.</param>
 			/// <param name="data">Application-defined data that EnumDisplayMonitors passes directly to the <see cref="MonitorEnumProc"/> function.</param>
 			/// <returns>Returns true on success, otherwise returns false (ie: the callback function interrupted the enumeration).</returns>
+			/// <remarks>https://msdn.microsoft.com/en-us/library/dd162610%28v=vs.85%29.aspx</remarks>
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			[return: MarshalAs( UnmanagedType.Bool )]
 			internal unsafe static extern bool EnumDisplayMonitors(
@@ -274,9 +277,8 @@ namespace ManagedX.Display
 				[In] MonitorEnumProc callback,
 				[In] IntPtr data
 			);
-			// https://msdn.microsoft.com/en-us/library/dd162610%28v=vs.85%29.aspx
 
-			#endregion EnumDisplayMonitors
+			#endregion EnumDisplayMonitors (unsafe)
 
 
 			/// <summary>Retrieves a handle to the display monitor that has the largest area of intersection with the bounding rectangle of a specified window.</summary>
@@ -317,12 +319,9 @@ namespace ManagedX.Display
 
 			var list = new List<DisplayDevice>( MaxAdapterCount );
 
-			var options = EnumDisplayDevicesOptions.None;
-			if( getMonitorDeviceInterfaceName )
-				options = EnumDisplayDevicesOptions.GetDeviceInterfaceName;
-
-			int deviceIndex = 0;
+			var deviceIndex = 0;
 			var device = DisplayDevice.Default;
+			var options = getMonitorDeviceInterfaceName ? EnumDisplayDevicesOptions.GetDeviceInterfaceName : EnumDisplayDevicesOptions.None;
 
 			while( NativeMethods.EnumDisplayDevicesW( deviceName, deviceIndex++, ref device, options ) )
 				list.Add( device );
