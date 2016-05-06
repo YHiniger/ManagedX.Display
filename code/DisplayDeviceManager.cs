@@ -90,7 +90,8 @@ namespace ManagedX.Display
 					adaptersByDeviceName.Remove( s );
 
 					adapter.OnRemoved();
-					adapterRemovedEvent( null, new DisplayDeviceEventArgs( adapter.DeviceIdentifier ) );
+					if( adapterRemovedEvent != null )
+						adapterRemovedEvent( null, new DisplayDeviceEventArgs( adapter.DeviceIdentifier ) );
 				}
 			}
 
@@ -99,7 +100,8 @@ namespace ManagedX.Display
 				var adapterAddedEvent = AdapterAdded;
 				while( addedAdapters.Count > 0 )
 				{
-					adapterAddedEvent( null, new DisplayDeviceEventArgs( addedAdapters[ 0 ] ) );
+					if( adapterAddedEvent != null )
+						adapterAddedEvent( null, new DisplayDeviceEventArgs( addedAdapters[ 0 ] ) );
 					addedAdapters.RemoveAt( 0 );
 				}
 			}
@@ -114,7 +116,7 @@ namespace ManagedX.Display
 			}
 
 
-			if( primaryAdapterChanged )
+			if( primaryAdapterChanged && PrimaryAdapterChanged != null )
 				PrimaryAdapterChanged( null, EventArgs.Empty );
 
 			isInitialized = true;
