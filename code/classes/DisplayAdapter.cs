@@ -530,7 +530,7 @@ namespace ManagedX.Display
 			
 			var removedEvent = this.Removed;
 			if( removedEvent != null )
-				removedEvent( this, EventArgs.Empty );
+				removedEvent.Invoke( this, EventArgs.Empty );
 		}
 
 

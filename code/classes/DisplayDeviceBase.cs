@@ -72,9 +72,9 @@ namespace ManagedX.Display
 
 				if( stateChanged )
 				{
-					var evt = this.StateChanged;
-					if( evt != null )
-						evt( this, EventArgs.Empty );
+					var stateChangedEvent = this.StateChanged;
+					if( stateChangedEvent != null )
+						stateChangedEvent.Invoke( this, EventArgs.Empty );
 				}
 			}
 		}
