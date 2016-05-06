@@ -13,7 +13,7 @@
 		internal DisplayConfigAdapterInfo( DisplayConfiguration displayConfiguration, PathSourceInfo source )
 			: base( source.AdapterId, source.Id, displayConfiguration.Topology )
 		{
-			if( source.ModeInfoIndex > -1 )
+			if( source.ModeInfoIndex > -1 && source.ModeInfoIndex < displayConfiguration.ModeInfo.Count )
 				mode = displayConfiguration.ModeInfo[ source.ModeInfoIndex ].SourceMode;
 			else
 				mode = SourceMode.Empty;
