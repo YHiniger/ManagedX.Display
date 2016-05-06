@@ -12,7 +12,6 @@
 	/// https://msdn.microsoft.com/en-us/library/windows/desktop/bb173066%28v=vs.85%29.aspx (DXGI_MODE_SCALING)
 	/// https://msdn.microsoft.com/en-us/library/dd183565%28v=vs.85%29.aspx (DMDFO_*)
 	/// </remarks>
-	[Native( "WinGDI.h", "DMDFO_*" )]
 	[Native( "DXGIType.h", "DXGI_MODE_SCALING" )]
 	public enum ModeScaling : int
 	{

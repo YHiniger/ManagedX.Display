@@ -8,7 +8,6 @@
 	/// https://msdn.microsoft.com/en-us/library/dd145065%28v=vs.85%29.aspx (MONITORINFO)
 	/// https://msdn.microsoft.com/en-us/library/dd145066%28v=vs.85%29.aspx (MONITORINFOEX)
 	/// </remarks>
-	[Win32.Native( "WinUser.h", "MONITORINFOF_*" )]
 	[System.Flags]
 	internal enum MonitorInfoStateIndicators : int
 	{
