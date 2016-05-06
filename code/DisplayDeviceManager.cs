@@ -11,7 +11,7 @@ namespace ManagedX.Display
 	// "GDI": Graphics Device Interface
 
 
-	/// <summary>ManagedX GDI display device manager.</summary>
+	/// <summary>ManagedX GDI (Graphics Device Interface) device manager.</summary>
 	public static class DisplayDeviceManager
 	{
 
@@ -23,10 +23,14 @@ namespace ManagedX.Display
 		public const int MaxDeviceNameChars = DisplayDeviceBase.MaxDeviceNameChars;
 
 
+		private const QueryDisplayConfigRequest DisplayConfigRequest = QueryDisplayConfigRequest.OnlyActivePaths;
+
+
+
 		private static readonly Dictionary<string, DisplayAdapter> adaptersByDeviceName = new Dictionary<string, DisplayAdapter>( MaxAdapterCount );
 		private static string primaryAdapterDeviceName;
 		private static bool isInitialized;
-		private static DisplayConfiguration currentConfiguration;	// not supported on Windows Vista
+		private static DisplayConfiguration currentConfiguration;
 		//private static DisplayConfiguration registryConfiguration;
 
 
@@ -68,7 +72,7 @@ namespace ManagedX.Display
 			if( DisplayConfiguration.IsSupported )
 			{
 				if( currentConfiguration == null )
-					currentConfiguration = DisplayConfiguration.Query( QueryDisplayConfigRequest.OnlyActivePaths );
+					currentConfiguration = DisplayConfiguration.Query( DisplayConfigRequest );
 				else
 					currentConfiguration.Refresh();
 			}
@@ -86,23 +90,18 @@ namespace ManagedX.Display
 					adaptersByDeviceName.Remove( s );
 
 					adapter.OnRemoved();
-					if( adapterRemovedEvent != null )
-						adapterRemovedEvent.Invoke( null, new DisplayDeviceEventArgs( adapter.DeviceIdentifier ) );
+					adapterRemovedEvent( null, new DisplayDeviceEventArgs( adapter.DeviceIdentifier ) );
 				}
 			}
 
 			if( addedAdapters.Count > 0 )
 			{
 				var adapterAddedEvent = AdapterAdded;
-				if( adapterAddedEvent != null )
+				while( addedAdapters.Count > 0 )
 				{
-					while( addedAdapters.Count > 0 )
-					{
-						adapterAddedEvent.Invoke( null, new DisplayDeviceEventArgs( addedAdapters[ 0 ] ) );
-						addedAdapters.RemoveAt( 0 );
-					}
+					adapterAddedEvent( null, new DisplayDeviceEventArgs( addedAdapters[ 0 ] ) );
+					addedAdapters.RemoveAt( 0 );
 				}
-				addedAdapters.Clear();
 			}
 
 
@@ -116,11 +115,7 @@ namespace ManagedX.Display
 
 
 			if( primaryAdapterChanged )
-			{
-				var primaryAdapterChangedEvent = PrimaryAdapterChanged;
-				if( primaryAdapterChangedEvent != null )
-					primaryAdapterChangedEvent.Invoke( null, EventArgs.Empty );
-			}
+				PrimaryAdapterChanged( null, EventArgs.Empty );
 
 			isInitialized = true;
 		}
@@ -129,7 +124,6 @@ namespace ManagedX.Display
 		#region Display adapters
 
 		/// <summary>Gets the primary display adapter.</summary>
-		///// <exception cref="InvalidOperationException"/>
 		public static DisplayAdapter PrimaryAdapter
 		{
 			get
@@ -144,7 +138,6 @@ namespace ManagedX.Display
 						return adapter;
 				}
 				return null;
-				//throw new InvalidOperationException( "Failed to retrieve primary display adapter." );
 			}
 		}
 
@@ -336,7 +329,7 @@ namespace ManagedX.Display
 			if( DisplayConfiguration.IsSupported )
 			{
 				if( currentConfiguration == null )
-					currentConfiguration = DisplayConfiguration.Query( QueryDisplayConfigRequest.DatabaseCurrent );
+					currentConfiguration = DisplayConfiguration.Query( DisplayConfigRequest );
 				else
 					currentConfiguration.Refresh();
 
@@ -372,7 +365,7 @@ namespace ManagedX.Display
 			if( DisplayConfiguration.IsSupported )
 			{
 				if( currentConfiguration == null )
-					currentConfiguration = DisplayConfiguration.Query( QueryDisplayConfigRequest.DatabaseCurrent );
+					currentConfiguration = DisplayConfiguration.Query( DisplayConfigRequest );
 				else
 					currentConfiguration.Refresh();
 
