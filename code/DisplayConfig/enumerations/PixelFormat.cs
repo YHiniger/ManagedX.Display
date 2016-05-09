@@ -1,4 +1,7 @@
-﻿namespace ManagedX.Display.DisplayConfig
+﻿using System.Diagnostics.CodeAnalysis;
+
+
+namespace ManagedX.Display.DisplayConfig
 {
 	using Win32;
 
@@ -12,25 +15,25 @@
 	{
 
 		/// <summary>Undefined.</summary>
-		None = 0,
+		Undefined = 0,
 
         /// <summary>8 bits per pixel format.</summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Bpp")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Bpp")]
 		[Native( "WinGDI.h", "DISPLAYCONFIG_PIXELFORMAT_8BPP" )]
 		EightBpp = 1,
 
         /// <summary>16 bits per pixel format.</summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Bpp")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Bpp")]
 		[Native( "WinGDI.h", "DISPLAYCONFIG_PIXELFORMAT_16BPP" )]
 		SixteenBpp = 2,
 
         /// <summary>24 bits per pixel format.</summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Bpp")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Bpp")]
 		[Native( "WinGDI.h", "DISPLAYCONFIG_PIXELFORMAT_24BPP" )]
 		TwentyFourBpp = 3,
 
         /// <summary>32 bits per pixel format. </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Bpp")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Bpp")]
 		[Native( "WinGDI.h", "DISPLAYCONFIG_PIXELFORMAT_32BPP" )]
 		ThirtyTwoBpp = 4,
 
@@ -38,7 +41,7 @@
 		/// <para>For example, a call to the QueryDisplayConfig function returns NonGDI if a DirectX application previously set the desktop to A2R10G10B10 format.</para>
 		/// A call to the SetDisplayConfig function fails if any pixel formats for active paths are set to NonGDI.
 		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "GDI" )]
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "GDI" )]
 		[Native( "WinGDI.h", "DISPLAYCONFIG_PIXELFORMAT_NONGDI" )]
 		NonGDI = 5
 	

@@ -10,7 +10,7 @@ namespace ManagedX.Display.DisplayConfig
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553915%28v=vs.85%29.aspx</remarks>
 	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_ADAPTER_NAME" )]
 	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 4, Size = 276 )]
-	internal sealed class AdapterDescription : DeviceDescription
+	internal sealed class AdapterInformation : DeviceInformation
 	{
 
 		/// <summary>Defines the maximum length, in unicode chars, of the <see cref="DevicePath"/>.</summary>
@@ -23,10 +23,10 @@ namespace ManagedX.Display.DisplayConfig
 
 
 
-		/// <summary>Initializes a new <see cref="AdapterDescription"/>.</summary>
+		/// <summary>Initializes a new <see cref="AdapterInformation"/>.</summary>
 		/// <param name="adapterId">The adapter the device information refers to.</param>
 		/// <param name="id">The identifier of the source or target to get or set information for.</param>
-		public AdapterDescription( Luid adapterId, int id )
+		public AdapterInformation( Luid adapterId, int id )
 			: base( DeviceInfoType.GetAdapterName, 276, adapterId, id )
 		{
 			devicePath = string.Empty;

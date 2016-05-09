@@ -49,31 +49,58 @@ namespace ManagedX.Display.DisplayConfig
 		public Luid AdapterId { get { return adapterId; } }
 
 
-		/// <summary>When <see cref="InfoType"/> is <see cref="ModeInfoType.Source"/>, gets a structure describing the specified source.
-		/// <para>Otherwise returns an empty structure.</para>
-		/// </summary>
-		public SourceMode SourceMode
+
+		#region Source mode
+
+		/// <summary>When <see cref="InfoType"/> is <see cref="ModeInfoType.Source"/>, gets the size, in pixels, of the source mode.</summary>
+		public Size Size
 		{
 			get
 			{
 				if( infoType == ModeInfoType.Source )
-					return sourceMode;
-				return SourceMode.Empty;
+					return new Size( sourceMode.Width, sourceMode.Height );
+				return Size.Empty;
 			}
 		}
 
 
-		/// <summary>When <see cref="InfoType"/> is <see cref="ModeInfoType.Target"/>, gets a structure describing the specified target.
-		/// <para>Otherwise returns an empty structure.</para></summary>
-		public TargetMode TargetMode
+		/// <summary>When <see cref="InfoType"/> is <see cref="ModeInfoType.Source"/>, gets the pixel format of the source mode.</summary>
+		public PixelFormat Format
+		{
+			get
+			{
+				if( infoType == ModeInfoType.Source )
+					return sourceMode.Format;
+				return PixelFormat.Undefined;
+			}
+		}
+		
+
+		/// <summary>When <see cref="InfoType"/> is <see cref="ModeInfoType.Source"/>, gets the position, in desktop coordinates, of the upper-left corner of the source mode.</summary>
+		public Point Position
+		{
+			get
+			{
+				if( infoType == ModeInfoType.Source )
+					return sourceMode.Position;
+				return Point.Zero;
+			}
+		}
+
+		#endregion Source mode
+
+
+		/// <summary>When <see cref="InfoType"/> is <see cref="ModeInfoType.Target"/>, gets information about the video signal.</summary>
+		public VideoSignalInfo VideoSignalInformation
 		{
 			get
 			{
 				if( infoType == ModeInfoType.Target )
-					return targetMode;
-				return TargetMode.Empty;
+					return targetMode.TargetVideoSignalInfo;
+				return VideoSignalInfo.Empty;
 			}
 		}
+
 
 
 		/// <summary>Returns a hash code for this <see cref="ModeInfo"/> structure.</summary>

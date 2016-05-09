@@ -15,25 +15,25 @@
 		None = 0,
 
 		/// <summary>Specifies the source name of the display device.
-		/// <para>If the DisplayConfigGetDeviceInfo function is successful, it returns the source name in the <see cref="SourceDeviceDescription"/> object.</para>
+		/// <para>If the DisplayConfigGetDeviceInfo function is successful, it returns the source name in the <see cref="SourceDeviceInformation"/> object.</para>
 		/// </summary>
 		[Native( "WinGDI.h", "DISPLAYCONFIG_DEVICE_INFO_GET_SOURCE_NAME" )]
 		GetSourceName = 1,
 
 		/// <summary>Specifies information about the monitor.
-		/// <para>If the DisplayConfigGetDeviceInfo function is successful, it returns info about the monitor in the <see cref="TargetDeviceDescription"/> object.</para>
+		/// <para>If the DisplayConfigGetDeviceInfo function is successful, it returns info about the monitor in the <see cref="TargetDeviceInformation"/> object.</para>
 		/// </summary>
 		[Native( "WinGDI.h", "DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME" )]
 		GetTargetName = 2,
 
 		/// <summary>Specifies information about the preferred mode of a monitor.
-		/// <para>If the DisplayConfigGetDeviceInfo function is successful, it returns info about the preferred mode of a monitor in the <see cref="TargetPreferredModeDescription"/> object.</para>
+		/// <para>If the DisplayConfigGetDeviceInfo function is successful, it returns info about the preferred mode of a monitor in the <see cref="TargetPreferredModeInformation"/> object.</para>
 		/// </summary>
 		[Native( "WinGDI.h", "DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_PREFERRED_MODE" )]
 		GetTargetPreferredMode = 3,
 
 		/// <summary>Specifies the graphics adapter name.
-		/// <para>If the DisplayConfigGetDeviceInfo function is successful, it returns the adapter name in the <see cref="AdapterDescription"/> object.</para>
+		/// <para>If the DisplayConfigGetDeviceInfo function is successful, it returns the adapter name in the <see cref="AdapterInformation"/> object.</para>
 		/// </summary>
 		[Native( "WinGDI.h", "DISPLAYCONFIG_DEVICE_INFO_GET_ADAPTER_NAME" )]
 		GetAdapterName = 4,

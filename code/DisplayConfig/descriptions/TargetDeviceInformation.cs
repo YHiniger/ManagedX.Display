@@ -11,8 +11,8 @@ namespace ManagedX.Display.DisplayConfig
 	/// <summary>Contains information about the target (defined in WinGDI.h).</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553989%28v=vs.85%29.aspx</remarks>
 	[Native( "WinGDI.h", "DISPLAYCONFIG_TARGET_DEVICE_NAME" )]
-	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 2, Size = 420 )]
-	public sealed class TargetDeviceDescription : DeviceDescription
+	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 4, Size = 420 )]
+	public sealed class TargetDeviceInformation : DeviceInformation
 	{
 
 		/// <summary>Defines the maximum length, in unicode chars, of the <see cref="FriendlyName"/>.</summary>
@@ -49,20 +49,19 @@ namespace ManagedX.Display.DisplayConfig
 
 		private Indicators indicators;
 		private VideoOutputTechnology outputTechnology;
-		private short edidManufactureId;    // might not be valid (see flags)
-		private short edidProductCodeId;    // might not be valid (see flags)
+		private int edid;    // might not be valid (see indicators)
 		private int connectorInstance;
 		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = MaxFriendlyNameLength )]
-		private string monitorFriendlyDeviceName; // might not be valid (see flags)
+		private string monitorFriendlyDeviceName; // might not be valid (see indicators)
 		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = MaxDevicePathLength )]
 		private string monitorDevicePath;
 
 
 
-		/// <summary>Initializes a new <see cref="TargetDeviceDescription"/>.</summary>
+		/// <summary>Initializes a new <see cref="TargetDeviceInformation"/>.</summary>
 		/// <param name="adapterId">The adapter identifier.</param>
 		/// <param name="id">The target device identifier.</param>
-		public TargetDeviceDescription( Luid adapterId, int id )
+		public TargetDeviceInformation( Luid adapterId, int id )
 			: base( DeviceInfoType.GetTargetName, 420, adapterId, id )
 		{
 		}
@@ -85,7 +84,7 @@ namespace ManagedX.Display.DisplayConfig
 			get
 			{
 				if( indicators.HasFlag( Indicators.ExtendedDisplayInformationDataIdsValid ) )
-					return edidManufactureId;
+					return (short)( edid & 0x0000ffff );
 				return 0;
 			}
 		}
@@ -97,7 +96,7 @@ namespace ManagedX.Display.DisplayConfig
 			get
 			{
 				if( indicators.HasFlag( Indicators.ExtendedDisplayInformationDataIdsValid ) )
-					return edidProductCodeId;
+					return (short)( edid >> 16 );
 				return 0;
 			}
 		}

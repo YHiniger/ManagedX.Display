@@ -5,7 +5,9 @@
 	public sealed class DisplayConfigAdapterInfo : DisplayConfigInfo
 	{
 
-		private SourceMode mode;
+		private Size size;
+		private PixelFormat format;
+		private Point position;
 		private bool isInUse;
 
 
@@ -14,9 +16,12 @@
 			: base( source.AdapterId, source.Id, displayConfiguration.Topology )
 		{
 			if( source.ModeInfoIndex > -1 && source.ModeInfoIndex < displayConfiguration.ModeInfo.Count )
-				mode = displayConfiguration.ModeInfo[ source.ModeInfoIndex ].SourceMode;
-			else
-				mode = SourceMode.Empty;
+			{
+				var mode = displayConfiguration.ModeInfo[ source.ModeInfoIndex ];
+				size = mode.Size;
+				format = mode.Format;
+				position = mode.Position;
+			}
 
 			isInUse = source.InUse;
 		}
@@ -24,15 +29,15 @@
 
 
 		/// <summary>Gets the position, in desktop-space coordinates, of the source surface.</summary>
-		public Point SurfacePosition { get { return mode.Position; } }
+		public Point SurfacePosition { get { return position; } }
 
 
 		/// <summary>Gets the size, in pixels, of the source surface.</summary>
-		public Size SurfaceSize { get { return mode.Size; } }
+		public Size SurfaceSize { get { return size; } }
 
 
 		/// <summary>Gets the pixel format of the source surface.</summary>
-		public PixelFormat SurfaceFormat { get { return mode.PixelFormat; } }
+		public PixelFormat SurfaceFormat { get { return format; } }
 
 
 		/// <summary>Gets a value indicating whether the source is in use.</summary>

@@ -53,16 +53,16 @@
   <ItemGroup>
     <Compile Include="code\classes\DisplayAdapter.cs" />
     <Compile Include="code\classes\DisplayDeviceBase.cs" />
-    <Compile Include="code\DisplayConfig\descriptions\AdapterDescription.cs" />
-    <Compile Include="code\DisplayConfig\descriptions\DeviceDescription.cs" />
+    <Compile Include="code\DisplayConfig\descriptions\AdapterInformation.cs" />
+    <Compile Include="code\DisplayConfig\descriptions\DeviceInformation.cs" />
     <Compile Include="code\DisplayConfig\DisplayConfigException.cs" />
     <Compile Include="code\DisplayConfig\DisplayConfigMonitorInfo.cs" />
     <Compile Include="code\DisplayConfig\DisplayConfigInfo.cs" />
     <Compile Include="code\DisplayConfig\DisplayConfigAdapterInfo.cs" />
-    <Compile Include="code\DisplayConfig\descriptions\SourceDeviceDescription.cs" />
+    <Compile Include="code\DisplayConfig\descriptions\SourceDeviceInformation.cs" />
     <Compile Include="code\DisplayConfig\structures\DesktopImageInformation.cs" />
-    <Compile Include="code\DisplayConfig\descriptions\TargetDeviceDescription.cs" />
-    <Compile Include="code\DisplayConfig\descriptions\TargetPreferredModeDescription.cs" />
+    <Compile Include="code\DisplayConfig\descriptions\TargetDeviceInformation.cs" />
+    <Compile Include="code\DisplayConfig\descriptions\TargetPreferredModeInformation.cs" />
     <Compile Include="code\DisplayDeviceEventArgs.cs" />
     <Compile Include="code\classes\DisplayMonitor.cs" />
     <Compile Include="code\classes\ReadOnlyDisplayAdapterCollection.cs" />

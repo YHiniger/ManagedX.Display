@@ -10,22 +10,19 @@ namespace ManagedX.Display.DisplayConfig
 	[System.Diagnostics.DebuggerStepThrough]
 	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_TARGET_MODE" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 48 )]
-	public struct TargetMode : IEquatable<TargetMode>
+	internal struct TargetMode : IEquatable<TargetMode>
 	{
 
-		private VideoSignalInfo targetVideoSignalInfo;
+		/// <summary>Contains a detailed description of the current target mode.</summary>
+		public VideoSignalInfo TargetVideoSignalInfo;
 
-
-
-		/// <summary>Gets a <see cref="VideoSignalInfo"/> structure that contains a detailed description of the current target mode.</summary>
-		public VideoSignalInfo TargetVideoSignalInfo { get { return targetVideoSignalInfo; } }
 
 
 		/// <summary>Returns a hash code for this <see cref="TargetMode"/> structure.</summary>
 		/// <returns>Returns a hash code for this <see cref="TargetMode"/> structure.</returns>
 		public override int GetHashCode()
 		{
-			return targetVideoSignalInfo.GetHashCode();
+			return TargetVideoSignalInfo.GetHashCode();
 		}
 
 
@@ -34,7 +31,7 @@ namespace ManagedX.Display.DisplayConfig
 		/// <returns>Returns true if the structures are equal, otherwise returns false.</returns>
 		public bool Equals( TargetMode other )
 		{
-			return targetVideoSignalInfo.Equals( other.targetVideoSignalInfo );
+			return TargetVideoSignalInfo.Equals( other.TargetVideoSignalInfo );
 		}
 
 
@@ -51,8 +48,9 @@ namespace ManagedX.Display.DisplayConfig
 		/// <returns>Returns a string representing this <see cref="TargetMode"/> structure.</returns>
 		public override string ToString()
 		{
-			return targetVideoSignalInfo.ToString();
+			return TargetVideoSignalInfo.ToString();
 		}
+
 
 
 		/// <summary>The empty <see cref="TargetMode"/> structure.</summary>
@@ -61,14 +59,13 @@ namespace ManagedX.Display.DisplayConfig
 
 		#region Operators
 
-
 		/// <summary>Equality operator.</summary>
 		/// <param name="targetMode">A <see cref="TargetMode"/> structure.</param>
 		/// <param name="other">A <see cref="TargetMode"/> structure.</param>
 		/// <returns>Returns true if the structures are equal, otherwise returns false.</returns>
 		public static bool operator ==( TargetMode targetMode, TargetMode other )
 		{
-			return targetMode.Equals( other );
+			return targetMode.TargetVideoSignalInfo.Equals( other.TargetVideoSignalInfo );
 		}
 
 
@@ -78,11 +75,10 @@ namespace ManagedX.Display.DisplayConfig
 		/// <returns>Returns true if the structures are not equal, otherwise returns false.</returns>
 		public static bool operator !=( TargetMode targetMode, TargetMode other )
 		{
-			return !targetMode.Equals( other );
+			return !targetMode.TargetVideoSignalInfo.Equals( other.TargetVideoSignalInfo );
 		}
-
 		
-		#endregion
+		#endregion Operators
 
 	}
 

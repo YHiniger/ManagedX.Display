@@ -321,7 +321,7 @@ namespace ManagedX.Display
 		/// <param name="adapter">A <see cref="DisplayAdapter"/>.</param>
 		/// <returns></returns>
 		/// <exception cref="ArgumentNullException"/>
-		/// <exception cref="InvalidOperationException"/>
+		/// <exception cref="DisplayConfigException"/>
 		[SuppressMessage( "Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters" )]
 		public static DisplayConfigAdapterInfo GetDisplayConfigInfo( this DisplayAdapter adapter )
 		{
@@ -357,7 +357,7 @@ namespace ManagedX.Display
 		/// <param name="monitor">A <see cref="DisplayMonitor"/>.</param>
 		/// <returns></returns>
 		/// <exception cref="ArgumentNullException"/>
-		/// <exception cref="InvalidOperationException"/>
+		/// <exception cref="DisplayConfigException"/>
 		[SuppressMessage( "Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters" )]
 		public static DisplayConfigMonitorInfo GetDisplayConfigInfo( this DisplayMonitor monitor )
 		{

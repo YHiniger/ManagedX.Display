@@ -10,7 +10,7 @@ namespace ManagedX.Display.DisplayConfig
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553983%28v=vs.85%29.aspx</remarks>
 	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_SOURCE_DEVICE_NAME" )]
 	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 4, Size = 84 )]
-	internal sealed class SourceDeviceDescription : DeviceDescription
+	internal sealed class SourceDeviceInformation : DeviceInformation
 	{
 
 		/// <summary>Defines the maximum length, in unicode chars, of the <see cref="GdiDeviceName"/>.</summary>
@@ -24,10 +24,10 @@ namespace ManagedX.Display.DisplayConfig
 
 
 
-		/// <summary>Initializes a new <see cref="SourceDeviceDescription"/>.</summary>
+		/// <summary>Initializes a new <see cref="SourceDeviceInformation"/>.</summary>
 		/// <param name="adapterId">The identifier of the source adapter device the information packet refers to.</param>
 		/// <param name="id">The identifier of the source adapter to get or set the device information for.</param>
-		public SourceDeviceDescription( Luid adapterId, int id )
+		public SourceDeviceInformation( Luid adapterId, int id )
 			: base( DeviceInfoType.GetSourceName, 84, adapterId, id )
 		{
 			viewGdiDeviceName = string.Empty;

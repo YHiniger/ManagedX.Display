@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Security;
 
@@ -21,7 +22,9 @@ namespace ManagedX.Display.DisplayConfig
 		private const int MaxClonePerSource = 4;
 
 		/// <summary>Defines the maximum number of paths: 1024.</summary>
+		[Native( "WinGDI.h", "DISPLAYCONFIG_MAXPATH" )]
 		public const int MaxPathCount = DisplayAdapter.MaxAdapterCount * MaxSourceCount * MaxClonePerSource;
+
 
 
 		[SuppressUnmanagedCodeSecurity]
@@ -161,7 +164,7 @@ namespace ManagedX.Display.DisplayConfig
 			//	_Inout_ DISPLAYCONFIG_DEVICE_INFO_HEADER* requestPacket);
 
 			/// <summary>Retrieves display configuration information about the device.</summary>
-			/// <param name="requestPacket">An initialized <see cref="AdapterDescription"/>.
+			/// <param name="requestPacket">An initialized <see cref="AdapterInformation"/>.
 			/// <para>This object contains information about the request, which includes the packet type in the type member.
 			/// The type and size of additional data that the function returns after the header structure depend on the packet type.
 			/// </para>
@@ -180,11 +183,11 @@ namespace ManagedX.Display.DisplayConfig
 			/// </remarks>
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			internal static extern ErrorCode DisplayConfigGetDeviceInfo(
-				[In, Out] AdapterDescription requestPacket
+				[In, Out] AdapterInformation requestPacket
 			);
 
 			/// <summary>Retrieves display configuration information about the device.</summary>
-			/// <param name="requestPacket">An initialized <see cref="SourceDeviceDescription"/>.
+			/// <param name="requestPacket">An initialized <see cref="SourceDeviceInformation"/>.
 			/// <para>This object contains information about the request, which includes the packet type in the type member.
 			/// The type and size of additional data that the function returns after the header structure depend on the packet type.
 			/// </para>
@@ -203,11 +206,11 @@ namespace ManagedX.Display.DisplayConfig
 			/// </remarks>
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			internal static extern ErrorCode DisplayConfigGetDeviceInfo(
-				[In, Out] SourceDeviceDescription requestPacket
+				[In, Out] SourceDeviceInformation requestPacket
 			);
 
 			/// <summary>Retrieves display configuration information about the device.</summary>
-			/// <param name="requestPacket">An initialized <see cref="TargetDeviceDescription"/>.
+			/// <param name="requestPacket">An initialized <see cref="TargetDeviceInformation"/>.
 			/// <para>This object contains information about the request, which includes the packet type in the type member.
 			/// The type and size of additional data that the function returns after the header structure depend on the packet type.
 			/// </para>
@@ -227,7 +230,7 @@ namespace ManagedX.Display.DisplayConfig
 			/// </remarks>
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			internal static extern ErrorCode DisplayConfigGetDeviceInfo(
-				[In, Out] TargetDeviceDescription requestPacket
+				[In, Out] TargetDeviceInformation requestPacket
 			);
 
 			///// <summary>Retrieves display configuration information about the device.</summary>
@@ -344,13 +347,14 @@ namespace ManagedX.Display.DisplayConfig
 		/// <param name="sourceInfo">A valid <see cref="PathSourceInfo"/> structure; must not be empty.</param>
 		/// <returns>Returns the GDI device name of a source device.</returns>
 		/// <exception cref="ArgumentException"/>
-		/// <exception cref="Exception"/>
+		/// <exception cref="DisplayConfigException"/>
+		[SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gdi" )]
 		public static string GetSourceGdiDeviceName( PathSourceInfo sourceInfo )
 		{
 			if( sourceInfo == PathSourceInfo.Empty )
 				throw new ArgumentException( "Invalid source info: empty.", "sourceInfo" );
 
-			var deviceName = new SourceDeviceDescription( sourceInfo.AdapterId, sourceInfo.Id );
+			var deviceName = new SourceDeviceInformation( sourceInfo.AdapterId, sourceInfo.Id );
 			var errorCode = SafeNativeMethods.DisplayConfigGetDeviceInfo( deviceName );
 			if( errorCode == ErrorCode.None )
 				return deviceName.GdiDeviceName;
@@ -358,17 +362,17 @@ namespace ManagedX.Display.DisplayConfig
 			throw GetException( errorCode );
 		}
 
-		/// <summary>Returns a <see cref="TargetDeviceDescription"/> structure containing information about the specified display target.</summary>
+		/// <summary>Returns a <see cref="TargetDeviceInformation"/> structure containing information about the specified display target.</summary>
 		/// <param name="targetInfo">A valid <see cref="PathTargetInfo"/> structure; must not be empty.</param>
-		/// <returns>Returns a <see cref="TargetDeviceDescription"/> structure containing information about the specified display target.</returns>
+		/// <returns>Returns a <see cref="TargetDeviceInformation"/> structure containing information about the specified display target.</returns>
 		/// <exception cref="ArgumentException"/>
-		/// <exception cref="Exception"/>
-		public static TargetDeviceDescription GetTargetDeviceName( PathTargetInfo targetInfo )
+		/// <exception cref="DisplayConfigException"/>
+		public static TargetDeviceInformation GetTargetDeviceName( PathTargetInfo targetInfo )
 		{
 			if( targetInfo == PathTargetInfo.Empty )
 				throw new ArgumentException( "Invalid target info: empty.", "targetInfo" );
 
-			var deviceName = new TargetDeviceDescription( targetInfo.AdapterId, targetInfo.Id );
+			var deviceName = new TargetDeviceInformation( targetInfo.AdapterId, targetInfo.Id );
 			var errorCode = SafeNativeMethods.DisplayConfigGetDeviceInfo( deviceName );
 			if( errorCode == ErrorCode.None )
 				return deviceName;
@@ -382,14 +386,13 @@ namespace ManagedX.Display.DisplayConfig
 		/// <param name="id">The adapter id.</param>
 		/// <returns>Returns the adapter device path.</returns>
 		/// <exception cref="ArgumentException"/>
-		/// <exception cref="Exception"/>
+		/// <exception cref="DisplayConfigException"/>
 		private static string GetAdapterDeviceName( Luid adapterId, int id )
 		{
 			if( adapterId == Luid.Zero )
 				throw new ArgumentException( "Invalid adapter id.", "adapterId" );
 
-			var adapterName = new AdapterDescription( adapterId, id );
-			//var adapterName = new AdapterName( adapterId, id );
+			var adapterName = new AdapterInformation( adapterId, id );
 			var errorCode = SafeNativeMethods.DisplayConfigGetDeviceInfo( adapterName );
 			if( errorCode == ErrorCode.None )
 				return adapterName.DevicePath;
@@ -402,7 +405,7 @@ namespace ManagedX.Display.DisplayConfig
 		/// <param name="sourceInfo">A valid <see cref="PathSourceInfo"/> structure.</param>
 		/// <returns>Returns the adapter device path.</returns>
 		/// <exception cref="ArgumentException"/>
-		/// <exception cref="Exception"/>
+		/// <exception cref="DisplayConfigException"/>
 		public static string GetAdapterDeviceName( PathSourceInfo sourceInfo )
 		{
 			if( sourceInfo == PathSourceInfo.Empty )
@@ -416,7 +419,7 @@ namespace ManagedX.Display.DisplayConfig
 			{
 				throw new ArgumentException( "Invalid source info.", "sourceInfo", ex );
 			}
-			catch( Exception )
+			catch( DisplayConfigException )
 			{
 				throw;
 			}
@@ -426,7 +429,7 @@ namespace ManagedX.Display.DisplayConfig
 		/// <param name="targetInfo">A valid <see cref="PathTargetInfo"/> structure.</param>
 		/// <returns>Returns the adapter device path.</returns>
 		/// <exception cref="ArgumentException"/>
-		/// <exception cref="Exception"/>
+		/// <exception cref="DisplayConfigException"/>
 		public static string GetAdapterDeviceName( PathTargetInfo targetInfo )
 		{
 			if( targetInfo == PathTargetInfo.Empty )
@@ -440,7 +443,7 @@ namespace ManagedX.Display.DisplayConfig
 			{
 				throw new ArgumentException( "Invalid target info.", "targetInfo", ex );
 			}
-			catch( Exception )
+			catch( DisplayConfigException )
 			{
 				throw;
 			}
@@ -490,14 +493,14 @@ namespace ManagedX.Display.DisplayConfig
 		}
 
 
-        /// <summary>Queries and returns a display configuration.</summary>
-        /// <param name="request">The request (flags?); must not be <see cref="QueryDisplayConfigRequest.None"/>.</param>
-        /// <returns>Returns a <see cref="DisplayConfiguration"/> object containing the requested information.</returns>
-        /// <exception cref="PlatformNotSupportedException"/>
-        /// <exception cref="InvalidEnumArgumentException"/>
-        /// <exception cref="InvalidOperationException"/>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "DisplayConfig")]
-        public static DisplayConfiguration Query( QueryDisplayConfigRequest request )
+		/// <summary>Queries and returns a display configuration.</summary>
+		/// <param name="request">The request (flags?); must not be <see cref="QueryDisplayConfigRequest.None"/>.</param>
+		/// <returns>Returns a <see cref="DisplayConfiguration"/> object containing the requested information.</returns>
+		/// <exception cref="PlatformNotSupportedException"/>
+		/// <exception cref="InvalidEnumArgumentException"/>
+		/// <exception cref="DisplayConfigException"/>
+		[SuppressMessage( "Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "DisplayConfig" )]
+		public static DisplayConfiguration Query( QueryDisplayConfigRequest request )
 		{
 			if( !IsSupported )
 				throw new PlatformNotSupportedException( "DisplayConfig is only available on Windows 7 or greater." );
@@ -510,7 +513,7 @@ namespace ManagedX.Display.DisplayConfig
 			{
 				return new DisplayConfiguration( request );
 			}
-			catch( Exception )
+			catch( DisplayConfigException )
 			{
 				throw;
 			}
@@ -525,11 +528,10 @@ namespace ManagedX.Display.DisplayConfig
 
 
 
-        /// <summary>Instantiates a new <see cref="DisplayConfiguration"/>.</summary>
-        /// <param name="request">A value of the <see cref="QueryDisplayConfigRequest"/> enumeration; must not be <see cref="QueryDisplayConfigRequest.None"/>.</param>
-        /// <exception cref="InvalidOperationException"/>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "DisplayConfiguration")]
-        private DisplayConfiguration( QueryDisplayConfigRequest request )
+		/// <summary>Instantiates a new <see cref="DisplayConfiguration"/>.</summary>
+		/// <param name="request">A value of the <see cref="QueryDisplayConfigRequest"/> enumeration; must not be <see cref="QueryDisplayConfigRequest.None"/>.</param>
+		/// <exception cref="DisplayConfigException"/>
+		private DisplayConfiguration( QueryDisplayConfigRequest request )
 		{
 			this.request = request;
 
@@ -537,9 +539,9 @@ namespace ManagedX.Display.DisplayConfig
 			{
 				this.Refresh();
 			}
-			catch( InvalidOperationException ex )
+			catch( DisplayConfigException ex )
 			{
-				throw new InvalidOperationException( "Failed to instantiate DisplayConfiguration.", ex );
+				throw new DisplayConfigException( "Failed to instantiate display configuration.", ex );
 			}
 		}
 
@@ -552,12 +554,12 @@ namespace ManagedX.Display.DisplayConfig
 
 
 		/// <summary>Refreshes the <see cref="DisplayConfiguration"/>.</summary>
-		/// <exception cref="InvalidOperationException"/>
+		/// <exception cref="DisplayConfigException"/>
 		public void Refresh()
 		{
 			var error = QueryDisplayConfig( request, out paths, out modes, out topologyId );
 			if( error != ErrorCode.None )
-				throw new InvalidOperationException( "Failed to refresh display configuration.", GetException( error ) );
+				throw GetException( error );
 		}
 
 

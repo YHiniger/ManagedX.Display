@@ -22,30 +22,37 @@ namespace ManagedX.Display.DisplayConfig
 		private ScanLineOrdering scanLineOrdering;
 
 
+
 		/// <summary>Gets the pixel clock rate.</summary>
 		public long PixelRate { get { return pixelRate; } }
+
 
 		/// <summary>Gets the horizontal frequency, in hertz (Hz).</summary>
 		public Rational HSyncFrequency { get { return hSyncFreq; } }
 
+
 		/// <summary>Gets the vertical frequency, in hertz (Hz).</summary>
 		public Rational VSyncFrequency { get { return vSyncFreq; } }
 		
-		/// <summary>A <see cref="Size"/> structure structure that specifies the width and height (in pixels) of the active portion of the video signal.</summary>
+
+		/// <summary>Gets the size, in pixels, of the active portion of the video signal.</summary>
 		public Size ActiveSize { get { return activeSize; } }
 		
-		/// <summary>A <see cref="Size"/> structure that specifies the width and height (in pixels) of the entire video signal.</summary>
+
+		/// <summary>Gets the size, in pixels, of the entire video signal.</summary>
 		public Size TotalSize { get { return totalSize; } }
 		
-		/// <summary>Either:
-		/// Additional signal information (supported by WDDM 1.3 and later display miniport drivers running on Windows 8.1 and later), or the video standard (if any) that defines the video signal.
-		/// <para>For a list of possible values, see the <see cref="VideoSignalStandard"/> enumerated type.</para>
-		/// </summary>
-		public int VideoStandard { get { return videoStandard & 0x0000ffff; } }
+
+		/// <summary>Gets the video standard (if any) which defines the video signal.</summary>
+		public VideoSignalStandard VideoStandard { get { return (VideoSignalStandard)( videoStandard & 0x0000ffff ); } }
+
+
+		/// <summary>Additional signal information (supported by WDDM 1.3 and later display miniport drivers running on Windows 8.1 and later).</summary>
+		public int VSyncFrequencyDivider { get { return ( videoStandard >> 16 ) & 0x0000003f; } }
+
 
         /// <summary>The scan-line ordering (for example, progressive or interlaced) of the video signal.</summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Scanline")]
-        public ScanLineOrdering ScanlineOrdering { get { return scanLineOrdering; } }
+        public ScanLineOrdering ScanLineOrdering { get { return scanLineOrdering; } }
 
 
 		/// <summary>Returns a hash code for this <see cref="VideoSignalInfo"/> structure.</summary>
