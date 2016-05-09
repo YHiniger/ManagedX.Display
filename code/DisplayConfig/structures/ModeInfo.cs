@@ -2,10 +2,8 @@
 using System.Runtime.InteropServices;
 
 
-namespace ManagedX.Display.DisplayConfig
+namespace ManagedX.Graphics.DisplayConfig
 {
-	using Graphics;
-
 
 	/// <summary>Contains either source mode or target mode information.</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553933%28v=vs.85%29.aspx</remarks>

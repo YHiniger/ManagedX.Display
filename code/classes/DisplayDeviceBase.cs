@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace ManagedX.Display
+namespace ManagedX.Graphics
 {
 
 	/// <summary>Base class for GDI display devices (adapters, monitors).

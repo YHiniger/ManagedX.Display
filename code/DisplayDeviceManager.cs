@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 
-namespace ManagedX.Display
+namespace ManagedX.Graphics
 {
 	using DisplayConfig;
 

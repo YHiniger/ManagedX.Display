@@ -1,7 +1,5 @@
-﻿namespace ManagedX.Display.DisplayConfig
+﻿namespace ManagedX.Graphics.DisplayConfig
 {
-	using Graphics;
-
 
 	/// <summary>Contains DisplayConfig information about a <see cref="DisplayMonitor"/>.</summary>
 	public sealed class DisplayConfigMonitorInfo : DisplayConfigInfo

@@ -1,10 +1,8 @@
 ﻿using System.Runtime.InteropServices;
 
 
-namespace ManagedX.Display.DisplayConfig
+namespace ManagedX.Graphics.DisplayConfig
 {
-	using Graphics;
-
 
 	/// <summary>Contains information about the display adapter.</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553915%28v=vs.85%29.aspx</remarks>

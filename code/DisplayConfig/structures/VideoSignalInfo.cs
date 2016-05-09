@@ -2,10 +2,8 @@
 using System.Runtime.InteropServices;
 
 
-namespace ManagedX.Display.DisplayConfig
+namespace ManagedX.Graphics.DisplayConfig
 {
-	using Graphics;
-
 
 	/// <summary>Contains information about the video signal for a display.</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff554007%28v=vs.85%29.aspx</remarks>

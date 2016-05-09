@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 
 
-namespace ManagedX.Display
+namespace ManagedX.Graphics
 {
 
 	/// <summary>Contains information about a display monitor.

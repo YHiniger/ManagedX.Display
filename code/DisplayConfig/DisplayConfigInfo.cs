@@ -1,7 +1,5 @@
-﻿namespace ManagedX.Display.DisplayConfig
+﻿namespace ManagedX.Graphics.DisplayConfig
 {
-	using Graphics;
-
 
 	/// <summary>Base class for additional DisplayConfig information.</summary>
 	public abstract class DisplayConfigInfo

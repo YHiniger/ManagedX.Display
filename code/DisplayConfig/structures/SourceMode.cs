@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 
 
-namespace ManagedX.Display.DisplayConfig
+namespace ManagedX.Graphics.DisplayConfig
 {
 
 	/// <summary>Contains information about a source display mode (defined in WinGDI.h).</summary>

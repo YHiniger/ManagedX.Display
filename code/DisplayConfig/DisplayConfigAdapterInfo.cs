@@ -1,4 +1,4 @@
-﻿namespace ManagedX.Display.DisplayConfig
+﻿namespace ManagedX.Graphics.DisplayConfig
 {
 
 	/// <summary>Contains DisplayConfig information about a <see cref="DisplayAdapter"/>.</summary>

@@ -1,4 +1,4 @@
-﻿namespace ManagedX.Display
+﻿namespace ManagedX.Graphics
 {
 
 	/// <summary>Enumerates flags used in the MonitorInfo and <see cref="MonitorInfoEx"/> structures.

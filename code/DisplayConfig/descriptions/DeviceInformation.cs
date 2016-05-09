@@ -2,10 +2,8 @@
 using System.Runtime.InteropServices;
 
 
-namespace ManagedX.Display.DisplayConfig
+namespace ManagedX.Graphics.DisplayConfig
 {
-	using Graphics;
-
 
 	/// <summary>Base class for device descriptions.
 	/// <para>Represents a device info header.</para>

@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 
 
-namespace ManagedX.Display.DisplayConfig
+namespace ManagedX.Graphics.DisplayConfig
 {
 
 	/// <summary>Describes a display path target mode (defined in WinGDI.h).</summary>

@@ -5,9 +5,8 @@ using System.Runtime.InteropServices;
 using System.Security;
 
 
-namespace ManagedX.Display.DisplayConfig
+namespace ManagedX.Graphics.DisplayConfig
 {
-	using Graphics;
 	using Win32;
 
 

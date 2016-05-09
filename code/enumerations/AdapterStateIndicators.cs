@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
 
-namespace ManagedX.Display
+namespace ManagedX.Graphics
 {
 	using Win32;
 

@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 
 
-namespace ManagedX.Display
+namespace ManagedX.Graphics
 {
 
 	/// <summary>A display adapter.</summary>

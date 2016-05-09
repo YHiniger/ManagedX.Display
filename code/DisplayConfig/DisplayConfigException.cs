@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 
 
-namespace ManagedX.Display.DisplayConfig
+namespace ManagedX.Graphics.DisplayConfig
 {
 
 	/// <summary>An exception to be thrown on DisplayConfig error.</summary>

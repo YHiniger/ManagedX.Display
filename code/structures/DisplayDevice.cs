@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 // Comments checked (2015-09-24)
 
 
-namespace ManagedX.Display
+namespace ManagedX.Graphics
 {
 
 	/// <summary>This structure receives information about the display device specified by the <code>deviceIndex</code> parameter of the EnumDisplayDevices function.

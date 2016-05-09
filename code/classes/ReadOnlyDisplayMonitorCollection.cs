@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 
-namespace ManagedX.Display
+namespace ManagedX.Graphics
 {
 
 	/// <summary>A read-only collection of <see cref="DisplayMonitor"/> instances.</summary>

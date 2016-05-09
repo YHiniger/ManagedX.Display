@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 
 
-namespace ManagedX.Display.DisplayConfig
+namespace ManagedX.Graphics.DisplayConfig
 {
 
 	/// <summary>A read-only collection of <see cref="ModeInfo"/> structures.</summary>

@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace ManagedX.Display
+namespace ManagedX.Graphics
 {
 
 	/// <summary>Arguments for use with <see cref="DisplayDeviceManager.AdapterAdded"/>, <see cref="DisplayAdapter.MonitorConnected"/> and <see cref="DisplayAdapter.MonitorDisconnected"/>.</summary>
