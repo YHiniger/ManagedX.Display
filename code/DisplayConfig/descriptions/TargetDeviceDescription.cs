@@ -10,17 +10,17 @@ namespace ManagedX.Display.DisplayConfig
 
 	/// <summary>Contains information about the target (defined in WinGDI.h).</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553989%28v=vs.85%29.aspx</remarks>
-	[System.Diagnostics.DebuggerStepThrough]
 	[Native( "WinGDI.h", "DISPLAYCONFIG_TARGET_DEVICE_NAME" )]
 	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 2, Size = 420 )]
-	public struct TargetDeviceName : IEquatable<TargetDeviceName>
+	public sealed class TargetDeviceDescription : DeviceDescription
 	{
 
-		/// <summary>Defines the maximum length, in chars, of the <see cref="FriendlyName"/>.</summary>
+		/// <summary>Defines the maximum length, in unicode chars, of the <see cref="FriendlyName"/>.</summary>
 		public const int MaxFriendlyNameLength = 64;
 
-		/// <summary>Defines the maximum length, in chars, of the <see cref="DevicePath"/>.</summary>
+		/// <summary>Defines the maximum length, in unicode chars, of the <see cref="DevicePath"/>.</summary>
 		public const int MaxDevicePathLength = 128;
+
 
 
 		/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553990%28v=vs.85%29.aspx</remarks>
@@ -31,21 +31,15 @@ namespace ManagedX.Display.DisplayConfig
 
 			None = 0x00000000,
 
-			/// <summary>The string in the monitorFriendlyDeviceName member of the <see cref="TargetDeviceName"/> structure was constructed
-			/// from the manufacture identification string in the extended display identification data (EDID).
-			/// </summary>
+			/// <summary>The string in the monitorFriendlyDeviceName member was constructed from the manufacture identification string in the extended display identification data (EDID).</summary>
 			[Native( "WinGDI.h", "friendlyNameFromEdid" )]
 			FriendlyNameFromExtendedDisplayInformationData = 0x00000001,
 
-			/// <summary>The target is forced with no detectable monitor attached and the monitorFriendlyDeviceName member of the
-			/// <see cref="TargetDeviceName"/> structure is a null-terminated empty string.
-			/// </summary>
+			/// <summary>The target is forced with no detectable monitor attached and the monitorFriendlyDeviceName member is a null-terminated empty string.</summary>
 			[Native( "WinGDI.h", "friendlyNameForced" )]
 			FriendlyNameForced = 0x00000002,
 
-			/// <summary>The edidManufactureId and edidProductCodeId members of the <see cref="TargetDeviceName"/> structure are valid and
-			/// were obtained from the extended display information data (EDID).
-			/// </summary>
+			/// <summary>The edidManufactureId and edidProductCodeId members are valid and were obtained from the extended display information data (EDID).</summary>
 			[Native( "WinGDI.h", "edidIdsValid" )]
 			ExtendedDisplayInformationDataIdsValid = 0x00000004
 
@@ -53,14 +47,10 @@ namespace ManagedX.Display.DisplayConfig
 
 
 
-		/// <summary>A <see cref="DeviceInfoHeader"/> structure that contains information about the request for the target device name.
-		/// The caller should set the <code>type</code> member of <see cref="DeviceInfoHeader"/> to <code><see cref="DeviceInfoType"/>.GetTargetName</code> and the <code>adapterId</code> and <code>id</code> members of <see cref="DeviceInfoHeader"/> to the target for which the caller wants the target device name.
-		/// The caller should set the <code>size</code> member of <see cref="DeviceInfoHeader"/> to at least the size of the <see cref="TargetDeviceName"/> structure.</summary>
-		private DeviceInfoHeader header;
 		private Indicators indicators;
 		private VideoOutputTechnology outputTechnology;
-		private short edidManufactureId;	// might not be valid (see flags)
-		private short edidProductCodeId;	// might not be valid (see flags)
+		private short edidManufactureId;    // might not be valid (see flags)
+		private short edidProductCodeId;    // might not be valid (see flags)
 		private int connectorInstance;
 		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = MaxFriendlyNameLength )]
 		private string monitorFriendlyDeviceName; // might not be valid (see flags)
@@ -68,23 +58,15 @@ namespace ManagedX.Display.DisplayConfig
 		private string monitorDevicePath;
 
 
-		/// <summary>Instantiates a new <see cref="TargetDeviceName"/> structure.</summary>
+
+		/// <summary>Initializes a new <see cref="TargetDeviceDescription"/>.</summary>
 		/// <param name="adapterId">The adapter identifier.</param>
-		/// <param name="targetId">The target device identifier.</param>
-		public TargetDeviceName( Luid adapterId, int targetId )
-			: this()
+		/// <param name="id">The target device identifier.</param>
+		public TargetDeviceDescription( Luid adapterId, int id )
+			: base( DeviceInfoType.GetTargetName, 420, adapterId, id )
 		{
-			header = new DeviceInfoHeader( DeviceInfoType.GetTargetName, Marshal.SizeOf( typeof( TargetDeviceName ) ), adapterId, targetId );
-			monitorDevicePath = monitorFriendlyDeviceName = string.Empty;
 		}
 
-
-		/// <summary>Gets the identifier of the target adapter device the information packet refers to.</summary>
-		public Luid AdapterId { get { return header.AdapterId; } }
-
-
-		/// <summary>Gets the identifier of the target adapter device to get or set the information for.</summary>
-		public int TargetId { get { return header.Id; } }
 
 
 		/// <summary>A value from the <see cref="VideoOutputTechnology"/> enumeration that specifies the target's connector type.</summary>
@@ -154,64 +136,12 @@ namespace ManagedX.Display.DisplayConfig
 		public string DevicePath { get { return string.Copy( monitorDevicePath ?? string.Empty ); } }
 
 
-		/// <summary>Returns a hash code for this <see cref="TargetDeviceName"/> structure.</summary>
-		/// <returns>Returns a hash code for this <see cref="TargetDeviceName"/> structure.</returns>
-		public override int GetHashCode()
-		{
-			return header.GetHashCode() ^ (int)indicators ^ (int)outputTechnology ^ connectorInstance ^ ( monitorDevicePath ?? string.Empty ).GetHashCode();
-		}
-
-
-		/// <summary></summary>
-		/// <param name="other"></param>
-		/// <returns></returns>
-		public bool Equals( TargetDeviceName other )
-		{
-			return header.Equals( other.header ) && ( indicators == other.indicators ) && ( outputTechnology == other.outputTechnology ) && ( connectorInstance == other.connectorInstance ) && this.DevicePath.Equals( other.DevicePath );
-		}
-
-
-		/// <summary></summary>
-		/// <param name="obj"></param>
-		/// <returns></returns>
-		public override bool Equals( object obj )
-		{
-			return ( obj is TargetDeviceName ) && this.Equals( (TargetDeviceName)obj );
-		}
-
-
 		/// <summary>Returns the <see cref="FriendlyName"/>.</summary>
 		/// <returns>Returns the <see cref="FriendlyName"/>.</returns>
-		public override string ToString()
+		public sealed override string ToString()
 		{
 			return this.FriendlyName;
 		}
-
-
-		#region Operators
-
-
-		/// <summary>Equality operator.</summary>
-		/// <param name="targetDeviceName">A <see cref="TargetDeviceName"/> structure.</param>
-		/// <param name="other">A <see cref="TargetDeviceName"/> structure.</param>
-		/// <returns>Returns true if the structures are equal, otherwise returns false.</returns>
-		public static bool operator ==( TargetDeviceName targetDeviceName, TargetDeviceName other )
-		{
-			return targetDeviceName.Equals( other );
-		}
-
-
-		/// <summary>Inequality operator.</summary>
-		/// <param name="targetDeviceName">A <see cref="TargetDeviceName"/> structure.</param>
-		/// <param name="other">A <see cref="TargetDeviceName"/> structure.</param>
-		/// <returns>Returns true if the structures are not equal, otherwise returns false.</returns>
-		public static bool operator !=( TargetDeviceName targetDeviceName, TargetDeviceName other )
-		{
-			return !targetDeviceName.Equals( other );
-		}
-
-
-		#endregion
 
 	}
 

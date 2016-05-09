@@ -13,7 +13,7 @@
 
 
 		
-		internal DisplayConfigMonitorInfo( DisplayConfiguration displayConfiguration, PathTargetInfo info, TargetDeviceName targetDeviceName )
+		internal DisplayConfigMonitorInfo( DisplayConfiguration displayConfiguration, PathTargetInfo info, TargetDeviceDescription targetDeviceName )
 			: base( info.AdapterId, info.Id, displayConfiguration.Topology )
 		{
 			if( info.ModeInfoIndex > -1 && info.ModeInfoIndex < displayConfiguration.ModeInfo.Count )

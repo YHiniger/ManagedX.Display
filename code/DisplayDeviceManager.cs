@@ -340,8 +340,8 @@ namespace ManagedX.Display
 				{
 					var source = paths[ p ].SourceInfo;
 					
-					var sourceDeviceName = DisplayConfiguration.GetSourceDeviceName( source );
-					if( sourceDeviceName.DeviceIdentifier == adapter.DeviceIdentifier )
+					var sourceDeviceName = DisplayConfiguration.GetSourceGdiDeviceName( source );
+					if( sourceDeviceName == adapter.DeviceIdentifier )
 						return new DisplayConfigAdapterInfo( currentConfiguration, source );
 				}
 			}

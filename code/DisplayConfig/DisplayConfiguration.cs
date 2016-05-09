@@ -24,10 +24,6 @@ namespace ManagedX.Display.DisplayConfig
 		public const int MaxPathCount = DisplayAdapter.MaxAdapterCount * MaxSourceCount * MaxClonePerSource;
 
 
-		/// <summary>Provides access to native functions (located in User32.dll, defined in WinUser.h) related to DisplayConfig.
-		/// <para>Requires Windows 7 or newer.</para>
-		/// </summary>
-		[Native( "WinUser.h" )]
 		[SuppressUnmanagedCodeSecurity]
 		private static class SafeNativeMethods
 		{
@@ -35,10 +31,8 @@ namespace ManagedX.Display.DisplayConfig
 			private const string LibraryName = "User32.dll";
 
 
-			/// <summary>Retrieves the size of the buffers that are required to call the QueryDisplayConfig function.
-			/// <para>Not available on Windows Vista.</para>
-			/// </summary>
-			/// <param name="flags">The type of information to retrieve.</param>
+			/// <summary>Retrieves the size of the buffers that are required to call the QueryDisplayConfig function.</summary>
+			/// <param name="request">The type of information to retrieve.</param>
 			/// <param name="pathArrayElementCount">Pointer to a variable that receives the number of elements in the path information table.
 			/// The <paramref name="pathArrayElementCount"/> parameter value is then used by a subsequent call to the QueryDisplayConfig function.
 			/// This parameter cannot be null.
@@ -54,10 +48,10 @@ namespace ManagedX.Display.DisplayConfig
 			/// <see cref="ErrorCode.GenFailure"/>.
 			/// </returns>
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
-			private static extern ErrorCode GetDisplayConfigBufferSizes(
-				[In] QueryDisplayConfigRequest flags,
-				out int pathArrayElementCount,
-				out int modeInfoArrayElementCount
+			internal static extern ErrorCode GetDisplayConfigBufferSizes(
+				[In] QueryDisplayConfigRequest request,
+				[Out] out int pathArrayElementCount,
+				[Out] out int modeInfoArrayElementCount
 			);
 			// https://msdn.microsoft.com/en-us/library/windows/hardware/ff566772%28v=vs.85%29.aspx
 			//LONG GetDisplayConfigBufferSizes(
@@ -81,7 +75,7 @@ namespace ManagedX.Display.DisplayConfig
 
 
 			/// <summary>Retrieves information about all possible display paths for all display devices, or views, in the current setting.</summary>
-			/// <param name="flags">The type of information to retrieve; must not be <see cref="QueryDisplayConfigRequest.None"/> nor specify <see cref="QueryDisplayConfigRequest.DatabaseCurrent"/>.</param>
+			/// <param name="request">The type of information to retrieve; must not be <see cref="QueryDisplayConfigRequest.None"/> nor specify <see cref="QueryDisplayConfigRequest.DatabaseCurrent"/>.</param>
 			/// <param name="pathInfoArrayElementCount">
 			/// Pointer to a variable that contains the number of elements in <paramref name="pathInfoArray"/>. This parameter cannot be null.
 			/// If QueryDisplayConfig returns <see cref="ErrorCode.None"/>, <paramref name="pathInfoArrayElementCount"/> is updated with the number of valid entries in <paramref name="pathInfoArray"/>.
@@ -97,7 +91,7 @@ namespace ManagedX.Display.DisplayConfig
 			/// If QueryDisplayConfig returns <see cref="ErrorCode.None"/>, <paramref name="modeInfoArrayElementCount"/> is updated with the number of valid entries in <paramref name="modeInfoArray"/>. 
 			/// </param>
 			/// <param name="modeInfoArray">Pointer to a variable that contains an array of <see cref="ModeInfo"/> elements. This parameter cannot be null.</param>
-			/// <param name="reserved">The currentTopologyId parameter is only set when the <paramref name="flags"/> parameter is set to <see cref="QueryDisplayConfigRequest.DatabaseCurrent"/>; must be null.</param>
+			/// <param name="reserved">The currentTopologyId parameter is only set when the <paramref name="request"/> parameter is set to <see cref="QueryDisplayConfigRequest.DatabaseCurrent"/>; must be null.</param>
 			/// <returns>Returns <see cref="ErrorCode.None"/> on success, otherwise returns one of the following <see cref="ErrorCode"/>:
 			/// <see cref="ErrorCode.InvalidParameter"/>,
 			/// <see cref="ErrorCode.NotSupported"/>,
@@ -106,8 +100,8 @@ namespace ManagedX.Display.DisplayConfig
 			/// <see cref="ErrorCode.InsufficientBuffer"/>.
 			/// </returns>
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
-			private static extern ErrorCode QueryDisplayConfig(
-				[In] QueryDisplayConfigRequest flags,
+			internal static extern ErrorCode QueryDisplayConfig(
+				[In] QueryDisplayConfigRequest request,
 				[In, Out] ref int pathInfoArrayElementCount,
 				[In, Out, MarshalAs( UnmanagedType.LPArray, SizeParamIndex = 1 )] PathInfo[] pathInfoArray,
 				[In, Out] ref int modeInfoArrayElementCount,
@@ -117,7 +111,7 @@ namespace ManagedX.Display.DisplayConfig
 
 
 			/// <summary>Retrieves information about all possible display paths for all display devices, or views, in the current setting.</summary>
-			/// <param name="flags">The type of information to retrieve; must be or specify <see cref="QueryDisplayConfigRequest.DatabaseCurrent"/>.</param>
+			/// <param name="request">The type of information to retrieve; must be or specify <see cref="QueryDisplayConfigRequest.DatabaseCurrent"/>.</param>
 			/// <param name="pathInfoArrayElementCount">
 			/// Pointer to a variable that contains the number of elements in <paramref name="pathInfoArray"/>. This parameter cannot be null.
 			/// If QueryDisplayConfig returns <see cref="ErrorCode.None"/>, <paramref name="pathInfoArrayElementCount"/> is updated with the number of valid entries in <paramref name="pathInfoArray"/>.
@@ -135,9 +129,9 @@ namespace ManagedX.Display.DisplayConfig
 			/// <param name="modeInfoArray">Pointer to a variable that contains an array of <see cref="ModeInfo"/> elements. This parameter cannot be null.</param>
 			/// <param name="currentTopologyId">Pointer to a variable that receives the identifier of the currently active topology in the CCD database.
 			/// For a list of possible values, see the <see cref="TopologyIndicators"/> enumerated type.
-			/// The currentTopologyId parameter is only set when the <paramref name="flags"/> parameter value is QDC_DATABASE_CURRENT.
-			/// If the <paramref name="flags"/> parameter value is set to QDC_DATABASE_CURRENT, the currentTopologyId parameter must not be null.
-			/// If the <paramref name="flags"/> parameter value is not set to QDC_DATABASE_CURRENT, the currentTopologyId parameter value must be null.
+			/// The currentTopologyId parameter is only set when the <paramref name="request"/> parameter value is QDC_DATABASE_CURRENT.
+			/// If the <paramref name="request"/> parameter value is set to QDC_DATABASE_CURRENT, the currentTopologyId parameter must not be null.
+			/// If the <paramref name="request"/> parameter value is not set to QDC_DATABASE_CURRENT, the currentTopologyId parameter value must be null.
 			/// </param>
 			/// <returns>Returns <see cref="ErrorCode.None"/> on success, otherwise returns one of the following <see cref="ErrorCode"/>:
 			/// <see cref="ErrorCode.InvalidParameter"/>,
@@ -148,62 +142,14 @@ namespace ManagedX.Display.DisplayConfig
 			/// </returns>
 			/// <remarks></remarks>
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
-			private static extern ErrorCode QueryDisplayConfig(
-				[In] QueryDisplayConfigRequest flags,
+			internal static extern ErrorCode QueryDisplayConfig(
+				[In] QueryDisplayConfigRequest request,
 				[In, Out] ref int pathInfoArrayElementCount,
 				[In, Out, MarshalAs( UnmanagedType.LPArray, SizeParamIndex = 1 )] PathInfo[] pathInfoArray,
 				[In, Out] ref int modeInfoArrayElementCount,
 				[In, Out, MarshalAs( UnmanagedType.LPArray, SizeParamIndex = 3 )] ModeInfo[] modeInfoArray,
-				out TopologyIndicators currentTopologyId
+				[Out] out TopologyIndicators currentTopologyId
 			);
-
-
-
-			/// <summary>Retrieves information about all possible display paths for all display devices, or views, in the current setting.</summary>
-			/// <param name="request">The type of information to retrieve; must not be <see cref="QueryDisplayConfigRequest.None"/>.</param>
-			/// <param name="pathInfoArray">Receives an array of <see cref="PathInfo"/> elements; can't be null.
-			/// <para>
-			/// Each element in <paramref name="pathInfoArray"/> describes a single path from a source to a target.
-			/// The source and target mode information indexes are only valid in combination with the <paramref name="modeInfoArray"/> tables that are returned for the API at the same time.
-			/// The <paramref name="pathInfoArray"/> is always returned in path priority order.
-			/// </para>
-			/// </param>
-			/// <param name="modeInfoArray">Receives an array of <see cref="ModeInfo"/> elements; can't be null.</param>
-			/// <param name="currentTopologyId">When <paramref name="request"/> is or specifies <see cref="QueryDisplayConfigRequest.DatabaseCurrent"/>, receives the identifier of the currently active topology in the CCD database.</param>
-			/// <returns>Returns <see cref="ErrorCode.None"/> on success, otherwise returns one of the following <see cref="ErrorCode"/>:
-			/// <see cref="ErrorCode.InvalidParameter"/>,
-			/// <see cref="ErrorCode.NotSupported"/>,
-			/// <see cref="ErrorCode.AccessDenied"/>,
-			/// <see cref="ErrorCode.GenFailure"/> or
-			/// <see cref="ErrorCode.InsufficientBuffer"/>.
-			/// </returns>
-			/// <exception cref="InvalidEnumArgumentException"/>
-			internal static ErrorCode QueryDisplayConfig( QueryDisplayConfigRequest request, out PathInfo[] pathInfoArray, out ModeInfo[] modeInfoArray, out TopologyIndicators currentTopologyId )
-			{
-				if( request == QueryDisplayConfigRequest.None )
-					throw new InvalidEnumArgumentException( "request", (int)request, typeof( QueryDisplayConfigRequest ) );
-
-				currentTopologyId = TopologyIndicators.Unspecified;
-
-				int pathInfoArrayElementCount;
-				int modeInfoArrayElementCount;
-
-				var errorCode = GetDisplayConfigBufferSizes( request, out pathInfoArrayElementCount, out modeInfoArrayElementCount );
-				if( errorCode != ErrorCode.None )
-				{
-					pathInfoArray = new PathInfo[ 0 ];
-					modeInfoArray = new ModeInfo[ 0 ];
-					return errorCode;
-				}
-
-				pathInfoArray = new PathInfo[ pathInfoArrayElementCount ];
-				modeInfoArray = new ModeInfo[ modeInfoArrayElementCount ];
-
-				if( request.HasFlag( QueryDisplayConfigRequest.DatabaseCurrent ) )
-					return QueryDisplayConfig( request, ref pathInfoArrayElementCount, pathInfoArray, ref modeInfoArrayElementCount, modeInfoArray, out currentTopologyId );
-				else
-					return QueryDisplayConfig( request, ref pathInfoArrayElementCount, pathInfoArray, ref modeInfoArrayElementCount, modeInfoArray, IntPtr.Zero );
-			}
 
 			#endregion QueryDisplayConfig
 
@@ -215,10 +161,10 @@ namespace ManagedX.Display.DisplayConfig
 			//	_Inout_ DISPLAYCONFIG_DEVICE_INFO_HEADER* requestPacket);
 
 			/// <summary>Retrieves display configuration information about the device.</summary>
-			/// <param name="requestPacket">
-			/// A pointer to a <see cref="DeviceInfoHeader"/> structure.
-			/// This structure contains information about the request, which includes the packet type in the type member.
+			/// <param name="requestPacket">An initialized <see cref="AdapterDescription"/>.
+			/// <para>This object contains information about the request, which includes the packet type in the type member.
 			/// The type and size of additional data that the function returns after the header structure depend on the packet type.
+			/// </para>
 			/// </param>
 			/// <returns>Returns <see cref="ErrorCode.None"/> on success, otherwise returns one of the following <see cref="ErrorCode"/>:
 			/// <see cref="ErrorCode.InvalidParameter"/>,
@@ -234,14 +180,14 @@ namespace ManagedX.Display.DisplayConfig
 			/// </remarks>
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			internal static extern ErrorCode DisplayConfigGetDeviceInfo(
-				[In, Out] ref AdapterName requestPacket
+				[In, Out] AdapterDescription requestPacket
 			);
 
 			/// <summary>Retrieves display configuration information about the device.</summary>
-			/// <param name="requestPacket">
-			/// A pointer to a <see cref="DeviceInfoHeader"/> structure.
-			/// This structure contains information about the request, which includes the packet type in the type member.
+			/// <param name="requestPacket">An initialized <see cref="SourceDeviceDescription"/>.
+			/// <para>This object contains information about the request, which includes the packet type in the type member.
 			/// The type and size of additional data that the function returns after the header structure depend on the packet type.
+			/// </para>
 			/// </param>
 			/// <returns>Returns <see cref="ErrorCode.None"/> on success, otherwise returns one of the following <see cref="ErrorCode"/>:
 			/// <see cref="ErrorCode.InvalidParameter"/>,
@@ -257,14 +203,14 @@ namespace ManagedX.Display.DisplayConfig
 			/// </remarks>
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			internal static extern ErrorCode DisplayConfigGetDeviceInfo(
-				[In, Out] ref SourceDeviceName requestPacket
+				[In, Out] SourceDeviceDescription requestPacket
 			);
 
 			/// <summary>Retrieves display configuration information about the device.</summary>
-			/// <param name="requestPacket">
-			/// A pointer to a <see cref="DeviceInfoHeader"/> structure.
-			/// This structure contains information about the request, which includes the packet type in the type member.
+			/// <param name="requestPacket">An initialized <see cref="TargetDeviceDescription"/>.
+			/// <para>This object contains information about the request, which includes the packet type in the type member.
 			/// The type and size of additional data that the function returns after the header structure depend on the packet type.
+			/// </para>
 			/// </param>
 			/// <returns>Returns <see cref="ErrorCode.None"/> on success, otherwise returns one of the following <see cref="ErrorCode"/>:
 			/// <see cref="ErrorCode.InvalidParameter"/>,
@@ -281,7 +227,7 @@ namespace ManagedX.Display.DisplayConfig
 			/// </remarks>
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			internal static extern ErrorCode DisplayConfigGetDeviceInfo(
-				[In, Out] ref TargetDeviceName requestPacket
+				[In, Out] TargetDeviceDescription requestPacket
 			);
 
 			///// <summary>Retrieves display configuration information about the device.</summary>
@@ -307,34 +253,57 @@ namespace ManagedX.Display.DisplayConfig
 			//	[In, Out] ref TargetPreferredMode requestPacket
 			//);
 
-			///// <summary>Retrieves display configuration information about the device.
-			///// <para>Requires Windows 8.1 or newer.</para>
-			///// </summary>
-			///// <param name="requestPacket">
-			///// A pointer to a <see cref="DeviceInfoHeader"/> structure.
-			///// This structure contains information about the request, which includes the packet type in the type member.
-			///// The type and size of additional data that the function returns after the header structure depend on the packet type.
-			///// </param>
-			///// <returns>Returns <see cref="ErrorCode.None"/> on success, otherwise returns one of the following <see cref="ErrorCode"/>:
-			///// <see cref="ErrorCode.InvalidParameter"/>,
-			///// <see cref="ErrorCode.NotSupported"/>,
-			///// <see cref="ErrorCode.AccessDenied"/>,
-			///// <see cref="ErrorCode.InsufficientBuffer"/>, or
-			///// <see cref="ErrorCode.GenFailure"/>.</returns>
-			///// <remarks>
-			///// Use this function to obtain additional information about a source or target for an adapter, such as the display name, the preferred display mode, and source device name.
-			///// The caller can call this function to obtain more friendly names to display in the user interface.
-			///// The caller can obtain names for the adapter, the source, and the target.
-			///// The caller can also call this function to obtain the best resolution of the connected display device.
-			///// </remarks>
-			//[DllImport( LibraryName, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
-			//internal static extern ErrorCode DisplayConfigGetDeviceInfo(
-			//	[In, Out] ref TargetBaseType requestPacket
-			//);
-
 			#endregion DisplayConfigGetDeviceInfo
 
 		}
+
+
+		/// <summary>Retrieves information about all possible display paths for all display devices, or views, in the current setting.</summary>
+		/// <param name="request">The type of information to retrieve; must not be <see cref="QueryDisplayConfigRequest.None"/>.</param>
+		/// <param name="pathInfoArray">Receives an array of <see cref="PathInfo"/> elements; can't be null.
+		/// <para>
+		/// Each element in <paramref name="pathInfoArray"/> describes a single path from a source to a target.
+		/// The source and target mode information indexes are only valid in combination with the <paramref name="modeInfoArray"/> tables that are returned for the API at the same time.
+		/// The <paramref name="pathInfoArray"/> is always returned in path priority order.
+		/// </para>
+		/// </param>
+		/// <param name="modeInfoArray">Receives an array of <see cref="ModeInfo"/> elements; can't be null.</param>
+		/// <param name="currentTopologyId">When <paramref name="request"/> is or specifies <see cref="QueryDisplayConfigRequest.DatabaseCurrent"/>, receives the identifier of the currently active topology in the CCD database.</param>
+		/// <returns>Returns <see cref="ErrorCode.None"/> on success, otherwise returns one of the following <see cref="ErrorCode"/>:
+		/// <see cref="ErrorCode.InvalidParameter"/>,
+		/// <see cref="ErrorCode.NotSupported"/>,
+		/// <see cref="ErrorCode.AccessDenied"/>,
+		/// <see cref="ErrorCode.GenFailure"/> or
+		/// <see cref="ErrorCode.InsufficientBuffer"/>.
+		/// </returns>
+		/// <exception cref="InvalidEnumArgumentException"/>
+		private static ErrorCode QueryDisplayConfig( QueryDisplayConfigRequest request, out PathInfo[] pathInfoArray, out ModeInfo[] modeInfoArray, out TopologyIndicators currentTopologyId )
+		{
+			if( request == QueryDisplayConfigRequest.None )
+				throw new InvalidEnumArgumentException( "request", (int)request, typeof( QueryDisplayConfigRequest ) );
+
+			currentTopologyId = TopologyIndicators.Unspecified;
+
+			int pathInfoArrayElementCount;
+			int modeInfoArrayElementCount;
+
+			var errorCode = SafeNativeMethods.GetDisplayConfigBufferSizes( request, out pathInfoArrayElementCount, out modeInfoArrayElementCount );
+			if( errorCode != ErrorCode.None )
+			{
+				pathInfoArray = new PathInfo[ 0 ];
+				modeInfoArray = new ModeInfo[ 0 ];
+				return errorCode;
+			}
+
+			pathInfoArray = new PathInfo[ pathInfoArrayElementCount ];
+			modeInfoArray = new ModeInfo[ modeInfoArrayElementCount ];
+
+			if( request.HasFlag( QueryDisplayConfigRequest.DatabaseCurrent ) )
+				return SafeNativeMethods.QueryDisplayConfig( request, ref pathInfoArrayElementCount, pathInfoArray, ref modeInfoArrayElementCount, modeInfoArray, out currentTopologyId );
+
+			return SafeNativeMethods.QueryDisplayConfig( request, ref pathInfoArrayElementCount, pathInfoArray, ref modeInfoArrayElementCount, modeInfoArray, IntPtr.Zero );
+		}
+
 
 
 		/// <summary>Returns a <see cref="DisplayConfigException"/> for a given error code.</summary>
@@ -371,36 +340,36 @@ namespace ManagedX.Display.DisplayConfig
 		}
 
 
-		/// <summary>Returns a <see cref="SourceDeviceName"/> structure containing the device name of the source device.</summary>
+		/// <summary>Returns the GDI device name of a source device.</summary>
 		/// <param name="sourceInfo">A valid <see cref="PathSourceInfo"/> structure; must not be empty.</param>
-		/// <returns>Returns a <see cref="SourceDeviceName"/> structure containing the device name of the source device.</returns>
+		/// <returns>Returns the GDI device name of a source device.</returns>
 		/// <exception cref="ArgumentException"/>
 		/// <exception cref="Exception"/>
-		public static SourceDeviceName GetSourceDeviceName( PathSourceInfo sourceInfo )
+		public static string GetSourceGdiDeviceName( PathSourceInfo sourceInfo )
 		{
 			if( sourceInfo == PathSourceInfo.Empty )
 				throw new ArgumentException( "Invalid source info: empty.", "sourceInfo" );
 
-			var deviceName = new SourceDeviceName( sourceInfo.AdapterId, sourceInfo.Id );
-			var errorCode = SafeNativeMethods.DisplayConfigGetDeviceInfo( ref deviceName );
+			var deviceName = new SourceDeviceDescription( sourceInfo.AdapterId, sourceInfo.Id );
+			var errorCode = SafeNativeMethods.DisplayConfigGetDeviceInfo( deviceName );
 			if( errorCode == ErrorCode.None )
-				return deviceName;
+				return deviceName.GdiDeviceName;
 
 			throw GetException( errorCode );
 		}
 
-		/// <summary>Returns a <see cref="TargetDeviceName"/> structure containing information about the specified display target.</summary>
+		/// <summary>Returns a <see cref="TargetDeviceDescription"/> structure containing information about the specified display target.</summary>
 		/// <param name="targetInfo">A valid <see cref="PathTargetInfo"/> structure; must not be empty.</param>
-		/// <returns>Returns a <see cref="TargetDeviceName"/> structure containing information about the specified display target.</returns>
+		/// <returns>Returns a <see cref="TargetDeviceDescription"/> structure containing information about the specified display target.</returns>
 		/// <exception cref="ArgumentException"/>
 		/// <exception cref="Exception"/>
-		public static TargetDeviceName GetTargetDeviceName( PathTargetInfo targetInfo )
+		public static TargetDeviceDescription GetTargetDeviceName( PathTargetInfo targetInfo )
 		{
 			if( targetInfo == PathTargetInfo.Empty )
 				throw new ArgumentException( "Invalid target info: empty.", "targetInfo" );
 
-			var deviceName = new TargetDeviceName( targetInfo.AdapterId, targetInfo.Id );
-			var errorCode = SafeNativeMethods.DisplayConfigGetDeviceInfo( ref deviceName );
+			var deviceName = new TargetDeviceDescription( targetInfo.AdapterId, targetInfo.Id );
+			var errorCode = SafeNativeMethods.DisplayConfigGetDeviceInfo( deviceName );
 			if( errorCode == ErrorCode.None )
 				return deviceName;
 
@@ -419,10 +388,11 @@ namespace ManagedX.Display.DisplayConfig
 			if( adapterId == Luid.Zero )
 				throw new ArgumentException( "Invalid adapter id.", "adapterId" );
 
-			var adapterName = new AdapterName( adapterId, id );
-			var errorCode = SafeNativeMethods.DisplayConfigGetDeviceInfo( ref adapterName );
+			var adapterName = new AdapterDescription( adapterId, id );
+			//var adapterName = new AdapterName( adapterId, id );
+			var errorCode = SafeNativeMethods.DisplayConfigGetDeviceInfo( adapterName );
 			if( errorCode == ErrorCode.None )
-				return adapterName.DeviceName;
+				return adapterName.DevicePath;
 			
 			throw GetException( errorCode );
 		}
@@ -585,7 +555,7 @@ namespace ManagedX.Display.DisplayConfig
 		/// <exception cref="InvalidOperationException"/>
 		public void Refresh()
 		{
-			var error = SafeNativeMethods.QueryDisplayConfig( request, out paths, out modes, out topologyId );
+			var error = QueryDisplayConfig( request, out paths, out modes, out topologyId );
 			if( error != ErrorCode.None )
 				throw new InvalidOperationException( "Failed to refresh display configuration.", GetException( error ) );
 		}
