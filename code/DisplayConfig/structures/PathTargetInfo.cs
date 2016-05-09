@@ -10,6 +10,7 @@ namespace ManagedX.Display.DisplayConfig
 	/// <summary>Contains target information for a single path.</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553954%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
+	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_PATH_TARGET_INFO" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 48 )]
 	public struct PathTargetInfo : IEquatable<PathTargetInfo>
 	{

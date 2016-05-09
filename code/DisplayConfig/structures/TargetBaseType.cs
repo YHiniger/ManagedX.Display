@@ -12,6 +12,7 @@ namespace ManagedX.Display.DisplayConfig
 	/// </summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/dn362043%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
+	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_TARGET_BASE_TYPE" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 24 )]
 	internal struct TargetBaseType : IEquatable<TargetBaseType>
 	{

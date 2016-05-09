@@ -8,6 +8,7 @@ namespace ManagedX.Display.DisplayConfig
 	/// <summary>Contains information about the video signal for a display.</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff554007%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
+	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_VIDEO_SIGNAL_INFO" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 48 )]
 	public struct VideoSignalInfo : IEquatable<VideoSignalInfo>
 	{
@@ -17,7 +18,7 @@ namespace ManagedX.Display.DisplayConfig
 		private Rational vSyncFreq;
 		private Size activeSize;
 		private Size totalSize;
-		private int videoStandard;
+		private int videoStandard;	// bits 0..15: videoStandard, 16..21: vSyncFreqDivider, 22..31: reserved
 		private ScanLineOrdering scanLineOrdering;
 
 
@@ -40,7 +41,7 @@ namespace ManagedX.Display.DisplayConfig
 		/// Additional signal information (supported by WDDM 1.3 and later display miniport drivers running on Windows 8.1 and later), or the video standard (if any) that defines the video signal.
 		/// <para>For a list of possible values, see the <see cref="VideoSignalStandard"/> enumerated type.</para>
 		/// </summary>
-		public int VideoStandard { get { return videoStandard; } }
+		public int VideoStandard { get { return videoStandard & 0x0000ffff; } }
 
         /// <summary>The scan-line ordering (for example, progressive or interlaced) of the video signal.</summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Scanline")]

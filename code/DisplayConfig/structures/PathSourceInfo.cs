@@ -10,6 +10,7 @@ namespace ManagedX.Display.DisplayConfig
 	/// <summary>Contains source information for a single path.</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553951%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
+	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_PATH_SOURCE_INFO" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 20 )]
 	public struct PathSourceInfo : IEquatable<PathSourceInfo>
 	{
@@ -35,7 +36,7 @@ namespace ManagedX.Display.DisplayConfig
 
 		private Luid adapterId;
 		private int id;
-		private int modeInfoIdx;
+		private int modeInfoIdx;	// cloneGroupId (16 bits) + sourceModeInfoIdx (16 bits)
 		private PathSourceInfoStatus statusFlags;
 
 

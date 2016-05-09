@@ -16,7 +16,7 @@
 		internal DisplayConfigMonitorInfo( DisplayConfiguration displayConfiguration, PathTargetInfo info, TargetDeviceName targetDeviceName )
 			: base( info.AdapterId, info.Id, displayConfiguration.Topology )
 		{
-			if( info.ModeInfoIndex > -1 )
+			if( info.ModeInfoIndex > -1 && info.ModeInfoIndex < displayConfiguration.ModeInfo.Count )
 				mode = displayConfiguration.ModeInfo[ info.ModeInfoIndex ].TargetMode.TargetVideoSignalInfo;
 			else
 				mode = VideoSignalInfo.Empty;

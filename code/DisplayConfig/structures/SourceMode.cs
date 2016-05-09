@@ -8,6 +8,7 @@ namespace ManagedX.Display.DisplayConfig
 	/// <summary>Contains information about a source display mode (defined in WinGDI.h).</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553986%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
+	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_SOURCE_MODE" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 20 )]
 	public struct SourceMode : IEquatable<SourceMode>
 	{

@@ -8,6 +8,7 @@ namespace ManagedX.Display.DisplayConfig
 	/// <summary>Describes a display path target mode (defined in WinGDI.h).</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553993%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
+	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_TARGET_MODE" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 48 )]
 	public struct TargetMode : IEquatable<TargetMode>
 	{

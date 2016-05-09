@@ -11,9 +11,18 @@ namespace ManagedX.Display.DisplayConfig
 	/// <summary>Contains information about the target (defined in WinGDI.h).</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553989%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
+	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_TARGET_DEVICE_NAME" )]
 	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 2, Size = 420 )]
 	public struct TargetDeviceName : IEquatable<TargetDeviceName>
 	{
+
+		/// <summary>Defines the maximum length, in chars, of the <see cref="FriendlyName"/>.</summary>
+		public const int MaxFriendlyNameLength = 64;
+
+		/// <summary>Defines the maximum length, in chars, of the <see cref="DevicePath"/>.</summary>
+		public const int MaxDevicePathLength = 128;
+
+
 
 		/// <summary>A <see cref="DeviceInfoHeader"/> structure that contains information about the request for the target device name.
 		/// The caller should set the <code>type</code> member of <see cref="DeviceInfoHeader"/> to <code><see cref="DeviceInfoType"/>.GetTargetName</code> and the <code>adapterId</code> and <code>id</code> members of <see cref="DeviceInfoHeader"/> to the target for which the caller wants the target device name.
@@ -24,9 +33,9 @@ namespace ManagedX.Display.DisplayConfig
 		private short edidManufactureId;	// might not be valid (see flags)
 		private short edidProductCodeId;	// might not be valid (see flags)
 		private int connectorInstance;
-		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = 64 )]
+		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = MaxFriendlyNameLength )]
 		private string monitorFriendlyDeviceName; // might not be valid (see flags)
-		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = 128 )]
+		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = MaxDevicePathLength )]
 		private string monitorDevicePath;
 
 

@@ -10,6 +10,7 @@ namespace ManagedX.Display.DisplayConfig
 	/// <summary>Contains display information about the device (defined in WinGDI.h).</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553920%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
+	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_DEVICE_INFO_HEADER" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 20 )]
 	internal struct DeviceInfoHeader : IEquatable<DeviceInfoHeader>
 	{

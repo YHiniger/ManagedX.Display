@@ -8,6 +8,7 @@ namespace ManagedX.Display.DisplayConfig
 	/// <summary>Describes a single path from a target to a source.</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553945%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
+	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_PATH_INFO" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 72 )]
 	public struct PathInfo : IEquatable<PathInfo>
 	{

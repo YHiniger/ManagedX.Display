@@ -9,6 +9,7 @@ namespace ManagedX.Display.DisplayConfig
 
 	/// <summary>Contains information about the preferred mode of a display (defined in WinGDI.h).</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553996%28v=vs.85%29.aspx</remarks>
+	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_TARGET_PREFERRED_MODE" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 76 )]
 	public struct TargetPreferredMode : IEquatable<TargetPreferredMode>
 	{

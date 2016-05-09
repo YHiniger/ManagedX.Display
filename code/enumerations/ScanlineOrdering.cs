@@ -25,15 +25,23 @@
 		/// numerator of the refreshRate member both to zero.</para>
 		/// In this case, SetDisplayConfig uses the best refresh rate it can find.
 		/// </summary>
+		[Native( "DXGIType.h", "DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED" )]
+		[Native( "WinGDI.h", "DISPLAYCONFIG_SCANLINE_ORDERING_UNSPECIFIED" )]
 		Unspecified = 0,
 
 		/// <summary>The output is a progressive image; the image is created from the first scanline to the last without skipping any.</summary>
+		[Native( "DXGIType.h", "DXGI_MODE_SCANLINE_ORDER_PROGRESSIVE" )]
+		[Native( "WinGDI.h", "DISPLAYCONFIG_SCANLINE_ORDERING_PROGRESSIVE" )]
 		Progressive = 1,
 
 		/// <summary>The output is an interlaced image, created beginning with the upper field.</summary>
+		[Native( "DXGIType.h", "DXGI_MODE_SCANLINE_ORDER_UPPER_FIELD_FIRST" )]
+		[Native( "WinGDI.h", "DISPLAYCONFIG_SCANLINE_ORDERING_INTERLACED_UPPERFIELDFIRST" )]
 		UpperFieldFirst = 2,
 
 		/// <summary>The output is an interlaced image, created beginning with the lower field.</summary>
+		[Native( "DXGIType.h", "DXGI_MODE_SCANLINE_ORDER_LOWER_FIELD_FIRST" )]
+		[Native( "WinGDI.h", "DISPLAYCONFIG_SCANLINE_ORDERING_INTERLACED_LOWERFIELDFIRST" )]
 		LowerFieldFirst = 3
 
 	}
