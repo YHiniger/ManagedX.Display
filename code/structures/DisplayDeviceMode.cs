@@ -6,6 +6,8 @@ using System.Runtime.InteropServices;
 
 namespace ManagedX.Display
 {
+	using Graphics;
+
 
 	/// <summary>Contains information about the initialization and environment of a display device.</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/dd183565%28v=vs.85%29.aspx</remarks>
