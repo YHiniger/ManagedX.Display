@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 
@@ -13,14 +14,21 @@ namespace ManagedX.Display.DisplayConfig
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 40 )]
 	public struct DesktopImageInformation : IEquatable<DesktopImageInformation>
 	{
-		
+
 		/// <summary>Indicates the size of the VidPn source surface that is being displayed on the monitor.</summary>
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
 		public Point PathSourceSize;
 
-		/// <summary>Indicates where the desktop image will be positioned within path source. Region must be completely inside the bounds of the path source size.</summary>
+		/// <summary>Indicates where the desktop image will be positioned within path source.
+		/// <para>Region must be completely inside the bounds of the path source size.</para>
+		/// </summary>
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
 		public Rect ImageRegion;
 
-		/// <summary>Indicates which part of the desktop image for this clone group will be displayed on this path. This currently must be set to the desktop size.</summary>
+		/// <summary>Indicates which part of the desktop image for this clone group will be displayed on this path.
+		/// <para>This currently must be set to the desktop size.</para>
+		/// </summary>
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
 		public Rect ImageClip;
 
 

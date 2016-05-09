@@ -22,7 +22,7 @@
 		[Native( "WinGDI.h", "DISPLAYCONFIG_MODE_INFO_TYPE_TARGET" )]
 		Target = 2,
 
-		/// <summary>Indicates that the <see cref="ModeInfo"/> structure contains a valid DISPLAYCONFIG_DESKTOP_IMAGE_INFO structure.
+		/// <summary>Indicates that the <see cref="ModeInfo"/> structure contains a valid <see cref="DesktopImageInformation"/> structure.
 		/// <para>Requires Windows 10 or newer.</para>
 		/// </summary>
 		[Native( "WinGDI.h", "DISPLAYCONFIG_MODE_INFO_TYPE_DESKTOP_IMAGE" )]

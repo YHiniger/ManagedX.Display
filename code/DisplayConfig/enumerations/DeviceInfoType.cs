@@ -49,7 +49,16 @@
 		/// Supported by WDDM 1.3 and later user-mode display drivers running on Windows 8.1 and later.
 		/// </summary>
 		[Native( "WinGDI.h", "DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_BASE_TYPE" )]
-		GetTargetBaseType = 6
+		GetTargetBaseType = 6,
+
+
+		/// <summary></summary>
+		[Native( "WinGDI.h", "DISPLAYCONFIG_DEVICE_INFO_GET_SUPPORT_VIRTUAL_RESOLUTION" )]
+		GetSupportVirtualResolution = 7,
+
+		/// <summary></summary>
+		[Native( "WinGDI.h", "DISPLAYCONFIG_DEVICE_INFO_SET_SUPPORT_VIRTUAL_RESOLUTION" )]
+		SetSupportVirtualResolution = 8
 
 	}
 

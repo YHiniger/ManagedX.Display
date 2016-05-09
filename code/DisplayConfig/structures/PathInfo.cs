@@ -4,33 +4,43 @@ using System.Runtime.InteropServices;
 
 namespace ManagedX.Display.DisplayConfig
 {
+	using Win32;
+
 
 	/// <summary>Describes a single path from a target to a source.</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553945%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
-	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_PATH_INFO" )]
+	[Native( "WinGDI.h", "DISPLAYCONFIG_PATH_INFO" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 72 )]
 	public struct PathInfo : IEquatable<PathInfo>
 	{
 
-		/// <summary>Enumerates flag values used by QueryDisplayConfig and SetDisplayConfig.</summary>
 		[Flags]
-		private enum PathInfoStates : int
+		private enum State : int
 		{
 
-			/// <summary>None.</summary>
 			None = 0x00000000,
 
 			/// <summary>Set by QueryDisplayConfig to indicate that the path is active and part of the desktop.
 			/// If this flag value is set, SetDisplayConfig attempts to enable this path.</summary>
-			Active = 0x00000001
+			[Native( "WinGDI.h", "DISPLAYCONFIG_PATH_ACTIVE" )]
+			Active = 0x00000001,
+
+			[Native( "WinGDI.h", "DISPLAYCONFIG_PATH_PREFERRED_UNSCALED" )]
+			PreferredUnscaled = 0x00000004,
+
+			/// <summary>Set by QueryDisplayConfig to indicate that the path supports the virtual mode.
+			/// <para>Supported starting in Windows 10.</para>
+			/// </summary>
+			[Native( "WinGDI.h", "DISPLAYCONFIG_PATH_SUPPORT_VIRTUAL_MODE" )]
+			SupportVirtualMode = 0x00000008,
 
 		}
 
 
 		private PathSourceInfo sourceInfo;
 		private PathTargetInfo targetInfo;
-		private PathInfoStates states;
+		private State state;
 
 
 		/// <summary>Gets a <see cref="PathSourceInfo"/> structure which contains the source information for the (display) path.</summary>
@@ -42,14 +52,25 @@ namespace ManagedX.Display.DisplayConfig
 
 
 		/// <summary>Gets a value indicating whether the (display) path is active and part of the desktop.</summary>
-		public bool Active { get { return states.HasFlag( PathInfoStates.Active ); } }
+		public bool Active { get { return state.HasFlag( State.Active ); } }
+
+
+		/// <summary></summary>
+		public bool PreferredUnscaled { get { return state.HasFlag( State.PreferredUnscaled ); } }
+
+
+		/// <summary>Gets a value indicating whether the (display) path supports virtual mode.
+		/// <para>Requires Windows 10 or newer.</para>
+		/// </summary>
+		public bool SupportsVirtualMode { get { return state.HasFlag( State.SupportVirtualMode ); } }
+
 
 
 		/// <summary>Returns a hash code for this <see cref="PathInfo"/> structure.</summary>
 		/// <returns>Returns a hash code for this <see cref="PathInfo"/> structure.</returns>
 		public override int GetHashCode()
 		{
-			return sourceInfo.GetHashCode() ^ targetInfo.GetHashCode() ^ (int)states;
+			return sourceInfo.GetHashCode() ^ targetInfo.GetHashCode() ^ (int)state;
 		}
 
 
@@ -58,7 +79,7 @@ namespace ManagedX.Display.DisplayConfig
 		/// <returns>Returns true if the <paramref name="other"/> <see cref="PathInfo"/> is equal to this structure.</returns>
 		public bool Equals( PathInfo other )
 		{
-			return sourceInfo.Equals( other.sourceInfo ) && targetInfo.Equals( other.targetInfo ) && ( states == other.states );
+			return sourceInfo.Equals( other.sourceInfo ) && targetInfo.Equals( other.targetInfo ) && ( state == other.state );
 		}
 
 

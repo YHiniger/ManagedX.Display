@@ -30,7 +30,7 @@
 
 		/// <summary>Output is currently being forced in a nonpersistent manner.</summary>
 		[Native( "WinGDI.h", "DISPLAYCONFIG_TARGET_FORCED_AVAILABILITY_SYSTEM" )]
-		ForcedAvailabilitySystem = 0x00000010
+		ForcedAvailabilitySystem = 0x00000010,
 
 	}
 
