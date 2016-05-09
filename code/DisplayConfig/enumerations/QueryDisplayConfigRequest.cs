@@ -5,7 +5,6 @@
 
 	/// <summary>Enumerates requests for the QueryDisplayConfig function (as defined in WinUser.h).</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff569215%28v=vs.85%29.aspx</remarks>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage( "Microsoft.Naming", "CA1714:FlagsEnumsShouldHavePluralNames" )]
 	[System.Flags]
 	public enum QueryDisplayConfigRequest : int
 	{
@@ -30,7 +29,9 @@
 		DatabaseCurrent = 0x00000004,
 
 
-		/// <summary></summary>
+		/// <summary>
+		/// <para>Requires Windows 10 or newer.</para>
+		/// </summary>
 		[Native( "WinUser.h", "QDC_VIRTUAL_MODE_AWARE" )]
 		VirtualModeAware = 0x00000010,
 	

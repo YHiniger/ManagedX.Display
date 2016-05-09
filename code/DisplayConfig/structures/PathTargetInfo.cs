@@ -44,6 +44,7 @@ namespace ManagedX.Display.DisplayConfig
 		private PathTargetInfoStatus status;
 
 
+
 		/// <summary>Gets the identifier of the adapter that the path is on.</summary>
 		public Luid AdapterId { get { return adapterId; } }
 

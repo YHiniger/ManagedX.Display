@@ -6,7 +6,7 @@
 	/// <summary>Enumerates flags of a <see cref="PathTargetInfo"/>'s status.</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553954%28v=vs.85%29.aspx</remarks>
 	[System.Flags]
-	public enum PathTargetInfoStatus : int
+	public enum PathTargetInfoStatus : int // TODO - rename to PathTargetInfoStateIndicators
 	{
 
 		/// <summary>Invalid.</summary>

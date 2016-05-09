@@ -31,7 +31,7 @@ namespace ManagedX.Display.DisplayConfig
 
 
 		[Flags]
-		private enum Status : int
+		private enum StatusIndicators : int
 		{
 
 			None = 0x00000000,
@@ -47,7 +47,7 @@ namespace ManagedX.Display.DisplayConfig
 		private Luid adapterId;
 		private int id;
 		private int modeInfoIdx;	// cloneGroupId (16 bits) + sourceModeInfoIdx (16 bits)
-		private Status status;
+		private StatusIndicators status;
 
 
 
@@ -80,7 +80,7 @@ namespace ManagedX.Display.DisplayConfig
 
 
 		/// <summary>Gets a value indicating whether the source is in use.</summary>
-		public bool InUse { get { return status.HasFlag( Status.InUse ); } }
+		public bool InUse { get { return status.HasFlag( StatusIndicators.InUse ); } }
 
 
 		/// <summary>Returns a hash code for this <see cref="PathSourceInfo"/> structure.</summary>

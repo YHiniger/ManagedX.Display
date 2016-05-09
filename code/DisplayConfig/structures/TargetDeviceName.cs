@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 
 namespace ManagedX.Display.DisplayConfig
 {
 	using Graphics;
+	using Win32;
 
 
 	/// <summary>Contains information about the target (defined in WinGDI.h).</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553989%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
-	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_TARGET_DEVICE_NAME" )]
+	[Native( "WinGDI.h", "DISPLAYCONFIG_TARGET_DEVICE_NAME" )]
 	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 2, Size = 420 )]
 	public struct TargetDeviceName : IEquatable<TargetDeviceName>
 	{
@@ -23,12 +23,41 @@ namespace ManagedX.Display.DisplayConfig
 		public const int MaxDevicePathLength = 128;
 
 
+		/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553990%28v=vs.85%29.aspx</remarks>
+		[Native( "WinGDI.h", "DISPLAYCONFIG_TARGET_DEVICE_NAME_FLAGS" )]
+		[Flags]
+		private enum Indicators : int
+		{
+
+			None = 0x00000000,
+
+			/// <summary>The string in the monitorFriendlyDeviceName member of the <see cref="TargetDeviceName"/> structure was constructed
+			/// from the manufacture identification string in the extended display identification data (EDID).
+			/// </summary>
+			[Native( "WinGDI.h", "friendlyNameFromEdid" )]
+			FriendlyNameFromExtendedDisplayInformationData = 0x00000001,
+
+			/// <summary>The target is forced with no detectable monitor attached and the monitorFriendlyDeviceName member of the
+			/// <see cref="TargetDeviceName"/> structure is a null-terminated empty string.
+			/// </summary>
+			[Native( "WinGDI.h", "friendlyNameForced" )]
+			FriendlyNameForced = 0x00000002,
+
+			/// <summary>The edidManufactureId and edidProductCodeId members of the <see cref="TargetDeviceName"/> structure are valid and
+			/// were obtained from the extended display information data (EDID).
+			/// </summary>
+			[Native( "WinGDI.h", "edidIdsValid" )]
+			ExtendedDisplayInformationDataIdsValid = 0x00000004
+
+		}
+
+
 
 		/// <summary>A <see cref="DeviceInfoHeader"/> structure that contains information about the request for the target device name.
 		/// The caller should set the <code>type</code> member of <see cref="DeviceInfoHeader"/> to <code><see cref="DeviceInfoType"/>.GetTargetName</code> and the <code>adapterId</code> and <code>id</code> members of <see cref="DeviceInfoHeader"/> to the target for which the caller wants the target device name.
 		/// The caller should set the <code>size</code> member of <see cref="DeviceInfoHeader"/> to at least the size of the <see cref="TargetDeviceName"/> structure.</summary>
 		private DeviceInfoHeader header;
-		private TargetDeviceNameFlags flags;
+		private Indicators indicators;
 		private VideoOutputTechnology outputTechnology;
 		private short edidManufactureId;	// might not be valid (see flags)
 		private short edidProductCodeId;	// might not be valid (see flags)
@@ -58,27 +87,40 @@ namespace ManagedX.Display.DisplayConfig
 		public int TargetId { get { return header.Id; } }
 
 
-		/// <summary>A <see cref="TargetDeviceNameFlags"/> value that identifies, in bit-field flags, information about the target.</summary>
-		[SuppressMessage( "Microsoft.Naming", "CA1726:UsePreferredTerms", MessageId = "Flags" )]
-		public TargetDeviceNameFlags Flags { get { return flags; } }
-
-
 		/// <summary>A value from the <see cref="VideoOutputTechnology"/> enumeration that specifies the target's connector type.</summary>
 		public VideoOutputTechnology OutputTechnology { get { return outputTechnology; } }
 
 
-		/// <summary>The manufacture identifier from the monitor extended display identification data (EDID).
-		/// This member is set only when the <code><see cref="TargetDeviceNameFlags.ExtendedDisplayInformationDataIdsValid"/></code> bit-field is set in the <see cref="Flags"/> member.
-		/// </summary>
-		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "EDID" )]
-		public short EDIDManufactureId { get { return edidManufactureId; } }
+		#region EDID
+
+		/// <summary>Gets a value indicating whether extended display identification data (EDID) is valid; see <see cref="ExtendedDisplayIdentificationDataManufactureId"/> and <see cref="ExtendedDisplayIdentificationDataProductCodeId"/>.</summary>
+		public bool IsExtendedDisplayIdentificationDataValid { get { return ( indicators & Indicators.ExtendedDisplayInformationDataIdsValid ) == Indicators.ExtendedDisplayInformationDataIdsValid; } }
 
 
-		/// <summary>The product code from the monitor EDID.
-		/// This member is set only when the <code><see cref="TargetDeviceNameFlags.ExtendedDisplayInformationDataIdsValid"/></code> bit-field is set in the <see cref="Flags"/> member.
-		/// </summary>
-		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "EDID" )]
-		public short EDIDProductCodeId { get { return edidProductCodeId; } }
+		/// <summary>When <see cref="IsExtendedDisplayIdentificationDataValid"/> is true, gets the manufacture identifier from the monitor extended display identification data (EDID).</summary>
+		public short ExtendedDisplayIdentificationDataManufactureId
+		{
+			get
+			{
+				if( indicators.HasFlag( Indicators.ExtendedDisplayInformationDataIdsValid ) )
+					return edidManufactureId;
+				return 0;
+			}
+		}
+
+
+		/// <summary>When <see cref="IsExtendedDisplayIdentificationDataValid"/> is true, gets the product code from the monitor extended display identification data (EDID).</summary>
+		public short ExtendedDisplayIdentificationDataProductCodeId
+		{
+			get
+			{
+				if( indicators.HasFlag( Indicators.ExtendedDisplayInformationDataIdsValid ) )
+					return edidProductCodeId;
+				return 0;
+			}
+		}
+
+		#endregion EDID
 
 
 		/// <summary>The one-based instance number of this particular target only when the adapter has multiple targets of this type.
@@ -88,10 +130,22 @@ namespace ManagedX.Display.DisplayConfig
 		public int ConnectorInstance { get { return connectorInstance; } }
 
 
-		/// <summary>Gets a (unicode) string that is the device name for the monitor.
+		/// <summary>Gets the friendly name for the monitor.
 		/// <para>This name can be used with SetupAPI.dll to obtain the device name that is contained in the installation package.</para>
 		/// </summary>
-		public string FriendlyName { get { return string.Copy( monitorFriendlyDeviceName ?? string.Empty ); } }
+		public string FriendlyName
+		{
+			get
+			{
+				if( indicators.HasFlag( Indicators.FriendlyNameForced ) )
+					return "Unknown";
+
+				if( indicators.HasFlag( Indicators.FriendlyNameFromExtendedDisplayInformationData ) && !string.IsNullOrWhiteSpace( monitorFriendlyDeviceName ) )
+					return string.Copy( monitorFriendlyDeviceName );
+
+				return "Generic PnP Monitor";
+			}
+		}
 
 
 		/// <summary>A (unicode) string that is the path to the device name for the monitor.
@@ -104,7 +158,7 @@ namespace ManagedX.Display.DisplayConfig
 		/// <returns>Returns a hash code for this <see cref="TargetDeviceName"/> structure.</returns>
 		public override int GetHashCode()
 		{
-			return header.GetHashCode() ^ (int)flags ^ (int)outputTechnology ^ connectorInstance ^ ( monitorDevicePath ?? string.Empty ).GetHashCode();
+			return header.GetHashCode() ^ (int)indicators ^ (int)outputTechnology ^ connectorInstance ^ ( monitorDevicePath ?? string.Empty ).GetHashCode();
 		}
 
 
@@ -113,7 +167,7 @@ namespace ManagedX.Display.DisplayConfig
 		/// <returns></returns>
 		public bool Equals( TargetDeviceName other )
 		{
-			return header.Equals( other.header ) && ( flags == other.flags ) && ( outputTechnology == other.outputTechnology ) && ( connectorInstance == other.connectorInstance ) && this.DevicePath.Equals( other.DevicePath );
+			return header.Equals( other.header ) && ( indicators == other.indicators ) && ( outputTechnology == other.outputTechnology ) && ( connectorInstance == other.connectorInstance ) && this.DevicePath.Equals( other.DevicePath );
 		}
 
 

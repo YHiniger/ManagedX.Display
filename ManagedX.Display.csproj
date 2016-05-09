@@ -84,7 +84,6 @@
     <Compile Include="code\DisplayConfig\enumerations\Scaling.cs" />
     <Compile Include="code\DisplayConfig\structures\SourceMode.cs" />
     <Compile Include="code\DisplayConfig\structures\TargetDeviceName.cs" />
-    <Compile Include="code\DisplayConfig\enumerations\TargetDeviceNameFlags.cs" />
     <Compile Include="code\DisplayConfig\structures\TargetMode.cs" />
     <Compile Include="code\DisplayConfig\enumerations\TopologyIndicators.cs" />
     <Compile Include="code\DisplayConfig\enumerations\VideoOutputTechnology.cs" />

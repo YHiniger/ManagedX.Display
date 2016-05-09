@@ -22,7 +22,7 @@
 				mode = VideoSignalInfo.Empty;
 
 			this.info = info;
-			
+
 			displayName = targetDeviceName.FriendlyName;
 			connectorInstance = targetDeviceName.ConnectorInstance;
 			devicePath = targetDeviceName.DevicePath;
