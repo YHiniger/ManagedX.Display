@@ -70,7 +70,6 @@
     <Compile Include="code\classes\ReadOnlyDisplayMonitorCollection.cs" />
     <None Include="code\DisplayConfig\structures\TargetBaseType.cs" />
     <Compile Include="code\DisplayConfig\DisplayConfiguration.cs" />
-    <Compile Include="code\DisplayConfig\enumerations\VideoSignalStandard.cs" />
     <Compile Include="code\DisplayConfig\enumerations\QueryDisplayConfigRequest.cs" />
     <Compile Include="code\DisplayConfig\enumerations\DeviceInfoType.cs" />
     <Compile Include="code\DisplayConfig\structures\ModeInfo.cs" />
