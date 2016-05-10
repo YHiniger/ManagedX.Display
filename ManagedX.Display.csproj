@@ -62,7 +62,7 @@
     <Compile Include="code\DisplayConfig\DisplayConfigInfo.cs" />
     <Compile Include="code\DisplayConfig\DisplayConfigAdapterInfo.cs" />
     <Compile Include="code\DisplayConfig\descriptions\SourceDeviceInformation.cs" />
-    <Compile Include="code\DisplayConfig\structures\DesktopImageInformation.cs" />
+    <Compile Include="code\DisplayConfig\structures\DesktopImageInfo.cs" />
     <Compile Include="code\DisplayConfig\descriptions\TargetDeviceInformation.cs" />
     <Compile Include="code\DisplayConfig\descriptions\TargetPreferredModeInformation.cs" />
     <Compile Include="code\DisplayDeviceEventArgs.cs" />

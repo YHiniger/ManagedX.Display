@@ -58,7 +58,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		public int ModeInfoIndex { get { return modeInfoIdx; } }
 
 
-		/// <summary>Gets the index into the mode array of the <see cref="DesktopImageInformation"/> entry that contains the desktop mode information for this path only when <see cref="PathInfo.SupportsVirtualMode"/> is true.
+		/// <summary>Gets the index into the mode array of the <see cref="DesktopImageInfo"/> entry that contains the desktop mode information for this path only when <see cref="PathInfo.SupportsVirtualMode"/> is true.
 		/// <para>If there is no entry for this in the mode array, the value of this property is <see cref="InvalidDesktopModeInfoIndex"/>.</para>
 		/// Requires Windows 10 or newer.
 		/// </summary>

@@ -12,7 +12,7 @@ namespace ManagedX.Graphics.DisplayConfig
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/mt622102%28v=vs.85%29.aspx</remarks>
 	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_DESKTOP_IMAGE_INFO" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 40 )]
-	public struct DesktopImageInformation : IEquatable<DesktopImageInformation>
+	public struct DesktopImageInfo : IEquatable<DesktopImageInfo>
 	{
 
 		/// <summary>Indicates the size of the VidPn source surface that is being displayed on the monitor.</summary>
@@ -33,49 +33,49 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 
-		/// <summary>Returns a hash code for this <see cref="DesktopImageInformation"/> structure.</summary>
-		/// <returns>Returns a hash code for this <see cref="DesktopImageInformation"/> structure.</returns>
+		/// <summary>Returns a hash code for this <see cref="DesktopImageInfo"/> structure.</summary>
+		/// <returns>Returns a hash code for this <see cref="DesktopImageInfo"/> structure.</returns>
 		public override int GetHashCode()
 		{
 			return PathSourceSize.GetHashCode() ^ ImageRegion.GetHashCode() ^ ImageClip.GetHashCode();
 		}
 
 
-		/// <summary>Returns a value indicating whether this <see cref="DesktopImageInformation"/> structure is equivalent to another <see cref="DesktopImageInformation"/> structure.</summary>
-		/// <param name="other">A <see cref="DesktopImageInformation"/> structure.</param>
+		/// <summary>Returns a value indicating whether this <see cref="DesktopImageInfo"/> structure is equivalent to another <see cref="DesktopImageInfo"/> structure.</summary>
+		/// <param name="other">A <see cref="DesktopImageInfo"/> structure.</param>
 		/// <returns>Returns true if the structures are equivalent, otherwise returns false.</returns>
-		public bool Equals( DesktopImageInformation other )
+		public bool Equals( DesktopImageInfo other )
 		{
 			return PathSourceSize.Equals( other.PathSourceSize ) && ImageRegion.Equals( other.ImageRegion ) && ImageClip.Equals( other.ImageClip );
 		}
 
 
-		/// <summary>Returns a value indicating whether this <see cref="DesktopImageInformation"/> structure is equivalent to an object.</summary>
+		/// <summary>Returns a value indicating whether this <see cref="DesktopImageInfo"/> structure is equivalent to an object.</summary>
 		/// <param name="obj">An object.</param>
-		/// <returns>Returns true if the specified object is a <see cref="DesktopImageInformation"/> structure which is equivalent to this structure, otherwise returns false.</returns>
+		/// <returns>Returns true if the specified object is a <see cref="DesktopImageInfo"/> structure which is equivalent to this structure, otherwise returns false.</returns>
 		public override bool Equals( object obj )
 		{
-			return ( obj is DesktopImageInformation ) && this.Equals( (DesktopImageInformation)obj );
+			return ( obj is DesktopImageInfo ) && this.Equals( (DesktopImageInfo)obj );
 		}
 
 
 		#region Operators
 
 		/// <summary>Equality comparer.</summary>
-		/// <param name="desktopImageInfo">A <see cref="DesktopImageInformation"/> structure.</param>
-		/// <param name="other">A <see cref="DesktopImageInformation"/> structure.</param>
+		/// <param name="desktopImageInfo">A <see cref="DesktopImageInfo"/> structure.</param>
+		/// <param name="other">A <see cref="DesktopImageInfo"/> structure.</param>
 		/// <returns>Returns true if the structures are equivalent, otherwise returns false.</returns>
-		public static bool operator ==( DesktopImageInformation desktopImageInfo, DesktopImageInformation other )
+		public static bool operator ==( DesktopImageInfo desktopImageInfo, DesktopImageInfo other )
 		{
 			return desktopImageInfo.Equals( other );
 		}
 
 
 		/// <summary>Inequality comparer.</summary>
-		/// <param name="desktopImageInfo">A <see cref="DesktopImageInformation"/> structure.</param>
-		/// <param name="other">A <see cref="DesktopImageInformation"/> structure.</param>
+		/// <param name="desktopImageInfo">A <see cref="DesktopImageInfo"/> structure.</param>
+		/// <param name="other">A <see cref="DesktopImageInfo"/> structure.</param>
 		/// <returns>Returns true if the structures are not equivalent, otherwise returns false.</returns>
-		public static bool operator !=( DesktopImageInformation desktopImageInfo, DesktopImageInformation other )
+		public static bool operator !=( DesktopImageInfo desktopImageInfo, DesktopImageInfo other )
 		{
 			return !desktopImageInfo.Equals( other );
 		}

@@ -383,6 +383,8 @@ namespace ManagedX.Graphics
 						if( !string.IsNullOrWhiteSpace( targetDeviceName.FriendlyName ) )
 							monitor.DisplayName = targetDeviceName.FriendlyName;
 
+						//var preferredMode = DisplayConfiguration.GetPreferredModeInfo( target );
+
 						return new DisplayConfigMonitorInfo( currentConfiguration, target, targetDeviceName );
 					}
 				}
