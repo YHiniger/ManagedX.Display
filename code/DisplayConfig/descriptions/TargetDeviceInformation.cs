@@ -11,7 +11,7 @@ namespace ManagedX.Graphics.DisplayConfig
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553989%28v=vs.85%29.aspx</remarks>
 	[Native( "WinGDI.h", "DISPLAYCONFIG_TARGET_DEVICE_NAME" )]
 	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 4, Size = 420 )]
-	public sealed class TargetDeviceInformation : DeviceInformation
+	public sealed class TargetDeviceInformation : TargetInformation
 	{
 
 		/// <summary>Defines the maximum length, in unicode chars, of the <see cref="FriendlyName"/>.</summary>
@@ -68,7 +68,7 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 		/// <summary>A value from the <see cref="VideoOutputTechnology"/> enumeration that specifies the target's connector type.</summary>
-		public VideoOutputTechnology OutputTechnology { get { return outputTechnology; } }
+		public sealed override VideoOutputTechnology OutputTechnology { get { return outputTechnology; } }
 
 
 		#region EDID

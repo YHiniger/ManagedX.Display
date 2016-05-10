@@ -153,6 +153,7 @@ namespace ManagedX.Graphics.DisplayConfig
 				[Out] out TopologyIndicators currentTopologyId
 			);
 
+
 			#endregion QueryDisplayConfig
 
 
@@ -180,6 +181,7 @@ namespace ManagedX.Graphics.DisplayConfig
 			/// The caller can obtain names for the adapter, the source, and the target.
 			/// The caller can also call this function to obtain the best resolution of the connected display device.
 			/// </remarks>
+			[SuppressMessage( "Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "AdapterInformation.devicePath" )]
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			internal static extern ErrorCode DisplayConfigGetDeviceInfo(
 				[In, Out] AdapterInformation requestPacket
@@ -203,6 +205,7 @@ namespace ManagedX.Graphics.DisplayConfig
 			/// The caller can obtain names for the adapter, the source, and the target.
 			/// The caller can also call this function to obtain the best resolution of the connected display device.
 			/// </remarks>
+			[SuppressMessage( "Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "SourceDeviceInformation.viewGdiDeviceName" )]
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			internal static extern ErrorCode DisplayConfigGetDeviceInfo(
 				[In, Out] SourceDeviceInformation requestPacket
@@ -227,33 +230,33 @@ namespace ManagedX.Graphics.DisplayConfig
 			/// The caller can obtain names for the adapter, the source, and the target.
 			/// The caller can also call this function to obtain the best resolution of the connected display device.
 			/// </remarks>
+			[SuppressMessage( "Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "TargetDeviceInformation.monitorDevicePath" )]
+			[SuppressMessage( "Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "TargetDeviceInformation.monitorFriendlyDeviceName" )]
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			internal static extern ErrorCode DisplayConfigGetDeviceInfo(
 				[In, Out] TargetDeviceInformation requestPacket
 			);
 
-			///// <summary>Retrieves display configuration information about the device.</summary>
-			///// <param name="requestPacket">
-			///// A pointer to a <see cref="DeviceInfoHeader"/> structure.
-			///// This structure contains information about the request, which includes the packet type in the type member.
-			///// The type and size of additional data that the function returns after the header structure depend on the packet type.
-			///// </param>
-			///// <returns>Returns <see cref="ErrorCode.None"/> on success, otherwise returns one of the following <see cref="ErrorCode"/>:
-			///// <see cref="ErrorCode.InvalidParameter"/>,
-			///// <see cref="ErrorCode.NotSupported"/>,
-			///// <see cref="ErrorCode.AccessDenied"/>,
-			///// <see cref="ErrorCode.InsufficientBuffer"/>, or
-			///// <see cref="ErrorCode.GenFailure"/>.</returns>
-			///// <remarks>
-			///// Use this function to obtain additional information about a source or target for an adapter, such as the display name, the preferred display mode, and source device name.
-			///// The caller can call this function to obtain more friendly names to display in the user interface.
-			///// The caller can obtain names for the adapter, the source, and the target.
-			///// The caller can also call this function to obtain the best resolution of the connected display device.
-			///// </remarks>
-			//[DllImport( LibraryName, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
-			//internal static extern ErrorCode DisplayConfigGetDeviceInfo(
-			//	[In, Out] ref TargetPreferredMode requestPacket
-			//);
+			/// <summary>Retrieves display configuration information about the device.</summary>
+			/// <param name="requestPacket">Contains information about the request, which includes the packet type in the type member.
+			/// <para>The type and size of additional data that the function returns after the header structure depend on the packet type.</para>
+			/// </param>
+			/// <returns>Returns <see cref="ErrorCode.None"/> on success, otherwise returns one of the following <see cref="ErrorCode"/>:
+			/// <see cref="ErrorCode.InvalidParameter"/>,
+			/// <see cref="ErrorCode.NotSupported"/>,
+			/// <see cref="ErrorCode.AccessDenied"/>,
+			/// <see cref="ErrorCode.InsufficientBuffer"/>, or
+			/// <see cref="ErrorCode.GenFailure"/>.</returns>
+			/// <remarks>
+			/// Use this function to obtain additional information about a source or target for an adapter, such as the display name, the preferred display mode, and source device name.
+			/// The caller can call this function to obtain more friendly names to display in the user interface.
+			/// The caller can obtain names for the adapter, the source, and the target.
+			/// The caller can also call this function to obtain the best resolution of the connected display device.
+			/// </remarks>
+			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
+			internal static extern ErrorCode DisplayConfigGetDeviceInfo(
+				[In, Out] TargetPreferredModeInformation requestPacket
+			);
 
 			#endregion DisplayConfigGetDeviceInfo
 
@@ -278,12 +281,8 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <see cref="ErrorCode.GenFailure"/> or
 		/// <see cref="ErrorCode.InsufficientBuffer"/>.
 		/// </returns>
-		/// <exception cref="InvalidEnumArgumentException"/>
 		private static ErrorCode QueryDisplayConfig( QueryDisplayConfigRequest request, out PathInfo[] pathInfoArray, out ModeInfo[] modeInfoArray, out TopologyIndicators currentTopologyId )
 		{
-			if( request == QueryDisplayConfigRequest.None )
-				throw new InvalidEnumArgumentException( "request", (int)request, typeof( QueryDisplayConfigRequest ) );
-
 			currentTopologyId = TopologyIndicators.Unspecified;
 
 			int pathInfoArrayElementCount;
@@ -449,26 +448,16 @@ namespace ManagedX.Graphics.DisplayConfig
 		}
 
 
-
-		///// <summary></summary>
-		///// <param name="targetInfo"></param>
-		///// <returns></returns>
-		///// <exception cref="ArgumentException"/>
-		///// <exception cref="Exception"/>
-		//public static TargetPreferredMode GetPreferredMode( PathTargetInfo targetInfo )
+		//internal static TargetPreferredModeInformation GetPreferredModeInfo( PathTargetInfo targetInfo )
 		//{
-		//	if( targetInfo == PathTargetInfo.Empty )
-		//		throw new ArgumentException( "Invalid target info.", "targetInfo" );
-
-		//	var preferredMode = new TargetPreferredMode( targetInfo.AdapterId, targetInfo.Id );
-		//	var errorCode = SafeNativeMethods.DisplayConfigGetDeviceInfo( ref preferredMode );
-		//	// FIXME - returns InvalidParameter
+		//	var info = new TargetPreferredModeInformation( targetInfo.AdapterId, targetInfo.Id );
+		//	var errorCode = SafeNativeMethods.DisplayConfigGetDeviceInfo( info );
 		//	if( errorCode == ErrorCode.None )
-		//		return preferredMode;
+		//		return info;
 
-		//	//throw GetException( errorCode );
-		//	return TargetPreferredMode.Empty;
+		//	throw GetException( errorCode );
 		//}
+
 
 
 		/// <summary>Defines the minimum version of Windows supported by DisplayConfig: 6.1 (Windows 7).</summary>
@@ -556,9 +545,12 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <exception cref="DisplayConfigException"/>
 		public void Refresh()
 		{
-			var error = QueryDisplayConfig( request, out paths, out modes, out topologyId );
-			if( error != ErrorCode.None )
-				throw GetException( error );
+			var errorCode = QueryDisplayConfig( request, out paths, out modes, out topologyId );
+			if( errorCode == ErrorCode.InsufficientBuffer )
+				errorCode = QueryDisplayConfig( request, out paths, out modes, out topologyId );
+
+			if( errorCode != ErrorCode.None )
+				throw GetException( errorCode );
 		}
 
 

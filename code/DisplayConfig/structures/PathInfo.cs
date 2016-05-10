@@ -16,7 +16,7 @@ namespace ManagedX.Graphics.DisplayConfig
 	{
 
 		[Flags]
-		private enum State : int
+		private enum StateIndicators : int
 		{
 
 			None = 0x00000000,
@@ -38,9 +38,11 @@ namespace ManagedX.Graphics.DisplayConfig
 		}
 
 
+
 		private PathSourceInfo sourceInfo;
 		private PathTargetInfo targetInfo;
-		private State state;
+		private StateIndicators state;
+
 
 
 		/// <summary>Gets a <see cref="PathSourceInfo"/> structure which contains the source information for the (display) path.</summary>
@@ -52,17 +54,17 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 		/// <summary>Gets a value indicating whether the (display) path is active and part of the desktop.</summary>
-		public bool Active { get { return state.HasFlag( State.Active ); } }
+		public bool Active { get { return state.HasFlag( StateIndicators.Active ); } }
 
 
-		/// <summary></summary>
-		public bool PreferredUnscaled { get { return state.HasFlag( State.PreferredUnscaled ); } }
+		///// <summary></summary>
+		//public bool PreferredUnscaled { get { return state.HasFlag( StateIndicators.PreferredUnscaled ); } }
 
 
 		/// <summary>Gets a value indicating whether the (display) path supports virtual mode.
 		/// <para>Requires Windows 10 or newer.</para>
 		/// </summary>
-		public bool SupportsVirtualMode { get { return state.HasFlag( State.SupportVirtualMode ); } }
+		public bool SupportsVirtualMode { get { return state.HasFlag( StateIndicators.SupportVirtualMode ); } }
 
 
 

@@ -55,6 +55,8 @@
     <Compile Include="code\classes\DisplayDeviceBase.cs" />
     <Compile Include="code\DisplayConfig\descriptions\AdapterInformation.cs" />
     <Compile Include="code\DisplayConfig\descriptions\DeviceInformation.cs" />
+    <None Include="code\DisplayConfig\descriptions\TargetBaseInformation.cs" />
+    <Compile Include="code\DisplayConfig\descriptions\TargetInformation.cs" />
     <Compile Include="code\DisplayConfig\DisplayConfigException.cs" />
     <Compile Include="code\DisplayConfig\DisplayConfigMonitorInfo.cs" />
     <Compile Include="code\DisplayConfig\DisplayConfigInfo.cs" />
@@ -68,7 +70,6 @@
     <Compile Include="code\classes\ReadOnlyDisplayAdapterCollection.cs" />
     <Compile Include="code\classes\ReadOnlyDisplayDeviceModeCollection.cs" />
     <Compile Include="code\classes\ReadOnlyDisplayMonitorCollection.cs" />
-    <None Include="code\DisplayConfig\structures\TargetBaseType.cs" />
     <Compile Include="code\DisplayConfig\DisplayConfiguration.cs" />
     <Compile Include="code\DisplayConfig\enumerations\QueryDisplayConfigRequest.cs" />
     <Compile Include="code\DisplayConfig\enumerations\DeviceInfoType.cs" />

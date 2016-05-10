@@ -10,7 +10,7 @@ namespace ManagedX.Graphics.DisplayConfig
 	/// </summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553920%28v=vs.85%29.aspx</remarks>
 	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_DEVICE_INFO_HEADER" )]
-	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 20 )]
+	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 4, Size = 20 )]
 	public abstract class DeviceInformation
 	{
 		

@@ -30,6 +30,12 @@ namespace ManagedX.Graphics.DisplayConfig
 		[FieldOffset( 16 )]
 		private SourceMode sourceMode;
 
+		/// <summary>A <see cref="DesktopImageInformation"/> structure that describes information about the desktop image only when <see cref="infoType"/> is <see cref="ModeInfoType.DesktopImage"/>.
+		/// <para>Supported starting in Windows 10.</para>
+		/// </summary>
+		[FieldOffset( 16 )]
+		private DesktopImageInformation desktopImageInfo;
+
 
 
 		/// <summary>Gets a value indicating whether the <see cref="ModeInfo"/> structure represents source or target mode information.
@@ -99,6 +105,9 @@ namespace ManagedX.Graphics.DisplayConfig
 			}
 		}
 
+
+		/// <summary>When <see cref="InfoType"/> is <see cref="ModeInfoType.DesktopImage"/>, gets information about the desktop image.</summary>
+		public DesktopImageInformation DesktopImage { get { return desktopImageInfo; } }
 
 
 		/// <summary>Returns a hash code for this <see cref="ModeInfo"/> structure.</summary>

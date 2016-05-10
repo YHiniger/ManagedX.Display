@@ -10,9 +10,10 @@
 		private string displayName;
 		private int connectorInstance;
 		private string devicePath;
+		//private TargetPreferredModeInformation preferredMode;
 
 
-		
+
 		internal DisplayConfigMonitorInfo( DisplayConfiguration displayConfiguration, PathTargetInfo info, TargetDeviceInformation targetDeviceName )
 			: base( info.AdapterId, info.Id, displayConfiguration.Topology )
 		{

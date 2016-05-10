@@ -8,7 +8,7 @@ namespace ManagedX.Graphics.DisplayConfig
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553996%28v=vs.85%29.aspx</remarks>
 	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_TARGET_PREFERRED_MODE" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 76 )]
-	internal sealed class TargetPreferredModeInformation : DeviceInformation
+	public sealed class TargetPreferredModeInformation : DeviceInformation
 	{
 
 		private int width;
