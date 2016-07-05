@@ -424,13 +424,12 @@ namespace ManagedX.Graphics
 			
 			var allHandles = GetMonitorHandles();
 			var handles = new List<IntPtr>();
-			for( var h = 0; h < allHandles.Count; h++ )
+			for( var h = 0; h < allHandles.Count; ++h )
 			{
 				var info = DisplayMonitor.GetMonitorInfo( allHandles[ h ] );
-				if( deviceName.Equals( info.AdapterDeviceName, StringComparison.Ordinal ) )
+				if( deviceName.Equals( info.AdapterDeviceName, StringComparison.OrdinalIgnoreCase ) )
 					handles.Add( allHandles[ h ] );
 			}
-
 
 			var removedMonitors = new List<string>( monitorsByDeviceName.Keys );
 			var addedMonitors = new List<string>();
@@ -438,7 +437,8 @@ namespace ManagedX.Graphics
 
 			DisplayMonitor displayMonitor;
 			var monitors = EnumDisplayDevices( deviceName, true );
-			for( var m = 0; m < monitors.Count; m++ )
+
+			for( var m = 0; m < monitors.Count; ++m )
 			{
 				var monitor = monitors[ m ];
 
@@ -447,13 +447,13 @@ namespace ManagedX.Graphics
 					displayMonitor.Refresh( monitor );
 					removedMonitors.Remove( monitor.DeviceName );
 				}
-				else
+				else if( m < handles.Count ) // FIXME - this should always be the case !
 				{
 					displayMonitor = new DisplayMonitor( monitor, handles[ m ] );
+
 					monitorsByDeviceName.Add( monitor.DeviceName, displayMonitor );
 					addedMonitors.Add( monitor.DeviceName );
 				}
-
 
 				if( displayMonitor.IsPrimary && ( primaryDisplayMonitor != displayMonitor ) )
 				{
