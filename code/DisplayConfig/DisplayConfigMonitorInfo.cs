@@ -31,8 +31,6 @@
 
 			if( modeInfoIndex > PathTargetInfo.InvalidModeInfoIndex && modeInfoIndex < displayConfiguration.ModeInfo.Count )
 				mode = displayConfiguration.ModeInfo[ modeInfoIndex ].VideoSignalInformation;
-			else
-				mode = VideoSignalInfo.Empty;
 
 			displayName = targetDeviceName.FriendlyName;
 			connectorInstance = targetDeviceName.ConnectorInstance;

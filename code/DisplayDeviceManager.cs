@@ -8,9 +8,6 @@ namespace ManagedX.Graphics
 	using DisplayConfig;
 
 
-	// "GDI": Graphics Device Interface
-
-
 	/// <summary>ManagedX GDI (Graphics Device Interface) device manager.</summary>
 	public static class DisplayDeviceManager
 	{
@@ -23,7 +20,7 @@ namespace ManagedX.Graphics
 		public const int MaxDeviceNameChars = DisplayDeviceBase.MaxDeviceNameChars;
 
 
-		private const QueryDisplayConfigRequest DisplayConfigRequest = QueryDisplayConfigRequest.OnlyActivePaths;
+		private const QueryDisplayConfigRequest DisplayConfigRequest = QueryDisplayConfigRequest.OnlyActivePaths;// | QueryDisplayConfigRequest.VirtualModeAware;
 
 
 

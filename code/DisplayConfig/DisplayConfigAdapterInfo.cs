@@ -20,12 +20,12 @@
 			{
 				modeInfoIndex = source.ModeInfoIndex2;
 				if( modeInfoIndex == PathSourceInfo.InvalidModeInfoIndex2 )
-					modeInfoIndex = -1;
+					modeInfoIndex = PathSourceInfo.InvalidModeInfoIndex;
 			}
 			else
 				modeInfoIndex = source.ModeInfoIndex;
 
-			if( modeInfoIndex > -1 && modeInfoIndex < displayConfiguration.ModeInfo.Count )
+			if( modeInfoIndex > PathSourceInfo.InvalidModeInfoIndex && modeInfoIndex < displayConfiguration.ModeInfo.Count )
 			{
 				var mode = displayConfiguration.ModeInfo[ modeInfoIndex ];
 				size = mode.Size;
