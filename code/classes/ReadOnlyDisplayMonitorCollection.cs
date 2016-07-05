@@ -26,10 +26,13 @@ namespace ManagedX.Graphics
 		/// <returns>Returns the requested monitor, or null.</returns>
 		public DisplayMonitor GetMonitorByHandle( IntPtr monitorHandle )
 		{
-			for( var m = 0; m < base.Count; m++ )
+			if( monitorHandle != IntPtr.Zero )
 			{
-				if( base[ m ].Handle == monitorHandle )
-					return base[ m ];
+				for( var m = 0; m < base.Count; m++ )
+				{
+					if( base[ m ].Handle == monitorHandle )
+						return base[ m ];
+				}
 			}
 			return null;
 		}

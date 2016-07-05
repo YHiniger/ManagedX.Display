@@ -104,31 +104,28 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 		/// <summary>The one-based instance number of this particular target only when the adapter has multiple targets of this type.
-		/// The connector instance is a consecutive one-based number that is unique within each adapter.
+		/// <para>The connector instance is a consecutive one-based number that is unique within each adapter.</para>
 		/// If this is the only target of this type on the adapter, this value is zero.
 		/// </summary>
 		public int ConnectorInstance { get { return connectorInstance; } }
 
 
-		/// <summary>Gets the friendly name for the monitor.
+		/// <summary>Gets the friendly name for the monitor, or an empty string.
 		/// <para>This name can be used with SetupAPI.dll to obtain the device name that is contained in the installation package.</para>
 		/// </summary>
 		public string FriendlyName
 		{
 			get
 			{
-				if( indicators.HasFlag( Indicators.FriendlyNameForced ) )
-					return "Unknown";
-
 				if( indicators.HasFlag( Indicators.FriendlyNameFromExtendedDisplayInformationData ) && !string.IsNullOrWhiteSpace( monitorFriendlyDeviceName ) )
 					return string.Copy( monitorFriendlyDeviceName );
 
-				return "Generic PnP Monitor";
+				return string.Empty;
 			}
 		}
 
 
-		/// <summary>A (unicode) string that is the path to the device name for the monitor.
+		/// <summary>Gets a (unicode) string that is the path to the device name for the monitor.
 		/// <para>This path can be used with SetupAPI.dll to obtain the device name that is contained in the installation package.</para>
 		/// </summary>
 		public string DevicePath { get { return string.Copy( monitorDevicePath ?? string.Empty ); } }

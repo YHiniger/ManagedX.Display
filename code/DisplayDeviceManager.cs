@@ -20,7 +20,7 @@ namespace ManagedX.Graphics
 		public const int MaxDeviceNameChars = DisplayDeviceBase.MaxDeviceNameChars;
 
 
-		private const QueryDisplayConfigRequest DisplayConfigRequest = QueryDisplayConfigRequest.OnlyActivePaths;// | QueryDisplayConfigRequest.VirtualModeAware;
+		private const QueryDisplayConfigRequest DisplayConfigRequest = QueryDisplayConfigRequest.DatabaseCurrent;// | QueryDisplayConfigRequest.VirtualModeAware;
 
 
 
@@ -333,7 +333,7 @@ namespace ManagedX.Graphics
 					currentConfiguration.Refresh();
 
 				var paths = currentConfiguration.PathInfo;
-				for( var p = 0; p < paths.Count; p++ )
+				for( var p = 0; p < paths.Count; ++p )
 				{
 					var path = paths[ p ];
 					var source = path.SourceInfo;
@@ -370,14 +370,12 @@ namespace ManagedX.Graphics
 					currentConfiguration.Refresh();
 
 				var paths = currentConfiguration.PathInfo;
-				for( var p = 0; p < paths.Count; p++ )
+				for( var p = 0; p < paths.Count; ++p )
 				{
 					var path = paths[ p ];
 					var target = path.TargetInfo;
 					var targetDeviceName = DisplayConfiguration.GetTargetDeviceName( target );
-					
-					var monitor2 = GetMonitorByDevicePath( targetDeviceName.DevicePath );
-					if( monitor2 != null )
+					if( monitor == GetMonitorByDevicePath( targetDeviceName.DevicePath ) )
 					{
 						if( !string.IsNullOrWhiteSpace( targetDeviceName.FriendlyName ) )
 							monitor.DisplayName = targetDeviceName.FriendlyName;

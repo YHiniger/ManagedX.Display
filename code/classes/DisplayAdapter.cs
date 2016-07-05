@@ -391,7 +391,6 @@ namespace ManagedX.Graphics
 		internal sealed override void Refresh( DisplayDevice displayDevice )
 		{
 			base.Refresh( displayDevice );
-
 			this.RefreshMonitors();
 
 			var mode = NativeMethods.GetCurrentDisplaySettingsEx( base.DeviceIdentifier, EnumDisplaySettingsExOptions.None );
@@ -424,10 +423,11 @@ namespace ManagedX.Graphics
 			
 			var allHandles = GetMonitorHandles();
 			var handles = new List<IntPtr>();
-			for( var h = 0; h < allHandles.Count; ++h )
+			int h;
+			for( h = 0; h < allHandles.Count; ++h )
 			{
 				var info = DisplayMonitor.GetMonitorInfo( allHandles[ h ] );
-				if( deviceName.Equals( info.AdapterDeviceName, StringComparison.OrdinalIgnoreCase ) )
+				if( deviceName.Equals( info.AdapterDeviceName, StringComparison.Ordinal ) )
 					handles.Add( allHandles[ h ] );
 			}
 
@@ -438,19 +438,29 @@ namespace ManagedX.Graphics
 			DisplayMonitor displayMonitor;
 			var monitors = EnumDisplayDevices( deviceName, true );
 
+			h = 0;
 			for( var m = 0; m < monitors.Count; ++m )
 			{
 				var monitor = monitors[ m ];
 
+				IntPtr handle;
+				if( ( monitor.State & (int)MonitorStateIndicators.Active ) == (int)MonitorStateIndicators.Active && ( h < handles.Count ) )
+				{
+					handle = handles[ h ];
+					++h;
+				}
+				else
+					handle = IntPtr.Zero;
+
 				if( monitorsByDeviceName.TryGetValue( monitor.DeviceName, out displayMonitor ) )
 				{
 					displayMonitor.Refresh( monitor );
+					displayMonitor.Handle = handle;
 					removedMonitors.Remove( monitor.DeviceName );
 				}
-				else if( m < handles.Count ) // FIXME - this should always be the case !
+				else
 				{
-					displayMonitor = new DisplayMonitor( monitor, handles[ m ] );
-
+					displayMonitor = new DisplayMonitor( monitor, handle );
 					monitorsByDeviceName.Add( monitor.DeviceName, displayMonitor );
 					addedMonitors.Add( monitor.DeviceName );
 				}
@@ -498,7 +508,7 @@ namespace ManagedX.Graphics
 			get
 			{
 				this.RefreshMonitors();
-				
+
 				var list = new List<DisplayMonitor>( monitorsByDeviceName.Values );
 				return new ReadOnlyDisplayMonitorCollection( list );
 			}
