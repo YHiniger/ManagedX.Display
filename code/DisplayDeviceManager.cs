@@ -338,11 +338,12 @@ namespace ManagedX.Graphics
 				var paths = currentConfiguration.PathInfo;
 				for( var p = 0; p < paths.Count; p++ )
 				{
-					var source = paths[ p ].SourceInfo;
+					var path = paths[ p ];
+					var source = path.SourceInfo;
 					
 					var sourceDeviceName = DisplayConfiguration.GetSourceGdiDeviceName( source );
 					if( sourceDeviceName == adapter.DeviceIdentifier )
-						return new DisplayConfigAdapterInfo( currentConfiguration, source );
+						return new DisplayConfigAdapterInfo( currentConfiguration, source, path.SupportsVirtualMode );
 				}
 			}
 
@@ -374,7 +375,8 @@ namespace ManagedX.Graphics
 				var paths = currentConfiguration.PathInfo;
 				for( var p = 0; p < paths.Count; p++ )
 				{
-					var target = paths[ p ].TargetInfo;
+					var path = paths[ p ];
+					var target = path.TargetInfo;
 					var targetDeviceName = DisplayConfiguration.GetTargetDeviceName( target );
 					
 					var monitor2 = GetMonitorByDevicePath( targetDeviceName.DevicePath );
@@ -385,7 +387,7 @@ namespace ManagedX.Graphics
 
 						//var preferredMode = DisplayConfiguration.GetPreferredModeInfo( target );
 
-						return new DisplayConfigMonitorInfo( currentConfiguration, target, targetDeviceName );
+						return new DisplayConfigMonitorInfo( currentConfiguration, target, targetDeviceName, path.SupportsVirtualMode );
 					}
 				}
 			}

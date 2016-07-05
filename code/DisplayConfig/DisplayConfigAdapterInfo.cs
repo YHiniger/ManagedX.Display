@@ -12,12 +12,22 @@
 
 
 
-		internal DisplayConfigAdapterInfo( DisplayConfiguration displayConfiguration, PathSourceInfo source )
+		internal DisplayConfigAdapterInfo( DisplayConfiguration displayConfiguration, PathSourceInfo source, bool supportsVirtualMode )
 			: base( source.AdapterId, source.Id, displayConfiguration.Topology )
 		{
-			if( source.ModeInfoIndex > -1 && source.ModeInfoIndex < displayConfiguration.ModeInfo.Count )
+			int modeInfoIndex;
+			if( supportsVirtualMode )
 			{
-				var mode = displayConfiguration.ModeInfo[ source.ModeInfoIndex ];
+				modeInfoIndex = source.ModeInfoIndex2;
+				if( modeInfoIndex == PathSourceInfo.InvalidModeInfoIndex2 )
+					modeInfoIndex = -1;
+			}
+			else
+				modeInfoIndex = source.ModeInfoIndex;
+
+			if( modeInfoIndex > -1 && modeInfoIndex < displayConfiguration.ModeInfo.Count )
+			{
+				var mode = displayConfiguration.ModeInfo[ modeInfoIndex ];
 				size = mode.Size;
 				format = mode.Format;
 				position = mode.Position;

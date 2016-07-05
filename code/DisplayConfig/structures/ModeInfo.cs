@@ -156,7 +156,6 @@ namespace ManagedX.Graphics.DisplayConfig
 
 		#region Operators
 
-
 		/// <summary>Equality comparer.</summary>
 		/// <param name="modeInfo">A <see cref="ModeInfo"/> structure.</param>
 		/// <param name="other">A <see cref="ModeInfo"/> structure.</param>
@@ -176,9 +175,8 @@ namespace ManagedX.Graphics.DisplayConfig
 			return !modeInfo.Equals( other );
 		}
 
-
-		#endregion
+		#endregion Operators
 
 	}
-	
+
 }

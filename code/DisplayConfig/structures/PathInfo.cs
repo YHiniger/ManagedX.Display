@@ -95,11 +95,10 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 		/// <summary>The empty <see cref="PathInfo"/> structure.</summary>
-		public static readonly PathInfo Empty = new PathInfo();
+		public static readonly PathInfo Empty;
 
 
 		#region Operators
-
 
 		/// <summary>Equality comparer.</summary>
 		/// <param name="pathInfo">A <see cref="PathInfo"/> structure.</param>
@@ -120,8 +119,7 @@ namespace ManagedX.Graphics.DisplayConfig
 			return !pathInfo.Equals( other );
 		}
 
-		
-		#endregion
+		#endregion Operators
 
 	}
 

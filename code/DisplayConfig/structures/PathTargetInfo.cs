@@ -90,7 +90,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// In this case, the caller specifies this value in the targetVideoSignalInfo member of the <see cref="TargetMode"/> structure.
 		/// </para>
 		/// A refresh rate with both the numerator and denominator set to zero (<see cref="Rational.Empty"/>) indicates that the caller does not specify a refresh rate and the operating system should use the most optimal refresh rate available.
-		/// For this case, in a call to the SetDisplayConfig function, the caller must set the scanLineOrdering member to <see cref="ScanLineOrdering.Unspecified"/>; otherwise, SetDisplayConfig fails.
+		/// For this case, in a call to the SetDisplayConfig function, the caller must set the scanLineOrdering member to <see cref="Graphics.ScanLineOrdering.Unspecified"/>; otherwise, SetDisplayConfig fails.
 		/// </summary>
 		public Rational RefreshRate { get { return refreshRate; } }
 

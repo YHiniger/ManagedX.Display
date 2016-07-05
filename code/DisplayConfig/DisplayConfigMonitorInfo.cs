@@ -14,13 +14,23 @@
 
 
 
-		internal DisplayConfigMonitorInfo( DisplayConfiguration displayConfiguration, PathTargetInfo info, TargetDeviceInformation targetDeviceName )
+		internal DisplayConfigMonitorInfo( DisplayConfiguration displayConfiguration, PathTargetInfo info, TargetDeviceInformation targetDeviceName, bool supportsVirtualMode )
 			: base( info.AdapterId, info.Id, displayConfiguration.Topology )
 		{
 			this.info = info;
 
-			if( info.ModeInfoIndex > -1 && info.ModeInfoIndex < displayConfiguration.ModeInfo.Count )
-				mode = displayConfiguration.ModeInfo[ info.ModeInfoIndex ].VideoSignalInformation;
+			int modeInfoIndex;
+			if( supportsVirtualMode )
+			{
+				modeInfoIndex = info.ModeInfoIndex2;
+				if( modeInfoIndex == PathTargetInfo.InvalidModeInfoIndex2 )
+					modeInfoIndex = PathTargetInfo.InvalidModeInfoIndex;
+			}
+			else
+				modeInfoIndex = info.ModeInfoIndex;
+
+			if( modeInfoIndex > PathTargetInfo.InvalidModeInfoIndex && modeInfoIndex < displayConfiguration.ModeInfo.Count )
+				mode = displayConfiguration.ModeInfo[ modeInfoIndex ].VideoSignalInformation;
 			else
 				mode = VideoSignalInfo.Empty;
 

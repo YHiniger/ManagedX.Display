@@ -114,7 +114,6 @@ namespace ManagedX.Graphics.DisplayConfig
 
 		#region Operators
 
-
 		/// <summary>Equality comparer.</summary>
 		/// <param name="pathSourceInfo">A <see cref="PathSourceInfo"/> structure.</param>
 		/// <param name="other">A <see cref="PathSourceInfo"/> structure.</param>
@@ -134,8 +133,7 @@ namespace ManagedX.Graphics.DisplayConfig
 			return !pathSourceInfo.Equals( other );
 		}
 
-	
-		#endregion
+		#endregion Operators
 
 	}
 
