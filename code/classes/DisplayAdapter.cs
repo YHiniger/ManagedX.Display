@@ -446,7 +446,7 @@ namespace ManagedX.Graphics
 				IntPtr handle;
 				if( ( monitor.State & (int)MonitorStateIndicators.Active ) == (int)MonitorStateIndicators.Active && ( h < handles.Count ) )
 				{
-					handle = handles[ h ];
+					handle = handles[ h ];	// FIXME - this is not the right handle when topology is Clone !
 					++h;
 				}
 				else
