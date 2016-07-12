@@ -220,7 +220,7 @@ namespace ManagedX.Graphics
 		/// </summary>
 		/// <param name="adapterId">The adapter id of the requested adapter.</param>
 		/// <returns>Returns the requested <see cref="DisplayAdapter"/>, or null if it doesn't exit.</returns>
-		public static DisplayAdapter GetAdapterById( Graphics.Luid adapterId )
+		public static DisplayAdapter GetAdapterById( Luid adapterId )
 		{
 			var adapters = Adapters;
 			for( var a = 0; a < adapters.Count; a++ )
