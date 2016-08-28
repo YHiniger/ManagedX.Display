@@ -374,7 +374,7 @@ namespace ManagedX.Graphics
 
 
 		
-		private Dictionary<string, DisplayMonitor> monitorsByDeviceName;
+		private readonly Dictionary<string, DisplayMonitor> monitorsByDeviceName;
 		private DisplayDeviceMode currentMode;
 
 

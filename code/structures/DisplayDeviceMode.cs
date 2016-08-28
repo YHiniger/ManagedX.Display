@@ -165,7 +165,6 @@ namespace ManagedX.Graphics
 
 			#region Operators
 
-
 			/// <summary>Equality comparer.</summary>
 			/// <param name="displayDeviceModeDisplay">A <see cref="DisplayInfo"/> structure.</param>
 			/// <param name="other">A <see cref="DisplayInfo"/> structure.</param>
@@ -185,8 +184,7 @@ namespace ManagedX.Graphics
 				return !displayDeviceModeDisplay.Equals( other );
 			}
 
-
-			#endregion
+			#endregion Operators
 
 		}
 
@@ -454,32 +452,17 @@ namespace ManagedX.Graphics
 		/// <returns></returns>
 		public int CompareTo( DisplayDeviceMode other )
 		{
-			if( pelsWidth < other.pelsWidth )
-				return -1;
+			if( pelsWidth != other.pelsWidth )
+				return pelsWidth < other.pelsWidth ? -1 : +1;
 
-			if( pelsWidth > other.pelsWidth )
-				return +1;
+			if( pelsHeight != other.pelsHeight )
+				return pelsHeight < other.pelsHeight ? -1 : +1;
 
+			if( displayFrequency != other.displayFrequency )
+				return displayFrequency < other.displayFrequency ? -1 : +1;
 
-			if( pelsHeight < other.pelsHeight )
-				return -1;
-
-			if( pelsHeight > other.pelsHeight )
-				return +1;
-
-
-			if( displayFrequency < other.displayFrequency )
-				return -1;
-
-			if( displayFrequency > other.displayFrequency )
-				return +1;
-
-
-			if( bitsPerPel < other.bitsPerPel )
-				return -1;
-
-			if( bitsPerPel > other.bitsPerPel )
-				return +1;
+			if( bitsPerPel != other.bitsPerPel )
+				return bitsPerPel < other.bitsPerPel ? -1 : +1;
 
 			return 0;
 		}
@@ -487,7 +470,7 @@ namespace ManagedX.Graphics
 
 
 		/// <summary>The empty (and invalid) <see cref="DisplayDeviceMode"/> structure.</summary>
-		private static readonly DisplayDeviceMode Empty = new DisplayDeviceMode();
+		private static readonly DisplayDeviceMode Empty;
 
 		/// <summary>The default <see cref="DisplayDeviceMode"/> structure.</summary>
 		public static readonly DisplayDeviceMode Default = new DisplayDeviceMode( (ushort)Marshal.SizeOf( typeof( DisplayDeviceMode ) ) );
@@ -554,8 +537,7 @@ namespace ManagedX.Graphics
 			return displayDeviceMode.CompareTo( other ) >= 0;
 		}
 
-		#endregion
-
+		#endregion Operators
 
 	}
 
