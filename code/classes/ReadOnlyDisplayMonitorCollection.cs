@@ -28,7 +28,8 @@ namespace ManagedX.Graphics
 		{
 			if( monitorHandle != IntPtr.Zero )
 			{
-				for( var m = 0; m < base.Count; m++ )
+				var count = base.Count;
+				for( var m = 0; m < count; ++m )
 				{
 					if( base[ m ].Handle == monitorHandle )
 						return base[ m ];
@@ -43,10 +44,13 @@ namespace ManagedX.Graphics
 		/// <returns>Returns the display monitor corresponding to the specified device path, or null.</returns>
 		public DisplayMonitor GetMonitorByDevicePath( string devicePath )
 		{
-			var count = this.Count;
-			for( var m = 0; m < count; m++ )
-				if( base[ m ].DevicePath.Equals( devicePath, StringComparison.OrdinalIgnoreCase ) )
-					return base[ m ];
+			if( !string.IsNullOrWhiteSpace( devicePath ) )
+			{
+				var count = base.Count;
+				for( var m = 0; m < count; ++m )
+					if( base[ m ].DevicePath.Equals( devicePath, StringComparison.OrdinalIgnoreCase ) )
+						return base[ m ];
+			}
 			return null;
 		}
 
