@@ -18,7 +18,7 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = MaxGdiDeviceNameLength )]
-		private string viewGdiDeviceName;
+		private readonly string viewGdiDeviceName;
 
 
 

@@ -15,10 +15,10 @@ namespace ManagedX.Graphics.DisplayConfig
 	public abstract class DeviceInformation
 	{
 		
-		private DeviceInfoType infoType;
-		private int structSize;
-		private Luid adapterId;
-		private int id;
+		private readonly DeviceInfoType infoType;
+		private readonly int structSize;
+		private readonly Luid adapterId;
+		private readonly int id;
 
 
 

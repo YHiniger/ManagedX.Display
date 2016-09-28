@@ -17,7 +17,7 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = MaxDevicePathLength )]
-		private string devicePath;
+		private readonly string devicePath;
 
 
 
