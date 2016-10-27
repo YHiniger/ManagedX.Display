@@ -4,12 +4,12 @@
 namespace ManagedX.Graphics
 {
 
-	/// <summary>Arguments for use with <see cref="DisplayDeviceManager.AdapterAdded"/>, <see cref="DisplayAdapter.MonitorConnected"/> and <see cref="DisplayAdapter.MonitorDisconnected"/>.</summary>
+	/// <summary>Arguments for use with <see cref="DisplayDeviceManager.AdapterAdded"/>, <see cref="DisplayAdapter.MonitorConnected"/> and <see cref="DisplayAdapter.MonitorDisconnected"/> events.</summary>
 	[Serializable]
 	public sealed class DisplayDeviceEventArgs : EventArgs
 	{
 
-		private string deviceIdentifier;
+		private readonly string deviceIdentifier;
 
 
 
