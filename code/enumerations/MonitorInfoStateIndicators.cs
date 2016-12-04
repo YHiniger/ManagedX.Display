@@ -16,7 +16,7 @@
 		None = 0x00000000,
 
 		/// <summary>This is the primary display monitor.</summary>
-		[Win32.Native( "WinUser.h", "MONITORINFOF_PRIMARY" )]
+		[Win32.Source( "WinUser.h", "MONITORINFOF_PRIMARY" )]
 		Primary = 0x00000001,
 
 	}

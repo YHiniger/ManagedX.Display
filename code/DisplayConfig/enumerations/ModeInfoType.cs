@@ -7,7 +7,7 @@
 	/// <para>This enumeration is equivalent to the native <code>DISPLAYCONFIG_MODE_INFO_TYPE</code> enumeration (defined in WinGDI.h).</para>
 	/// </summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553942%28v=vs.85%29.aspx</remarks>
-	[Native( "WinGDI.h", "DISPLAYCONFIG_MODE_INFO_TYPE" )]
+	[Source( "WinGDI.h", "DISPLAYCONFIG_MODE_INFO_TYPE" )]
 	public enum ModeInfoType : int
 	{
 
@@ -15,17 +15,17 @@
 		Undefined = 0,
 
 		/// <summary>Indicates that the <see cref="ModeInfo"/> structure contains source mode information.</summary>
-		[Native( "WinGDI.h", "DISPLAYCONFIG_MODE_INFO_TYPE_SOURCE" )]
+		[Source( "WinGDI.h", "DISPLAYCONFIG_MODE_INFO_TYPE_SOURCE" )]
 		Source = 1,
 
 		/// <summary>Indicates that the <see cref="ModeInfo"/> structure contains target mode information.</summary>
-		[Native( "WinGDI.h", "DISPLAYCONFIG_MODE_INFO_TYPE_TARGET" )]
+		[Source( "WinGDI.h", "DISPLAYCONFIG_MODE_INFO_TYPE_TARGET" )]
 		Target = 2,
 
 		/// <summary>Indicates that the <see cref="ModeInfo"/> structure contains a valid <see cref="DesktopImageInfo"/> structure.
 		/// <para>Requires Windows 10 or newer.</para>
 		/// </summary>
-		[Native( "WinGDI.h", "DISPLAYCONFIG_MODE_INFO_TYPE_DESKTOP_IMAGE" )]
+		[Source( "WinGDI.h", "DISPLAYCONFIG_MODE_INFO_TYPE_DESKTOP_IMAGE" )]
 		DesktopImage = 3
 
 	}

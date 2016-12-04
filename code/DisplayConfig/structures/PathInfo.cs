@@ -10,7 +10,7 @@ namespace ManagedX.Graphics.DisplayConfig
 	/// <summary>Describes a single path from a target to a source.</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553945%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
-	[Native( "WinGDI.h", "DISPLAYCONFIG_PATH_INFO" )]
+	[Source( "WinGDI.h", "DISPLAYCONFIG_PATH_INFO" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 72 )]
 	public struct PathInfo : IEquatable<PathInfo>
 	{
@@ -23,16 +23,16 @@ namespace ManagedX.Graphics.DisplayConfig
 
 			/// <summary>Set by QueryDisplayConfig to indicate that the path is active and part of the desktop.
 			/// If this flag value is set, SetDisplayConfig attempts to enable this path.</summary>
-			[Native( "WinGDI.h", "DISPLAYCONFIG_PATH_ACTIVE" )]
+			[Source( "WinGDI.h", "DISPLAYCONFIG_PATH_ACTIVE" )]
 			Active = 0x00000001,
 
-			[Native( "WinGDI.h", "DISPLAYCONFIG_PATH_PREFERRED_UNSCALED" )]
+			[Source( "WinGDI.h", "DISPLAYCONFIG_PATH_PREFERRED_UNSCALED" )]
 			PreferredUnscaled = 0x00000004,
 
 			/// <summary>Set by QueryDisplayConfig to indicate that the path supports the virtual mode.
 			/// <para>Supported starting in Windows 10.</para>
 			/// </summary>
-			[Native( "WinGDI.h", "DISPLAYCONFIG_PATH_SUPPORT_VIRTUAL_MODE" )]
+			[Source( "WinGDI.h", "DISPLAYCONFIG_PATH_SUPPORT_VIRTUAL_MODE" )]
 			SupportVirtualMode = 0x00000008,
 
 		}

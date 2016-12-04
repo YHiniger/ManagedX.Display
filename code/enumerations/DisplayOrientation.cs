@@ -11,19 +11,19 @@
 	{
 
 		/// <summary>The display orientation is the natural orientation of the display device; it should be used as the default.</summary>
-		[Native( "WinGDI.h", "DMDO_DEFAULT" )]
+		[Source( "WinGDI.h", "DMDO_DEFAULT" )]
 		Default,
 
 		/// <summary>The display orientation is rotated 90 degrees (measured clockwise) from <see cref="Default"/>.</summary>
-		[Native( "WinGDI.h", "DMDO_90" )]
+		[Source( "WinGDI.h", "DMDO_90" )]
 		Rotate90,
 
 		/// <summary>The display orientation is rotated 180 degrees (measured clockwise) from <see cref="Default"/>.</summary>
-		[Native( "WinGDI.h", "DMDO_180" )]
+		[Source( "WinGDI.h", "DMDO_180" )]
 		Rotate180,
 
 		/// <summary>The display orientation is rotated 270 degrees (measured clockwise) from <see cref="Default"/>.</summary>
-		[Native( "WinGDI.h", "DMDO_270" )]
+		[Source( "WinGDI.h", "DMDO_270" )]
 		Rotate270
 
 	}

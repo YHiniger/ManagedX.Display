@@ -8,7 +8,7 @@ namespace ManagedX.Graphics.DisplayConfig
 	/// <summary>Contains information about the video signal for a display.</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff554007%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
-	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_VIDEO_SIGNAL_INFO" )]
+	[Win32.Source( "WinGDI.h", "DISPLAYCONFIG_VIDEO_SIGNAL_INFO" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 48 )]
 	public struct VideoSignalInfo : IEquatable<VideoSignalInfo>
 	{

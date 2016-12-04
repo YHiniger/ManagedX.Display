@@ -10,7 +10,7 @@ namespace ManagedX.Graphics.DisplayConfig
 	/// <para>Only available on Windows 10 or newer.</para>
 	/// </summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/mt622102%28v=vs.85%29.aspx</remarks>
-	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_DESKTOP_IMAGE_INFO" )]
+	[Win32.Source( "WinGDI.h", "DISPLAYCONFIG_DESKTOP_IMAGE_INFO" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 40 )]
 	public struct DesktopImageInfo : IEquatable<DesktopImageInfo>
 	{

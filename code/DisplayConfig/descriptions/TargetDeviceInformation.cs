@@ -9,7 +9,7 @@ namespace ManagedX.Graphics.DisplayConfig
 
 	/// <summary>Contains information about the target (defined in WinGDI.h).</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553989%28v=vs.85%29.aspx</remarks>
-	[Native( "WinGDI.h", "DISPLAYCONFIG_TARGET_DEVICE_NAME" )]
+	[Source( "WinGDI.h", "DISPLAYCONFIG_TARGET_DEVICE_NAME" )]
 	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 4, Size = 420 )]
 	public sealed class TargetDeviceInformation : TargetInformation
 	{
@@ -23,7 +23,7 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 		/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553990%28v=vs.85%29.aspx</remarks>
-		[Native( "WinGDI.h", "DISPLAYCONFIG_TARGET_DEVICE_NAME_FLAGS" )]
+		[Source( "WinGDI.h", "DISPLAYCONFIG_TARGET_DEVICE_NAME_FLAGS" )]
 		[Flags]
 		private enum Indicators : int
 		{
@@ -31,15 +31,15 @@ namespace ManagedX.Graphics.DisplayConfig
 			None = 0x00000000,
 
 			/// <summary>The string in the monitorFriendlyDeviceName member was constructed from the manufacture identification string in the extended display identification data (EDID).</summary>
-			[Native( "WinGDI.h", "friendlyNameFromEdid" )]
+			[Source( "WinGDI.h", "friendlyNameFromEdid" )]
 			FriendlyNameFromExtendedDisplayInformationData = 0x00000001,
 
 			/// <summary>The target is forced with no detectable monitor attached and the monitorFriendlyDeviceName member is a null-terminated empty string.</summary>
-			[Native( "WinGDI.h", "friendlyNameForced" )]
+			[Source( "WinGDI.h", "friendlyNameForced" )]
 			FriendlyNameForced = 0x00000002,
 
 			/// <summary>The edidManufactureId and edidProductCodeId members are valid and were obtained from the extended display information data (EDID).</summary>
-			[Native( "WinGDI.h", "edidIdsValid" )]
+			[Source( "WinGDI.h", "edidIdsValid" )]
 			ExtendedDisplayInformationDataIdsValid = 0x00000004
 
 		}

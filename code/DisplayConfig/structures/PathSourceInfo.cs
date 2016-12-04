@@ -10,21 +10,21 @@ namespace ManagedX.Graphics.DisplayConfig
 	/// <summary>Contains source information for a single path.</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553951%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
-	[Native( "WinGDI.h", "DISPLAYCONFIG_PATH_SOURCE_INFO" )]
+	[Source( "WinGDI.h", "DISPLAYCONFIG_PATH_SOURCE_INFO" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 20 )]
 	public struct PathSourceInfo : IEquatable<PathSourceInfo>
 	{
 
 		/// <summary>Defines the invalid <see cref="ModeInfoIndex"/>: -1.</summary>
-		[Native( "WinGDI.h", "DISPLAYCONFIG_PATH_MODE_IDX_INVALID" )]
+		[Source( "WinGDI.h", "DISPLAYCONFIG_PATH_MODE_IDX_INVALID" )]
 		public const int InvalidModeInfoIndex = -1;
 
 		/// <summary>Defines the invalid <see cref="CloneGroupId"/>: 0xFFFF.</summary>
-		[Native( "WinGDI.h", "DISPLAYCONFIG_PATH_CLONE_GROUP_INVALID" )]
+		[Source( "WinGDI.h", "DISPLAYCONFIG_PATH_CLONE_GROUP_INVALID" )]
 		public const int InvalidCloneGroupId = 0xffff;
 
 		/// <summary>Defines the invalid <see cref="ModeInfoIndex2"/>: 0xFFFF.</summary>
-		[Native( "WinGDI.h", "DISPLAYCONFIG_PATH_SOURCE_MODE_IDX_INVALID" )]
+		[Source( "WinGDI.h", "DISPLAYCONFIG_PATH_SOURCE_MODE_IDX_INVALID" )]
 		public const int InvalidModeInfoIndex2 = 0xffff;
 
 
@@ -36,7 +36,7 @@ namespace ManagedX.Graphics.DisplayConfig
 			None = 0x00000000,
 
 			/// <summary>The source is in use by at least one active path.</summary>
-			[Native( "WinGDI.h", "DISPLAYCONFIG_SOURCE_IN_USE" )]
+			[Source( "WinGDI.h", "DISPLAYCONFIG_SOURCE_IN_USE" )]
 			InUse = 0x00000001,
 
 		}

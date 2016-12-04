@@ -10,7 +10,7 @@ namespace ManagedX.Graphics.DisplayConfig
 	/// <summary>Contains target information for a single path.</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553954%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
-	[Native( "WinGDI.h", "DISPLAYCONFIG_PATH_TARGET_INFO" )]
+	[Source( "WinGDI.h", "DISPLAYCONFIG_PATH_TARGET_INFO" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 48 )]
 	public struct PathTargetInfo : IEquatable<PathTargetInfo>
 	{
@@ -20,12 +20,12 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 		/// <summary>Defines the invalid <see cref="DesktopModeInfoIndex"/>: 0xFFFF.</summary>
-		[Native( "WinGDI.h", "DISPLAYCONFIG_PATH_DESKTOP_IMAGE_IDX_INVALID" )]
+		[Source( "WinGDI.h", "DISPLAYCONFIG_PATH_DESKTOP_IMAGE_IDX_INVALID" )]
 		public const int InvalidDesktopModeInfoIndex = 0xffff;
 
 
 		/// <summary>Defines the invalid <see cref="ModeInfoIndex2"/>: 0xFFFF.</summary>
-		[Native( "WinGDI.h", "DISPLAYCONFIG_PATH_TARGET_MODE_IDX_INVALID" )]
+		[Source( "WinGDI.h", "DISPLAYCONFIG_PATH_TARGET_MODE_IDX_INVALID" )]
 		public const int InvalidModeInfoIndex2 = 0xffff;
 
 

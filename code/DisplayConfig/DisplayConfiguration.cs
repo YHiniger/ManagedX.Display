@@ -21,7 +21,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		private const int MaxClonePerSource = 4;
 
 		/// <summary>Defines the maximum number of paths: 1024.</summary>
-		[Native( "WinGDI.h", "DISPLAYCONFIG_MAXPATH" )]
+		[Source( "WinGDI.h", "DISPLAYCONFIG_MAXPATH" )]
 		public const int MaxPathCount = DisplayAdapter.MaxAdapterCount * MaxSourceCount * MaxClonePerSource;
 
 

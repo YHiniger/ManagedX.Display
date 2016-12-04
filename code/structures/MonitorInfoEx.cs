@@ -10,7 +10,7 @@ namespace ManagedX.Graphics
 	/// </summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/dd145066%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
-	[Win32.Native( "WinUser.h", "MONITORINFOEX" )]
+	[Win32.Source( "WinUser.h", "MONITORINFOEX" )]
 	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 4, Size = 104 )]
 	internal struct MonitorInfoEx : IEquatable<MonitorInfoEx>
 	{
