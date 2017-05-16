@@ -285,10 +285,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		{
 			currentTopologyId = TopologyIndicators.Unspecified;
 
-			int pathInfoArrayElementCount;
-			int modeInfoArrayElementCount;
-
-			var errorCode = SafeNativeMethods.GetDisplayConfigBufferSizes( request, out pathInfoArrayElementCount, out modeInfoArrayElementCount );
+			var errorCode = SafeNativeMethods.GetDisplayConfigBufferSizes( request, out int pathInfoArrayElementCount, out int modeInfoArrayElementCount );
 			if( errorCode != ErrorCode.None )
 			{
 				pathInfoArray = new PathInfo[ 0 ];

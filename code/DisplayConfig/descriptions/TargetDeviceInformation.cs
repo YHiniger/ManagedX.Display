@@ -30,11 +30,11 @@ namespace ManagedX.Graphics.DisplayConfig
 
 			None = 0x00000000,
 
-			/// <summary>The string in the monitorFriendlyDeviceName member was constructed from the manufacture identification string in the extended display identification data (EDID).</summary>
+			/// <summary>The string in the <see cref="monitorFriendlyDeviceName"/> member was constructed from the manufacture identification string in the extended display identification data (EDID).</summary>
 			[Source( "WinGDI.h", "friendlyNameFromEdid" )]
 			FriendlyNameFromExtendedDisplayInformationData = 0x00000001,
 
-			/// <summary>The target is forced with no detectable monitor attached and the monitorFriendlyDeviceName member is a null-terminated empty string.</summary>
+			/// <summary>The target is forced with no detectable monitor attached and the <see cref="monitorFriendlyDeviceName"/> member is a null-terminated empty string.</summary>
 			[Source( "WinGDI.h", "friendlyNameForced" )]
 			FriendlyNameForced = 0x00000002,
 
