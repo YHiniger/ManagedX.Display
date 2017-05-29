@@ -1,7 +1,7 @@
 # ManagedX.Display
-ManagedX.Display is a .NET 4.6 class library which provides access to GDI display devices (adapters, monitors) on Windows Vista/7/8/8.1/10.
+ManagedX.Display is a .NET 4.6 class library which provides access to GDI display devices (adapters, monitors) on Windows 7/8.x/10.
 
-Also partially implements the DisplayConfig API (not available on Windows Vista).
+Also partially implements the DisplayConfig API.
 
 
 ## Features
@@ -17,6 +17,6 @@ For the display adapters/monitors events to work, the application must periodica
 
 
 ### Requirements
-- Windows Vista SP2 or newer
+- Windows 7 (SP1) or newer
 - .NET Framework 4.6 : https://www.microsoft.com/en-us/download/details.aspx?id=48130
 - ManagedX : https://github.com/YHiniger/ManagedX
