@@ -6,7 +6,7 @@
 	/// <summary>Enumerates flags of a <see cref="PathTargetInfo"/>'s status.</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553954%28v=vs.85%29.aspx</remarks>
 	[System.Flags]
-	public enum PathTargetInfoStatus : int // TODO - rename to PathTargetInfoStateIndicators
+	public enum PathTargetInfoStateIndicators : int
 	{
 
 		/// <summary>Invalid.</summary>
@@ -34,9 +34,8 @@
 
 
 		/// <summary></summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "HMD" )]
 		[Source( "WinGDI.h", "DISPLAYCONFIG_TARGET_IS_HMD" )]
-		TargetIsHMD = 0x00000020,
+		TargetIsHeadMountedDisplay = 0x00000020,
 
 	}
 

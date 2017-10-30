@@ -83,7 +83,7 @@
     <Compile Include="code\DisplayConfig\ReadOnlyPathInfoCollection.cs" />
     <Compile Include="code\DisplayConfig\structures\PathSourceInfo.cs" />
     <Compile Include="code\DisplayConfig\structures\PathTargetInfo.cs" />
-    <Compile Include="code\DisplayConfig\enumerations\PathTargetInfoStatus.cs" />
+    <Compile Include="code\DisplayConfig\enumerations\PathTargetInfoStateIndicators.cs" />
     <Compile Include="code\DisplayConfig\enumerations\PixelFormat.cs" />
     <Compile Include="code\DisplayConfig\enumerations\Scaling.cs" />
     <Compile Include="code\DisplayConfig\structures\SourceMode.cs" />

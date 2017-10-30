@@ -66,7 +66,7 @@
 		
 
 		/// <summary>Gets the target's state.</summary>
-		public PathTargetInfoStatus State => info.Status;
+		public PathTargetInfoStateIndicators State => info.State;
 
 		#endregion PathTargetInfo properties
 

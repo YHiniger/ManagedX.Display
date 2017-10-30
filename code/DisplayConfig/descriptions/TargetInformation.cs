@@ -12,7 +12,7 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 		/// <summary>Constructor.</summary>
-		/// <param name="type">Indicates the type of information to configure or obtain; must not be <see cref="DeviceInfoType.None"/>.</param>
+		/// <param name="type">Indicates the type of information to configure or obtain; must not be <see cref="DeviceInfoType.Undefined"/>.</param>
 		/// <param name="size">The size, in bytes, of the description (including the header, which is 20 bytes).</param>
 		/// <param name="adapterId">The adapter the device information refers to.</param>
 		/// <param name="id">The identifier of the source or target to get or set information for.</param>

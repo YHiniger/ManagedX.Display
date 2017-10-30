@@ -80,9 +80,9 @@ namespace ManagedX.Graphics.DisplayConfig
 		[MarshalAs( UnmanagedType.Bool )]
 		public readonly bool IsTargetAvailable;
 
-		/// <summary>Indicates the status of the target.</summary>
+		/// <summary>The status of the target.</summary>
 		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
-		public readonly PathTargetInfoStatus Status;
+		public readonly PathTargetInfoStateIndicators State;
 
 
 
@@ -111,7 +111,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns a hash code for this <see cref="PathTargetInfo"/> structure.</returns>
 		public override int GetHashCode()
 		{
-			return AdapterId.GetHashCode() ^ Id ^ modeInfoIdx ^ (int)OutputTechnology ^ (int)Rotation ^ (int)Scaling ^ RefreshRate.GetHashCode() ^ (int)ScanLineOrdering ^ ( IsTargetAvailable ? -1 : 0 ) ^ (int)Status;
+			return AdapterId.GetHashCode() ^ Id ^ modeInfoIdx ^ (int)OutputTechnology ^ (int)Rotation ^ (int)Scaling ^ RefreshRate.GetHashCode() ^ (int)ScanLineOrdering ^ ( IsTargetAvailable ? -1 : 0 ) ^ (int)State;
 		}
 
 
@@ -120,7 +120,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns true if the <paramref name="other"/> structure equals this <see cref="PathTargetInfo"/> structure, otherwise returns false.</returns>
 		public bool Equals( PathTargetInfo other )
 		{
-			return AdapterId.Equals( other.AdapterId ) && ( Id == other.Id ) && ( modeInfoIdx == other.modeInfoIdx ) && ( OutputTechnology == other.OutputTechnology ) && ( Rotation == other.Rotation ) && ( Scaling == other.Scaling ) && RefreshRate.Equals( other.RefreshRate ) && ( ScanLineOrdering == other.ScanLineOrdering ) && ( IsTargetAvailable == other.IsTargetAvailable ) && ( Status == other.Status );
+			return AdapterId.Equals( other.AdapterId ) && ( Id == other.Id ) && ( modeInfoIdx == other.modeInfoIdx ) && ( OutputTechnology == other.OutputTechnology ) && ( Rotation == other.Rotation ) && ( Scaling == other.Scaling ) && RefreshRate.Equals( other.RefreshRate ) && ( ScanLineOrdering == other.ScanLineOrdering ) && ( IsTargetAvailable == other.IsTargetAvailable ) && ( State == other.State );
 		}
 
 
