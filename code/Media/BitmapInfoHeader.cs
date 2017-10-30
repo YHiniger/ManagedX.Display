@@ -123,7 +123,7 @@ namespace ManagedX.Graphics
 		/// <returns>Returns true if the specified object is a <see cref="BitmapInfoHeader"/> structure which is equivalent to this structure, otherwise returns false.</returns>
 		public override bool Equals( object obj )
 		{
-			return obj is BitmapInfoHeader && this.Equals( (BitmapInfoHeader)obj );
+			return obj is BitmapInfoHeader bih && this.Equals( bih );
 		}
 
 

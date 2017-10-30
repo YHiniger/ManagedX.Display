@@ -105,7 +105,7 @@ namespace ManagedX.Graphics
 		/// <returns>Returns true if the specified object is a <see cref="VideoInfoHeader2"/> structure which is equivalent to this <see cref="VideoInfoHeader2"/> structure, otherwise returns false.</returns>
 		public override bool Equals( object obj )
 		{
-			return obj is VideoInfoHeader2 && this.Equals( (VideoInfoHeader2)obj );
+			return obj is VideoInfoHeader2 vih2 && this.Equals( vih2 );
 		}
 
 
