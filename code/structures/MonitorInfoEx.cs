@@ -15,6 +15,24 @@ namespace ManagedX.Graphics
 	internal struct MonitorInfoEx : IEquatable<MonitorInfoEx>
 	{
 
+		/// <summary>Enumerates flags used in the MonitorInfo and <see cref="MonitorInfoEx"/> structures.
+		/// <para>This enumeration is equivalent to the native <code>MONITORINFOF_*</code> constants (defined in WinUser.h).</para>
+		/// </summary>
+		[Flags]
+		private enum StateIndicators : int
+		{
+
+			/// <summary>No states specified.</summary>
+			None = 0x00000000,
+
+			/// <summary>This is the primary display monitor.</summary>
+			[Win32.Source( "WinUser.h", "MONITORINFOF_PRIMARY" )]
+			Primary = 0x00000001,
+
+		}
+
+
+
 		// MONITORINFO struct
 		private readonly int structSize;
 
@@ -30,7 +48,7 @@ namespace ManagedX.Graphics
 		/// </summary>
 		public readonly Rect Workspace;
 
-		private readonly MonitorInfoStateIndicators flags;
+		private readonly StateIndicators flags;
 		// End of MONITORINFO struct
 
 		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = DisplayDevice.MaxDeviceNameChars )]
@@ -42,14 +60,14 @@ namespace ManagedX.Graphics
 		{
 			structSize = structureSize;
 			Monitor = Workspace = Rect.Zero;
-			flags = MonitorInfoStateIndicators.None;
+			flags = StateIndicators.None;
 			deviceName = string.Empty;
 		}
 
 
 
 		/// <summary>Gets a value indicating whether the monitor is the primary monitor.</summary>
-		public bool IsPrimary => flags.HasFlag( MonitorInfoStateIndicators.Primary );
+		public bool IsPrimary => flags.HasFlag( StateIndicators.Primary );
 
 
 		/// <summary>Gets the adapter device name of the monitor.

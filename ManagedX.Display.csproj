@@ -95,7 +95,6 @@
     <Compile Include="code\enumerations\AdapterStateIndicators.cs" />
     <Compile Include="code\enumerations\MonitorStateIndicators.cs" />
     <Compile Include="code\enumerations\DisplayOrientation.cs" />
-    <Compile Include="code\enumerations\MonitorInfoStateIndicators.cs" />
     <Compile Include="code\Media\BitmapInfoHeader.cs" />
     <Compile Include="code\Media\DirectShow\VideoInfoHeader.cs" />
     <Compile Include="code\Media\DirectShow\VideoInfoHeader2.cs" />
