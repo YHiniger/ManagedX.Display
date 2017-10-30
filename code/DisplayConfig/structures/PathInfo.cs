@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 
@@ -26,6 +27,7 @@ namespace ManagedX.Graphics.DisplayConfig
 			[Source( "WinGDI.h", "DISPLAYCONFIG_PATH_ACTIVE" )]
 			Active = 0x00000001,
 
+			/// <summary>Not implemented.</summary>
 			[Source( "WinGDI.h", "DISPLAYCONFIG_PATH_PREFERRED_UNSCALED" )]
 			PreferredUnscaled = 0x00000004,
 
@@ -39,32 +41,30 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 
-		private PathSourceInfo sourceInfo;
-		private PathTargetInfo targetInfo;
-		private StateIndicators state;
+		/// <summary>Contains the source information for the display path.</summary>
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
+		public readonly PathSourceInfo SourceInfo;
 
+		/// <summary>Contains the target information for the display path.</summary>
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
+		public readonly PathTargetInfo TargetInfo;
 
+		private readonly StateIndicators state;
 
-		/// <summary>Gets a <see cref="PathSourceInfo"/> structure which contains the source information for the (display) path.</summary>
-		public PathSourceInfo SourceInfo { get { return sourceInfo; } }
-
-
-		/// <summary>Gets a <see cref="PathTargetInfo"/> structure which contains the target information for the (display) path.</summary>
-		public PathTargetInfo TargetInfo { get { return targetInfo; } }
 
 
 		/// <summary>Gets a value indicating whether the (display) path is active and part of the desktop.</summary>
-		public bool Active { get { return state.HasFlag( StateIndicators.Active ); } }
+		public bool IsActive => state.HasFlag( StateIndicators.Active ); 
 
 
 		///// <summary></summary>
-		//public bool PreferredUnscaled { get { return state.HasFlag( StateIndicators.PreferredUnscaled ); } }
+		//public bool PreferredUnscaled => state.HasFlag( StateIndicators.PreferredUnscaled );
 
 
 		/// <summary>Gets a value indicating whether the (display) path supports virtual mode.
 		/// <para>Requires Windows 10 or newer.</para>
 		/// </summary>
-		public bool SupportsVirtualMode { get { return state.HasFlag( StateIndicators.SupportVirtualMode ); } }
+		public bool SupportsVirtualMode => state.HasFlag( StateIndicators.SupportVirtualMode );
 
 
 
@@ -72,7 +72,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns a hash code for this <see cref="PathInfo"/> structure.</returns>
 		public override int GetHashCode()
 		{
-			return sourceInfo.GetHashCode() ^ targetInfo.GetHashCode() ^ (int)state;
+			return SourceInfo.GetHashCode() ^ TargetInfo.GetHashCode() ^ (int)state;
 		}
 
 
@@ -81,7 +81,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns true if the <paramref name="other"/> <see cref="PathInfo"/> is equal to this structure.</returns>
 		public bool Equals( PathInfo other )
 		{
-			return sourceInfo.Equals( other.sourceInfo ) && targetInfo.Equals( other.targetInfo ) && ( state == other.state );
+			return SourceInfo.Equals( other.SourceInfo ) && TargetInfo.Equals( other.TargetInfo ) && ( state == other.state );
 		}
 
 
@@ -90,8 +90,9 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns true if the specified object is a <see cref="PathInfo"/> structure and is equal to this structure; otherwise returns false.</returns>
 		public override bool Equals( object obj )
 		{
-			return ( obj is PathInfo ) && this.Equals( (PathInfo)obj );
+			return ( obj is PathInfo pi ) && this.Equals( pi );
 		}
+
 
 
 		/// <summary>The empty <see cref="PathInfo"/> structure.</summary>

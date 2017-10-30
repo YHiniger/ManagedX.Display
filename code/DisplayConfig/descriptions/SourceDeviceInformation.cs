@@ -11,13 +11,7 @@ namespace ManagedX.Graphics.DisplayConfig
 	internal sealed class SourceDeviceInformation : DeviceInformation
 	{
 
-		/// <summary>Defines the maximum length, in unicode chars, of the <see cref="GdiDeviceName"/>.</summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gdi" )]
-		public const int MaxGdiDeviceNameLength = 32;
-
-
-
-		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = MaxGdiDeviceNameLength )]
+		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = DisplayDevice.MaxDeviceNameChars )]
 		private readonly string viewGdiDeviceName;
 
 
@@ -37,7 +31,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <para>This name can be used in a call to EnumDisplaySettings to obtain a list of available modes for the specified source.</para>
 		/// </summary>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gdi" )]
-		public string GdiDeviceName { get { return ( viewGdiDeviceName == null ) ? string.Empty : string.Copy( viewGdiDeviceName ); } }
+		public string GdiDeviceName => string.Copy( viewGdiDeviceName ?? string.Empty );
 
 
 		/// <summary>Returns the <see cref="GdiDeviceName"/>.</summary>

@@ -54,14 +54,17 @@
     <Compile Include="code\classes\DisplayAdapter.cs" />
     <Compile Include="code\classes\DisplayDeviceBase.cs" />
     <Compile Include="code\DisplayConfig\descriptions\AdapterInformation.cs" />
+    <None Include="code\DisplayConfig\descriptions\AdvancedColorInformation.cs" />
     <Compile Include="code\DisplayConfig\descriptions\DeviceInformation.cs" />
     <None Include="code\DisplayConfig\descriptions\TargetBaseInformation.cs" />
     <Compile Include="code\DisplayConfig\descriptions\TargetInformation.cs" />
+    <None Include="code\DisplayConfig\descriptions\VirtualResolutionSupportInformation.cs" />
     <Compile Include="code\DisplayConfig\DisplayConfigException.cs" />
     <Compile Include="code\DisplayConfig\DisplayConfigMonitorInfo.cs" />
     <Compile Include="code\DisplayConfig\DisplayConfigInfo.cs" />
     <Compile Include="code\DisplayConfig\DisplayConfigAdapterInfo.cs" />
     <Compile Include="code\DisplayConfig\descriptions\SourceDeviceInformation.cs" />
+    <Compile Include="code\DisplayConfig\enumerations\ColorEncoding.cs" />
     <Compile Include="code\DisplayConfig\structures\DesktopImageInfo.cs" />
     <Compile Include="code\DisplayConfig\descriptions\TargetDeviceInformation.cs" />
     <Compile Include="code\DisplayConfig\descriptions\TargetPreferredModeInformation.cs" />

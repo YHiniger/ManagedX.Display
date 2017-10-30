@@ -28,8 +28,8 @@ namespace ManagedX.Graphics
 		{
 			if( monitorHandle != IntPtr.Zero )
 			{
-				var count = base.Count;
-				for( var m = 0; m < count; ++m )
+				var mMax = base.Count;
+				for( var m = 0; m < mMax; ++m )
 				{
 					if( base[ m ].Handle == monitorHandle )
 						return base[ m ];
@@ -46,9 +46,9 @@ namespace ManagedX.Graphics
 		{
 			if( !string.IsNullOrWhiteSpace( devicePath ) )
 			{
-				var count = base.Count;
-				for( var m = 0; m < count; ++m )
-					if( base[ m ].DevicePath.Equals( devicePath, StringComparison.OrdinalIgnoreCase ) )
+				var mMax = base.Count;
+				for( var m = 0; m < mMax; ++m )
+					if( devicePath.Equals( base[ m ].DevicePath, StringComparison.OrdinalIgnoreCase ) )
 						return base[ m ];
 			}
 			return null;

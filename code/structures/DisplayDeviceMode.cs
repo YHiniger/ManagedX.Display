@@ -38,14 +38,14 @@ namespace ManagedX.Graphics
 			/// <summary></summary>
 			Scale = 16,
 
-			/// <summary><see cref="DisplayDeviceMode.DisplayInfo.Position"/> is initialized.</summary>
+			/// <summary><see cref="DisplayInfo.Position"/> is initialized.</summary>
 			Position = 32,
 
 			/// <summary></summary>
 			[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "NUP" )]
 			NUP = 64,
 
-			/// <summary><see cref="DisplayDeviceMode.DisplayInfo.DisplayOrientation"/> is initialized.</summary>
+			/// <summary><see cref="DisplayInfo.DisplayOrientation"/> is initialized.</summary>
 			DisplayOrientation = 128,
 
 			/// <summary></summary>
@@ -112,7 +112,7 @@ namespace ManagedX.Graphics
 			/// <summary></summary>
 			PanningHeight = 268435456,
 
-			/// <summary><see cref="DisplayDeviceMode.DisplayInfo.DisplayFixedOutput"/> is initialized.</summary>
+			/// <summary><see cref="DisplayInfo.DisplayFixedOutput"/> is initialized.</summary>
 			DisplayFixedOutput = 536870912
 
 		}
@@ -159,7 +159,7 @@ namespace ManagedX.Graphics
 			/// <returns>Returns true if the specified object is a <see cref="DisplayInfo"/> structure which equals this structure, otherwise returns false.</returns>
 			public override bool Equals( object obj )
 			{
-				return ( obj is DisplayInfo ) && this.Equals( (DisplayInfo)obj );
+				return ( obj is DisplayInfo di ) && this.Equals( di );
 			}
 
 
@@ -190,12 +190,12 @@ namespace ManagedX.Graphics
 
 
 
-		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = 32 )]
+		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = DisplayDevice.MaxDeviceNameChars )]
 		private string deviceName;
 		private short specVersion;
 		private short driverVersion;
 		/// <summary>Specifies the size, in bytes, of the <see cref="DisplayDeviceMode"/> structure, not including any private driver-specific data that might follow the structure's public members. Set this member to sizeof (<see cref="DisplayDeviceMode"/>) to indicate the version of the <see cref="DisplayDeviceMode"/> structure being used.</summary>
-		private ushort structureSize;
+		private readonly ushort structureSize;
 		/// <summary>Contains the number of bytes of private driver-data that follow this structure. If a device driver does not use device-specific information, set this member to zero.</summary>
 		private ushort driverExtra;
 		/// <summary>Specifies whether certain members of the <see cref="DisplayDeviceMode"/> structure have been initialized. If a member is initialized, its corresponding bit is set, otherwise the bit is clear. A driver supports only those <see cref="DisplayDeviceMode"/> members that are appropriate for the printer or display technology.</summary>
@@ -248,21 +248,20 @@ namespace ManagedX.Graphics
 		/// <summary>Gets a null-terminated string that specifies the "friendly" name of the display (or printer); for example, "PCL/HP LaserJet" in the case of PCL/HP LaserJet.
 		/// <para>This string is unique among device drivers. Note that this name may be truncated to fit in the deviceName variable (32 chars).</para>
 		/// </summary>
-		public string DeviceName { get { return string.Copy( deviceName ?? string.Empty ); } }
+		public string DeviceName => string.Copy( deviceName ?? string.Empty );
 
 
 		/// <summary>Gets the version number of the initialization data specification the structure is based on.
 		/// <para>To ensure the correct version is used for any operating system, use DM_SPECVERSION.</para>
 		/// </summary>
-		public short SpecVersion { get { return specVersion; } }
+		public short SpecVersion => specVersion;
 
 
 		/// <summary>Gets the driver version number assigned by the driver developer.</summary>
-		public short DriverVersion { get { return driverVersion; } }
+		public short DriverVersion => driverVersion;
 
 
 		#region "Fields"
-
 
 		/// <summary>Gets a <see cref="Point"/> structure indicating the positional coordinates of the display device in reference to the desktop area.
 		/// <para>The primary display device is always located at coordinates (0,0).</para>
@@ -395,8 +394,7 @@ namespace ManagedX.Graphics
 			}
 		}
 
-
-		#endregion
+		#endregion "Fields"
 
 
 		/// <summary>Returns a hash code for this <see cref="DisplayDeviceMode"/> structure.</summary>
@@ -433,7 +431,7 @@ namespace ManagedX.Graphics
 		/// <returns>Returns true if the specified object is a <see cref="DisplayDeviceMode"/> structure which equals this structure, otherwise returns false.</returns>
 		public override bool Equals( object obj )
 		{
-			return ( obj is DisplayDeviceMode ) && this.Equals( (DisplayDeviceMode)obj );
+			return ( obj is DisplayDeviceMode ddm ) && this.Equals( ddm );
 		}
 
 
@@ -470,7 +468,7 @@ namespace ManagedX.Graphics
 
 
 		/// <summary>The empty (and invalid) <see cref="DisplayDeviceMode"/> structure.</summary>
-		private static readonly DisplayDeviceMode Empty;
+		internal static readonly DisplayDeviceMode Empty;
 
 		/// <summary>The default <see cref="DisplayDeviceMode"/> structure.</summary>
 		public static readonly DisplayDeviceMode Default = new DisplayDeviceMode( (ushort)Marshal.SizeOf( typeof( DisplayDeviceMode ) ) );

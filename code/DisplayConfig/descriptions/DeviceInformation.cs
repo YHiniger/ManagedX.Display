@@ -42,18 +42,18 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 		/// <summary>Gets the type of device information to retrieve or set.</summary>
-		public DeviceInfoType InfoType { get { return infoType; } }
+		public DeviceInfoType InfoType => infoType;
 
 
 		/// <summary>Gets the identifier of the adapter the device information packet refers to.</summary>
-		public Luid AdapterId { get { return adapterId; } }
+		public Luid AdapterId => adapterId;
 
 
 		/// <summary>The source or target identifier to get or set the device information for.
 		/// <para>The meaning of this identifier is related to the <see cref="InfoType"/> of information being requested.</para>
 		/// For example, in the case of <see cref="DeviceInfoType.GetSourceName"/>, this is the source identifier.
 		/// </summary>
-		public int Id { get { return id; } }
+		public int Id => id;
 
 	}
 

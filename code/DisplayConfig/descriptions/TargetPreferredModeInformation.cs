@@ -11,9 +11,9 @@ namespace ManagedX.Graphics.DisplayConfig
 	public sealed class TargetPreferredModeInformation : DeviceInformation
 	{
 
-		private int width;
-		private int height;
-		private TargetMode targetMode;
+		private readonly int width;
+		private readonly int height;
+		private readonly TargetMode targetMode;
 
 
 
@@ -28,18 +28,18 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 		/// <summary>Gets the size, in pixels, of the best mode for the monitor which is connected to the target that <see cref="VideoSignal"/> specifies.</summary>
-		public Size Size { get { return new Size( width, height ); } }
+		public Size Size => new Size( width, height );
 
 
 		/// <summary>Gets information about the best mode for the monitor which is connected to the specified target.</summary>
-		public VideoSignalInfo VideoSignal { get { return targetMode.TargetVideoSignalInfo; } }
+		public VideoSignalInfo VideoSignal => targetMode.TargetVideoSignalInfo;
 
 
 		/// <summary>Returns a string representing this <see cref="TargetPreferredModeInformation"/>.</summary>
 		/// <returns>Returns a string representing this <see cref="TargetPreferredModeInformation"/>.</returns>
 		public sealed override string ToString()
 		{
-			return width + "x" + height + "@" + VideoSignal.VSyncFrequency.ToSingle() + "Hz";
+			return string.Format( System.Globalization.CultureInfo.InvariantCulture, "{0}x{1}@{2}Hz", width, height, VideoSignal.VSyncFrequency.ToSingle() );
 		}
 
 	}

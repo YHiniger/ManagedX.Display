@@ -31,13 +31,13 @@ namespace ManagedX.Graphics
 		/// <summary>Gets the <see cref="DeviceName"/> of this display device.
 		/// <para>The device name is in the form "\\.\DISPLAY1" for an adapter, and "\\.\DISPLAY1\Monitor0" for a monitor.</para>
 		/// </summary>
-		public string DeviceIdentifier { get { return device.DeviceName; } }
+		public string DeviceIdentifier => device.DeviceName;
 
 
 		/// <summary>Gets the friendly name of this display device.</summary>
 		public virtual string DisplayName
 		{
-			get { return device.DeviceString; }
+			get => device.DeviceString;
 			internal set { } // for DisplayMonitor to get a chance to receive a more friendly name than "Generic PnP Monitor"
 		}
 
@@ -45,13 +45,13 @@ namespace ManagedX.Graphics
 		#region Protected properties
 		
 		/// <summary>Gets the state of this display device.</summary>
-		protected int RawState { get { return device.State; } }
+		protected int RawState => device.State;
 
 
 		/// <summary>Gets the device id of this display device.
 		/// <para>This property is named DeviceId for adapters and DevicePath for monitors (to improve consistency with DisplayConfig).</para>
 		/// </summary>
-		protected string DeviceId { get { return device.DeviceId; } }
+		protected string DeviceId => device.DeviceId;
 
 		#endregion Protected properties
 
@@ -59,7 +59,7 @@ namespace ManagedX.Graphics
 		/// <summary>Gets the device name of this display device.
 		/// <para>The device name is in the form "\\.\DISPLAY1" for an adapter, and "\\.\DISPLAY1\Monitor0" for a monitor.</para>
 		/// </summary>
-		public string DeviceName { get { return device.DeviceName; } }
+		public string DeviceName => device.DeviceName;
 
 
 		/// <summary>Resets, if relevant, the underlying <see cref="DisplayDevice"/> structure and raises events when required.</summary>
@@ -68,15 +68,11 @@ namespace ManagedX.Graphics
 			if( !device.Equals( displayDevice ) )
 			{
 				var stateChanged = ( device.State != displayDevice.State );
-				
+
 				device = displayDevice;
 
 				if( stateChanged )
-				{
-					var stateChangedEvent = this.StateChanged;
-					if( stateChangedEvent != null )
-						stateChangedEvent.Invoke( this, EventArgs.Empty );
-				}
+					this.StateChanged?.Invoke( this, EventArgs.Empty );
 			}
 		}
 
@@ -85,9 +81,8 @@ namespace ManagedX.Graphics
 		public event EventHandler StateChanged;
 
 
-
 		/// <summary>Gets the (registry?) key associated with this display device.</summary>
-		public string DeviceKey { get { return device.DeviceKey; } }
+		public string DeviceKey => device.DeviceKey;
 
 
 		/// <summary>Returns the hash code of the underlying <see cref="DisplayDevice"/> structure.</summary>
@@ -112,8 +107,8 @@ namespace ManagedX.Graphics
 		/// <returns>Returns a value indicating whether this <see cref="DisplayDeviceBase"/> instance is equivalent to an object.</returns>
 		public override bool Equals( object obj )
 		{
-			if( obj is DisplayDevice )
-				return device.Equals( (DisplayDevice)obj );
+			if( obj is DisplayDevice dev )
+				return dev.Equals( dev );
 
 			return this.Equals( obj as DisplayDeviceBase );
 		}

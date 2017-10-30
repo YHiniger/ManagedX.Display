@@ -14,7 +14,7 @@ namespace ManagedX.Graphics.DisplayConfig
 	{
 
 		/// <summary>Contains a detailed description of the current target mode.</summary>
-		public VideoSignalInfo TargetVideoSignalInfo;
+		public readonly VideoSignalInfo TargetVideoSignalInfo;
 
 
 
@@ -40,7 +40,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns true if the specified object is an equivalent <see cref="TargetMode"/> structure, otherwise returns false.</returns>
 		public override bool Equals( object obj )
 		{
-			return ( obj is TargetMode ) && this.Equals( (TargetMode)obj );
+			return ( obj is TargetMode tm ) && this.Equals( tm );
 		}
 
 

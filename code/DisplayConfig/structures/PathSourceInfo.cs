@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 
@@ -43,50 +44,48 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 
-		private Luid adapterId;
-		private int id;
-		private int modeInfoIdx;	// cloneGroupId (16 bits) + sourceModeInfoIdx (16 bits)
-		private StatusIndicators status;
+		/// <summary>The identifier of the adapter that this source information relates to.</summary>
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
+		public readonly Luid AdapterId;
 
+		/// <summary>The source identifier on the specified adapter that this path relates to.</summary>
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
+		public readonly int Id;
 
+		private readonly int modeInfoIdx;	// cloneGroupId (16 bits) + sourceModeInfoIdx (16 bits)
+		private readonly StatusIndicators status;
 
-		/// <summary>Gets the identifier of the adapter that this source information relates to.</summary>
-		public Luid AdapterId { get { return adapterId; } }
-
-
-		/// <summary>Gets the source identifier on the specified adapter that this path relates to.</summary>
-		public int Id { get { return id; } }
 
 
 		/// <summary>Gets the index into the mode information table that contains the source mode information for this path only when <see cref="PathInfo.SupportsVirtualMode"/> is false.
 		/// <para>If source mode information is not available, the value of this property is <see cref="InvalidModeInfoIndex"/>(-1).</para>
 		/// </summary>
-		public int ModeInfoIndex { get { return modeInfoIdx; } }
+		public int ModeInfoIndex => modeInfoIdx;
 
 
 		/// <summary>A valid identifier used to show which clone group the path is a member of only when <see cref="PathInfo.SupportsVirtualMode"/> is true.
 		/// <para>If this value is invalid, then it must be set to <see cref="InvalidCloneGroupId"/>.</para>
 		/// Supported starting in Windows 10.
 		/// </summary>
-		public int CloneGroupId { get { return modeInfoIdx & 0x0000ffff; } }
+		public int CloneGroupId => modeInfoIdx & 0x0000ffff;
 
 
 		/// <summary>A valid index into the mode array of the <see cref="SourceMode"/> entry that contains the source mode information for this path only when <see cref="PathInfo.SupportsVirtualMode"/> is true.
 		/// <para>If there is no entry for this in the mode array, the value of this property is <see cref="InvalidModeInfoIndex2"/>.</para>
 		/// Supported starting in Windows 10.
 		/// </summary>
-		public int ModeInfoIndex2 { get { return modeInfoIdx >> 16; } }
+		public int ModeInfoIndex2 => modeInfoIdx >> 16;
 
 
 		/// <summary>Gets a value indicating whether the source is in use.</summary>
-		public bool InUse { get { return status.HasFlag( StatusIndicators.InUse ); } }
+		public bool InUse => status.HasFlag( StatusIndicators.InUse );
 
 
 		/// <summary>Returns a hash code for this <see cref="PathSourceInfo"/> structure.</summary>
 		/// <returns>Returns a hash code for this <see cref="PathSourceInfo"/> structure.</returns>
 		public override int GetHashCode()
 		{
-			return adapterId.GetHashCode() ^ id ^ modeInfoIdx ^ (int)status;
+			return AdapterId.GetHashCode() ^ Id ^ modeInfoIdx ^ (int)status;
 		}
 
 
@@ -95,7 +94,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns true if the structures are equal, otherwise returns false.</returns>
 		public bool Equals( PathSourceInfo other )
 		{
-			return this.adapterId.Equals( other.adapterId ) && ( id == other.id ) && ( modeInfoIdx == other.modeInfoIdx ) && ( status == other.status );
+			return this.AdapterId.Equals( other.AdapterId ) && ( Id == other.Id ) && ( modeInfoIdx == other.modeInfoIdx ) && ( status == other.status );
 		}
 
 
@@ -104,7 +103,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns true if the specified object is a <see cref="PathSourceInfo"/> structure which equals this structure, otherwise returns false.</returns>
 		public override bool Equals( object obj )
 		{
-			return ( obj is PathSourceInfo ) && this.Equals( (PathSourceInfo)obj );
+			return ( obj is PathSourceInfo psi ) && this.Equals( psi );
 		}
 
 

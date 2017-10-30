@@ -56,7 +56,6 @@ namespace ManagedX.Graphics
 		/// <summary>No documentation.
 		/// <para>This value is present since Windows 8.</para>
 		/// </summary>
-		[SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Acc" )]
 		[Source( "WinGDI.h", "DISPLAY_DEVICE_ACC_DRIVER" )]
 		AccDriver = 0x00000040,
 

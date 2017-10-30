@@ -14,9 +14,7 @@
 		/// <summary>No indicators specified.</summary>
 		None = 0x00000000,
 
-		/// <summary>The monitor is presented as being "on" by the respective GDI view.
-		/// <para>Windows Vista: EnumDisplayDevices will only enumerate monitors that can be presented as being "on".</para>
-		/// </summary>
+		/// <summary>The monitor is presented as being "on" by the respective GDI view.</summary>
 		[Source( "WinGDI.h", "DISPLAY_DEVICE_ACTIVE" )]
 		Active = 0x00000001,
 

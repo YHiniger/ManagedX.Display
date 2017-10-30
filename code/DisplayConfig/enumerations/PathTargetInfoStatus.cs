@@ -32,6 +32,12 @@
 		[Source( "WinGDI.h", "DISPLAYCONFIG_TARGET_FORCED_AVAILABILITY_SYSTEM" )]
 		ForcedAvailabilitySystem = 0x00000010,
 
+
+		/// <summary></summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "HMD" )]
+		[Source( "WinGDI.h", "DISPLAYCONFIG_TARGET_IS_HMD" )]
+		TargetIsHMD = 0x00000020,
+
 	}
 
 }

@@ -15,11 +15,25 @@ namespace ManagedX.Graphics
 	internal struct MonitorInfoEx : IEquatable<MonitorInfoEx>
 	{
 
-		private int structSize;
-		private Rect monitor;
-		private Rect work;
-		private MonitorInfoStateIndicators flags;
-		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = 32 )]
+		// MONITORINFO struct
+		private readonly int structSize;
+
+		/// <summary>The display monitor rectangle, expressed in virtual-screen coordinates.
+		/// <para>Note that if the monitor is not the primary display monitor, some of the rectangle's coordinates may be negative values.</para>
+		/// </summary>
+		public readonly Rect Monitor;
+
+		/// <summary>The work area rectangle of the display monitor which can be used by applications, expressed in virtual-screen coordinates.
+		/// <para>Windows uses this rectangle to maximize an application on the monitor.</para>
+		/// The rest of the area in <see cref="Monitor"/> contains system windows such as the task bar and side bars.
+		/// <para>Note that if the monitor is not the primary display monitor, some of the rectangle's coordinates may be negative values.</para>
+		/// </summary>
+		public readonly Rect Workspace;
+
+		private readonly MonitorInfoStateIndicators flags;
+		// End of MONITORINFO struct
+
+		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = DisplayDevice.MaxDeviceNameChars )]
 		private string deviceName;
 
 
@@ -27,35 +41,21 @@ namespace ManagedX.Graphics
 		private MonitorInfoEx( int structureSize )
 		{
 			structSize = structureSize;
-			monitor = work = Rect.Zero;
+			Monitor = Workspace = Rect.Zero;
 			flags = MonitorInfoStateIndicators.None;
 			deviceName = string.Empty;
 		}
 
 
 
-		/// <summary>Gets the display monitor rectangle, expressed in virtual-screen coordinates.
-		/// <para>Note that if the monitor is not the primary display monitor, some of the rectangle's coordinates may be negative values.</para>
-		/// </summary>
-		public Rect Monitor { get { return monitor; } }
-
-
-		/// <summary>Gets the work area rectangle of the display monitor which can be used by applications, expressed in virtual-screen coordinates.
-		/// <para>Windows uses this rectangle to maximize an application on the monitor.</para>
-		/// The rest of the area in <see cref="Monitor"/> contains system windows such as the task bar and side bars.
-		/// <para>Note that if the monitor is not the primary display monitor, some of the rectangle's coordinates may be negative values.</para>
-		/// </summary>
-		public Rect Workspace { get { return work; } }
-		
-
 		/// <summary>Gets a value indicating whether the monitor is the primary monitor.</summary>
-		public bool IsPrimary { get { return flags.HasFlag( MonitorInfoStateIndicators.Primary ); } }
+		public bool IsPrimary => flags.HasFlag( MonitorInfoStateIndicators.Primary );
 
 
 		/// <summary>Gets the adapter device name of the monitor.
 		/// <para>Most applications have no use for a display monitor name, and so can save some bytes by using a MonitorInfo structure.</para>
 		/// </summary>
-		public string AdapterDeviceName { get { return string.Copy( deviceName ?? string.Empty ); } }
+		public string AdapterDeviceName => string.Copy( deviceName ?? string.Empty );
 
 
 
@@ -63,7 +63,7 @@ namespace ManagedX.Graphics
 		/// <returns>Returns a hash code for this <see cref="MonitorInfoEx"/> structure.</returns>
 		public override int GetHashCode()
 		{
-			return structSize ^ monitor.GetHashCode() ^ work.GetHashCode() ^ (int)flags ^ this.AdapterDeviceName.GetHashCode();
+			return structSize ^ Monitor.GetHashCode() ^ Workspace.GetHashCode() ^ (int)flags ^ this.AdapterDeviceName.GetHashCode();
 		}
 
 
@@ -74,8 +74,8 @@ namespace ManagedX.Graphics
 		{
 			return
 				( structSize == other.structSize ) &&
-				( monitor == other.monitor ) &&
-				( work == other.work ) &&
+				Monitor.Equals( other.Monitor ) &&
+				Workspace.Equals( other.Workspace ) &&
 				( flags == other.flags ) && 
 				this.AdapterDeviceName.Equals( other.AdapterDeviceName, StringComparison.Ordinal );
 		}
@@ -86,7 +86,7 @@ namespace ManagedX.Graphics
 		/// <returns>Returns true if the specified object is a <see cref="MonitorInfoEx"/> structure which equals this structure, otherwise returns false.</returns>
 		public override bool Equals( object obj )
 		{
-			return ( obj is MonitorInfoEx ) && this.Equals( (MonitorInfoEx)obj );
+			return ( obj is MonitorInfoEx mie ) && this.Equals( mie );
 		}
 
 

@@ -33,7 +33,7 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 		/// <summary>Gets the device name for the adapter; can't be null.</summary>
-		public string DevicePath { get { return ( devicePath == null ) ? string.Empty : string.Copy( devicePath ); } }
+		public string DevicePath => string.Copy( devicePath ?? string.Empty );
 
 
 

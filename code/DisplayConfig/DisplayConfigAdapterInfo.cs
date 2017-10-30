@@ -5,10 +5,10 @@
 	public sealed class DisplayConfigAdapterInfo : DisplayConfigInfo
 	{
 
-		private Size size;
-		private PixelFormat format;
-		private Point position;
-		private bool isInUse;
+		private readonly Size size;
+		private readonly PixelFormat format;
+		private readonly Point position;
+		private readonly bool isInUse;
 
 
 
@@ -39,19 +39,19 @@
 
 
 		/// <summary>Gets the position, in desktop-space coordinates, of the source surface.</summary>
-		public Point SurfacePosition { get { return position; } }
+		public Point SurfacePosition => position;
 
 
 		/// <summary>Gets the size, in pixels, of the source surface.</summary>
-		public Size SurfaceSize { get { return size; } }
+		public Size SurfaceSize => size;
 
 
 		/// <summary>Gets the pixel format of the source surface.</summary>
-		public PixelFormat SurfaceFormat { get { return format; } }
+		public PixelFormat SurfaceFormat => format;
 
 
 		/// <summary>Gets a value indicating whether the source is in use.</summary>
-		public bool IsInUse { get { return isInUse; } }
+		public bool IsInUse => isInUse;
 
 	}
 

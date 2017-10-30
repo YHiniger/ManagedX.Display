@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-// Comments checked (2015-09-24)
-
 
 namespace ManagedX.Graphics
 {
+	using Win32;
+
 
 	/// <summary>This structure receives information about the display device specified by the <code>deviceIndex</code> parameter of the EnumDisplayDevices function.
 	/// <para>The four string members are set based on the parameters passed to EnumDisplayDevices.</para>
@@ -14,35 +14,39 @@ namespace ManagedX.Graphics
 	/// </summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/dd183569%28v=vs.85%29.aspx</remarks>
 	[System.Diagnostics.DebuggerStepThrough]
-	[Win32.Source( "WinGDI.h", "DISPLAY_DEVICE" )]
+	[Source( "WinGDI.h", "DISPLAY_DEVICE" )]
 	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 4, Size = 840 )]
 	internal struct DisplayDevice : IEquatable<DisplayDevice>
 	{
 
-		/// <summary>Defines the maximum length, in chars, of the <see cref="DeviceName"/>.</summary>
-		public const int MaxDeviceNameChars = 32;
+		/// <summary>Defines the maximum length, in chars, of the <see cref="DeviceName"/> string.</summary>
+		internal const int MaxDeviceNameChars = 32;
+
+		/// <summary>Defines the maximum length, in chars, of the <see cref="DeviceString"/>, <see cref="DeviceId"/> and <see cref="DeviceKey"/> strings.</summary>
+		internal const int MaxStringChars = 128;
 
 
 		#region Fields
 
-		private int structureSize;
+		private readonly int structureSize;
 
 		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = MaxDeviceNameChars )]
-		private string deviceName;
+		private readonly string deviceName;
 
-		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = 128 )]
-		private string deviceString;
+		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = MaxStringChars )]
+		private readonly string deviceString;
 
 		/// <summary>The device state; can be either a combination of <see cref="AdapterStateIndicators"/> values or a combination of <see cref="MonitorStateIndicators"/> values.</summary>
-		public readonly int State;
+		internal readonly int State;
 
-		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = 128 )]
-		private string deviceID;
+		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = MaxStringChars )]
+		private readonly string deviceID;
 
-		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = 128 )]
-		private string deviceKey;
+		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = MaxStringChars )]
+		private readonly string deviceKey;
 
 		#endregion Fields
+
 
 
 		private DisplayDevice( int structSize )
@@ -54,20 +58,21 @@ namespace ManagedX.Graphics
 		}
 
 
+
 		/// <summary>Gets the device name of the display adapter or monitor; can't be null.</summary>
-		public string DeviceName { get { return string.Copy( deviceName ?? string.Empty ); } }
+		public string DeviceName => string.Copy( deviceName ?? string.Empty );
 
 
 		/// <summary>Gets a description of the display adapter/monitor device; can't be null.</summary>
-		public string DeviceString { get { return string.Copy( deviceString ?? string.Empty ); } }
+		public string DeviceString => string.Copy( deviceString ?? string.Empty );
 
 
-		/// <summary>Gets the (adapter?) device id string corresponding to the display device.</summary>
-		public string DeviceId { get { return string.Copy( deviceID ?? string.Empty ); } }
+		/// <summary>Gets the (adapter?) device id string corresponding to the display device; can't be null.</summary>
+		public string DeviceId => string.Copy( deviceID ?? string.Empty );
 
 
-		/// <summary>Gets the (registry?) key associated with the display device.</summary>
-		public string DeviceKey { get { return string.Copy( deviceKey ?? string.Empty ); } }
+		/// <summary>Gets the (registry?) key associated with the display device; can't be null.</summary>
+		public string DeviceKey => string.Copy( deviceKey ?? string.Empty );
 
 
 
@@ -75,7 +80,7 @@ namespace ManagedX.Graphics
 		/// <returns>Returns a hash code for this <see cref="DisplayDevice"/> structure.</returns>
 		public override int GetHashCode()
 		{
-			return this.DeviceName.GetHashCode() ^ this.DeviceString.GetHashCode() ^ State ^ this.DeviceId.GetHashCode() ^ this.DeviceKey.GetHashCode();
+			return this.DeviceName.GetHashCode() ^ this.DeviceString.GetHashCode() ^ this.State ^ this.DeviceId.GetHashCode() ^ this.DeviceKey.GetHashCode();
 		}
 
 
@@ -97,7 +102,7 @@ namespace ManagedX.Graphics
 		/// <returns>Returns true if the specified object is a <see cref="DisplayDevice"/> structure which equals this structure, otherwise returns false.</returns>
 		public override bool Equals( object obj )
 		{
-			return ( obj is DisplayDevice ) && this.Equals( (DisplayDevice)obj );
+			return ( obj is DisplayDevice dd ) && this.Equals( dd );
 		}
 
 
@@ -111,7 +116,7 @@ namespace ManagedX.Graphics
 
 
 		/// <summary>The empty (and invalid) <see cref="DisplayDevice"/> structure.</summary>
-		public static readonly DisplayDevice Empty;
+		internal static readonly DisplayDevice Empty;
 
 
 		/// <summary>The default <see cref="DisplayDevice"/> structure.
@@ -141,7 +146,7 @@ namespace ManagedX.Graphics
 			return !displayDevice.Equals( other );
 		}
 
-		#endregion
+		#endregion Operators
 
 	}
 

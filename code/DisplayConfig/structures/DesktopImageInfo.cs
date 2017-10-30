@@ -17,19 +17,19 @@ namespace ManagedX.Graphics.DisplayConfig
 
 		/// <summary>Indicates the size of the VidPn source surface that is being displayed on the monitor.</summary>
 		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
-		public Point PathSourceSize;
+		public readonly Point PathSourceSize;
 
 		/// <summary>Indicates where the desktop image will be positioned within path source.
 		/// <para>Region must be completely inside the bounds of the path source size.</para>
 		/// </summary>
 		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
-		public Rect ImageRegion;
+		public readonly Rect ImageRegion;
 
 		/// <summary>Indicates which part of the desktop image for this clone group will be displayed on this path.
 		/// <para>This currently must be set to the desktop size.</para>
 		/// </summary>
 		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
-		public Rect ImageClip;
+		public readonly Rect ImageClip;
 
 
 
@@ -55,8 +55,13 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns true if the specified object is a <see cref="DesktopImageInfo"/> structure which is equivalent to this structure, otherwise returns false.</returns>
 		public override bool Equals( object obj )
 		{
-			return ( obj is DesktopImageInfo ) && this.Equals( (DesktopImageInfo)obj );
+			return ( obj is DesktopImageInfo dii ) && this.Equals( dii );
 		}
+
+
+		
+		/// <summary>The empty <see cref="DesktopImageInfo"/> structure.</summary>
+		public static readonly DesktopImageInfo Empty;
 
 
 		#region Operators

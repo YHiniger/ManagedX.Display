@@ -10,14 +10,14 @@ namespace ManagedX.Graphics
 	public sealed class DisplayMonitor : DisplayDeviceBase
 	{
 
-		#region Static methods
+		#region Static
 
+		[Win32.Source( "WinUser.h" )]
 		[SuppressUnmanagedCodeSecurity]
 		private static class SafeNativeMethods
 		{
 
 			private const string LibraryName = "User32.dll";
-			// WinUser.h
 
 			
 			/// <summary>Retrieves information about a display monitor.</summary>
@@ -28,7 +28,7 @@ namespace ManagedX.Graphics
 			/// </param>
 			/// <returns>Returns false on failure, otherwise returns true.</returns>
 			/// <remarks>https://msdn.microsoft.com/en-us/library/dd144901%28v=vs.85%29.aspx</remarks>
-			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
+			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true )]
 			[return: MarshalAs( UnmanagedType.Bool )]
 			internal static extern bool GetMonitorInfoW(
 				[In] IntPtr monitorHandle,
@@ -49,13 +49,13 @@ namespace ManagedX.Graphics
 			return info;
 		}
 
-		#endregion Static methods
+		#endregion Static
 
 
 
 		private IntPtr handle;
 		private MonitorInfoEx info;
-		private string displayConfigFriendlyName;	// provided by DisplayConfig (if supported)
+		private string displayConfigFriendlyName;	// provided by DisplayConfig
 
 
 
@@ -76,9 +76,7 @@ namespace ManagedX.Graphics
 		/// <summary>Raises the <see cref="Disconnected"/> event.</summary>
 		internal void OnDisconnected()
 		{
-			var disconnectedEvent = this.Disconnected;
-			if( disconnectedEvent != null )
-				disconnectedEvent.Invoke( this, EventArgs.Empty );
+			this.Disconnected?.Invoke( this, EventArgs.Empty );
 		}
 
 
@@ -100,50 +98,50 @@ namespace ManagedX.Graphics
 		/// <summary>Gets the device path associated with this <see cref="DisplayMonitor"/>.
 		/// <para>This string can be used with DisplayConfig and SetupAPI (not implemented).</para>
 		/// </summary>
-		public string DevicePath { get { return base.DeviceId; } }
+		public string DevicePath => base.DeviceId;
 
 
 		/// <summary>Gets a value indicating the state of this <see cref="DisplayMonitor"/>.</summary>
 		/// <seealso cref="MonitorStateIndicators"/>
-		public MonitorStateIndicators State { get { return (MonitorStateIndicators)base.RawState; } }
+		public MonitorStateIndicators State => (MonitorStateIndicators)base.RawState;
 
 
 		/// <summary>Gets a value indicating whether the monitor is active.
 		/// <para>This property is part the monitor <see cref="State"/>.</para>
 		/// </summary>
-		public bool IsActive { get { return ( base.RawState & (int)MonitorStateIndicators.Active ) == (int)MonitorStateIndicators.Active; } }
+		public bool IsActive => ( base.RawState & (int)MonitorStateIndicators.Active ) == (int)MonitorStateIndicators.Active;
 
 
 		/// <summary>Gets a value indicating whether the monitor is attached to the Windows Desktop.
 		/// <para>This property is part the monitor <see cref="State"/>.</para>
 		/// </summary>
-		public bool IsAttachedToDesktop { get { return ( base.RawState & (int)MonitorStateIndicators.Attached ) == (int)MonitorStateIndicators.Attached; } }
+		public bool IsAttachedToDesktop => ( base.RawState & (int)MonitorStateIndicators.Attached ) == (int)MonitorStateIndicators.Attached;
 
 
 		/// <summary>When <see cref="IsActive"/> is true, gets the handle (HMONITOR) associated with this <see cref="DisplayMonitor"/>.</summary>
 		public IntPtr Handle
 		{
-			get { return handle; }
-			internal set { info = GetMonitorInfo( handle = value ); }
+			get => handle;
+			internal set => info = GetMonitorInfo( handle = value );
 		}
 
 
 		#region MonitorInfoEx properties
 
 		/// <summary>When <see cref="IsActive"/> is true, gets a value indicating whether this <see cref="DisplayMonitor"/> is the primary monitor.</summary>
-		public bool IsPrimary { get { return info.IsPrimary; } }
+		public bool IsPrimary => info.IsPrimary;
 
 
 		/// <summary>When <see cref="IsActive"/> is true, gets a <see cref="Rect"/> representing the monitor screen, expressed in virtual screen coordinates.</summary>
-		public Rect Screen { get { return info.Monitor; } }
+		public Rect Screen => info.Monitor;
 
 
 		/// <summary>When <see cref="IsActive"/> is true, gets a <see cref="Rect"/> representing the monitor's workspace, expressed in virtual screen coordinates.</summary>
-		public Rect Workspace { get { return info.Workspace; } }
+		public Rect Workspace => info.Workspace;
 
 
 		/// <summary>When <see cref="IsActive"/> is true, gets the device name of the display adapter this <see cref="DisplayMonitor"/> is connected to.</summary>
-		public string AdapterDeviceName { get { return info.AdapterDeviceName; } }
+		public string AdapterDeviceName => info.AdapterDeviceName;
 
 		#endregion MonitorInfoEx properties
 	

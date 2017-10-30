@@ -14,18 +14,18 @@ namespace ManagedX.Graphics.DisplayConfig
 	{
 
 		/// <summary>The width, in pixels, of the source mode.</summary>
-		public int Width;
+		public readonly int Width;
 
 		/// <summary>The height, in pixels, of the source mode.</summary>
-		public int Height;
+		public readonly int Height;
 
 		/// <summary>The pixel format of the source mode.</summary>
-		public PixelFormat Format;
+		public readonly PixelFormat Format;
 
 		/// <summary>The position in the desktop coordinate space of the upper-left corner of this source surface.
 		/// <para>The source surface that is located at (0, 0) is always the primary source surface.</para>
 		/// </summary>
-		public Point Position;
+		public readonly Point Position;
 
 
 
@@ -51,7 +51,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns true if the specified object is a <see cref="SourceMode"/> structure which is equivalent to this structure, otherwise returns false.</returns>
 		public override bool Equals( object obj )
 		{
-			return ( obj is SourceMode ) && this.Equals( (SourceMode)obj );
+			return ( obj is SourceMode sm ) && this.Equals( sm );
 		}
 
 
@@ -60,17 +60,17 @@ namespace ManagedX.Graphics.DisplayConfig
 		public override string ToString()
 		{
 			string pixelFmt = "";
-			if( Format == DisplayConfig.PixelFormat.Undefined )
+			if( Format == PixelFormat.Undefined )
 				pixelFmt = "? bpp";
-			else if( Format == DisplayConfig.PixelFormat.NonGDI )
+			else if( Format == PixelFormat.NonGDI )
 				pixelFmt = "Non GDI";
-			else if( Format == DisplayConfig.PixelFormat.EightBpp )
+			else if( Format == PixelFormat.EightBpp )
 				pixelFmt = "8 bpp";
-			else if( Format == DisplayConfig.PixelFormat.SixteenBpp )
+			else if( Format == PixelFormat.SixteenBpp )
 				pixelFmt = "16 bpp";
-			else if( Format == DisplayConfig.PixelFormat.TwentyFourBpp )
+			else if( Format == PixelFormat.TwentyFourBpp )
 				pixelFmt = "24 bpp";
-			else if( Format == DisplayConfig.PixelFormat.ThirtyTwoBpp )
+			else if( Format == PixelFormat.ThirtyTwoBpp )
 				pixelFmt = "32 bpp";
 			return string.Format( System.Globalization.CultureInfo.InvariantCulture, "{0}×{1} ({2})", Width, Height, pixelFmt );
 		}

@@ -93,7 +93,11 @@ namespace ManagedX.Graphics.DisplayConfig
         /// <summary>Indicates that the VidPN target is a Miracast wireless display device. Supported starting in Windows 8.1.</summary>
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Miracast")]
 		[Source( "WinGDI.h", "DISPLAYCONFIG_OUTPUT_TECHNOLOGY_MIRACAST" )]
-		Miracast = 15
+		Miracast = 15,
+
+		/// <summary></summary>
+		[Source( "WinGDI.h", "DISPLAYCONFIG_OUTPUT_TECHNOLOGY_INDIRECT_WIRED" )]
+		IndirectWired = 16,
 
 	}
 

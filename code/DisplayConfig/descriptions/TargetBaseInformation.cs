@@ -14,7 +14,7 @@ namespace ManagedX.Graphics.DisplayConfig
 	internal sealed class TargetBaseInformation : TargetInformation
 	{
 
-		private VideoOutputTechnology outputTechnology;
+		private readonly VideoOutputTechnology outputTechnology;
 
 
 
@@ -29,8 +29,8 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 
-		/// <summary>When overridden, gets the video output technology.</summary>
-		public sealed override VideoOutputTechnology OutputTechnology { get { return outputTechnology; } }
+		/// <summary>Gets the video output technology.</summary>
+		public sealed override VideoOutputTechnology OutputTechnology => outputTechnology;
 
 	}
 

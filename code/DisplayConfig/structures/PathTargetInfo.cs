@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 
@@ -30,61 +31,29 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 
-		private Luid adapterId;
-		private int id;
-		private int modeInfoIdx;	// desktopModeInfoIndex (16 bits), targetModeInfoIndex (16 bits)
-		private VideoOutputTechnology outputTechnology;
-		private DisplayRotation rotation;
-		private Scaling scaling;
-		private Rational refreshRate;
-		private ScanLineOrdering scanLineOrdering;
-		[MarshalAs( UnmanagedType.Bool )]
-		private bool targetAvailable;
-		private PathTargetInfoStatus status;
+		/// <summary>The identifier of the adapter that the path is on.</summary>
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
+		public readonly Luid AdapterId;
 
+		/// <summary>The target identifier on the specified adapter that this path relates to.</summary>
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
+		public readonly int Id;
 
+		private readonly int modeInfoIdx;   // desktopModeInfoIndex (16 bits), targetModeInfoIndex (16 bits)
 
-		/// <summary>Gets the identifier of the adapter that the path is on.</summary>
-		public Luid AdapterId { get { return adapterId; } }
+		/// <summary>The target's connector type.</summary>
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
+		public readonly VideoOutputTechnology OutputTechnology;
 
+		/// <summary>Specifies the rotation of the target.</summary>
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
+		public readonly DisplayRotation Rotation;
 
-		/// <summary>Gets the target identifier on the specified adapter that this path relates to.</summary>
-		public int Id { get { return id; } }
+		/// <summary>Specifies how the source image is scaled to the target.</summary>
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
+		public readonly Scaling Scaling;
 
-
-		/// <summary>Gets the index into the mode information table that contains the target mode information for this path only when <see cref="PathInfo.SupportsVirtualMode"/> is false.
-		/// <para>If target mode information is not available, the value of this property is <see cref="InvalidModeInfoIndex"/>(-1).</para>
-		/// </summary>
-		public int ModeInfoIndex { get { return modeInfoIdx; } }
-
-
-		/// <summary>Gets the index into the mode array of the <see cref="DesktopImageInfo"/> entry that contains the desktop mode information for this path only when <see cref="PathInfo.SupportsVirtualMode"/> is true.
-		/// <para>If there is no entry for this in the mode array, the value of this property is <see cref="InvalidDesktopModeInfoIndex"/>.</para>
-		/// Requires Windows 10 or newer.
-		/// </summary>
-		public int DesktopModeInfoIndex { get { return modeInfoIdx & 0x0000ffff; } }
-
-
-		/// <summary>Gets the index into the mode array of the <see cref="TargetMode"/> entry which contains the target mode information for this path only when <see cref="PathInfo.SupportsVirtualMode"/> is true.
-		/// <para>If there is no entry for this in the mode array, the value of targetModeInfoIdx is <see cref="InvalidModeInfoIndex2"/>.</para>
-		/// Requires Windows 10 or newer.
-		/// </summary>
-		public int ModeInfoIndex2 { get { return modeInfoIdx >> 16; } }
-
-
-		/// <summary>Gets the target's connector type.</summary>
-		public VideoOutputTechnology OutputTechnology { get { return outputTechnology; } }
-
-
-		/// <summary>Gets a value which specifies the rotation of the target.</summary>
-		public DisplayRotation Rotation { get { return rotation; } }
-
-
-		/// <summary>Gets a value which specifies how the source image is scaled to the target.</summary>
-		public Scaling Scaling { get { return scaling; } }
-
-
-		/// <summary>Gets a <see cref="Rational"/> structure which specifies the refresh rate of the target.
+		/// <summary>Specifies the refresh rate of the target.
 		/// <para>
 		/// If the caller specifies target mode information, the operating system will instead use the refresh rate that is stored in the vSyncFreq member of the <see cref="VideoSignalInfo"/> structure.
 		/// In this case, the caller specifies this value in the targetVideoSignalInfo member of the <see cref="TargetMode"/> structure.
@@ -92,26 +61,49 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// A refresh rate with both the numerator and denominator set to zero (<see cref="Rational.Empty"/>) indicates that the caller does not specify a refresh rate and the operating system should use the most optimal refresh rate available.
 		/// For this case, in a call to the SetDisplayConfig function, the caller must set the scanLineOrdering member to <see cref="Graphics.ScanLineOrdering.Unspecified"/>; otherwise, SetDisplayConfig fails.
 		/// </summary>
-		public Rational RefreshRate { get { return refreshRate; } }
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
+		public readonly Rational RefreshRate;
 
-
-		/// <summary>Gets a value that specifies the scan-line ordering of the output on the target.
+		/// <summary>Specifies the scan-line ordering of the output on the target.
 		/// <para>If the caller specifies target mode information, the operating system will instead use the scan-line ordering that is stored in the scanLineOrdering member of the <see cref="VideoSignalInfo"/> structure.</para>
 		/// In this case, the caller specifies this value in the targetVideoSignalInfo member of the <see cref="TargetMode"/> structure.
 		/// </summary>
-		public ScanLineOrdering ScanLineOrdering { get { return scanLineOrdering; } }
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
+		public readonly ScanLineOrdering ScanLineOrdering;
 
-
-		/// <summary>Gets a value that specifies whether the target is available.
+		/// <summary>Indicates whether the target is available.
 		/// true indicates that the target is available.
 		/// Because the asynchronous nature of display topology changes when a monitor is removed, a path might still be marked as active even though the monitor has been removed.
 		/// In such a case, targetAvailable could be false for an active path.
 		/// This is typically a transient situation that will change after the operating system takes action on the monitor removal.</summary>
-		public bool IsTargetAvailable { get { return targetAvailable; } }
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
+		[MarshalAs( UnmanagedType.Bool )]
+		public readonly bool IsTargetAvailable;
+
+		/// <summary>Indicates the status of the target.</summary>
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
+		public readonly PathTargetInfoStatus Status;
 
 
-		/// <summary>Gets a bitwise OR of flag values that indicates the status of the target.</summary>
-		public PathTargetInfoStatus State { get { return status; } }
+
+		/// <summary>Gets the index into the mode information table that contains the target mode information for this path only when <see cref="PathInfo.SupportsVirtualMode"/> is false.
+		/// <para>If target mode information is not available, the value of this property is <see cref="InvalidModeInfoIndex"/>(-1).</para>
+		/// </summary>
+		public int ModeInfoIndex => modeInfoIdx;
+
+
+		/// <summary>Gets the index into the mode array of the <see cref="DesktopImageInfo"/> entry that contains the desktop mode information for this path only when <see cref="PathInfo.SupportsVirtualMode"/> is true.
+		/// <para>If there is no entry for this in the mode array, the value of this property is <see cref="InvalidDesktopModeInfoIndex"/>.</para>
+		/// Requires Windows 10 or newer.
+		/// </summary>
+		public int DesktopModeInfoIndex => modeInfoIdx & 0x0000ffff;
+
+
+		/// <summary>Gets the index into the mode array of the <see cref="TargetMode"/> entry which contains the target mode information for this path only when <see cref="PathInfo.SupportsVirtualMode"/> is true.
+		/// <para>If there is no entry for this in the mode array, the value of targetModeInfoIdx is <see cref="InvalidModeInfoIndex2"/>.</para>
+		/// Requires Windows 10 or newer.
+		/// </summary>
+		public int ModeInfoIndex2 => modeInfoIdx >> 16;
 
 
 
@@ -119,7 +111,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns a hash code for this <see cref="PathTargetInfo"/> structure.</returns>
 		public override int GetHashCode()
 		{
-			return adapterId.GetHashCode() ^ id ^ modeInfoIdx ^ (int)outputTechnology ^ (int)rotation ^ (int)scaling ^ refreshRate.GetHashCode() ^ (int)scanLineOrdering ^ ( targetAvailable ? -1 : 0 ) ^ (int)status;
+			return AdapterId.GetHashCode() ^ Id ^ modeInfoIdx ^ (int)OutputTechnology ^ (int)Rotation ^ (int)Scaling ^ RefreshRate.GetHashCode() ^ (int)ScanLineOrdering ^ ( IsTargetAvailable ? -1 : 0 ) ^ (int)Status;
 		}
 
 
@@ -128,7 +120,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns true if the <paramref name="other"/> structure equals this <see cref="PathTargetInfo"/> structure, otherwise returns false.</returns>
 		public bool Equals( PathTargetInfo other )
 		{
-			return adapterId.Equals( other.adapterId ) && ( id == other.id ) && ( modeInfoIdx == other.modeInfoIdx ) && ( outputTechnology == other.outputTechnology ) && ( rotation == other.rotation ) && ( scaling == other.scaling ) && refreshRate.Equals( other.refreshRate ) && ( scanLineOrdering == other.scanLineOrdering ) && ( targetAvailable == other.targetAvailable ) && ( status == other.status );
+			return AdapterId.Equals( other.AdapterId ) && ( Id == other.Id ) && ( modeInfoIdx == other.modeInfoIdx ) && ( OutputTechnology == other.OutputTechnology ) && ( Rotation == other.Rotation ) && ( Scaling == other.Scaling ) && RefreshRate.Equals( other.RefreshRate ) && ( ScanLineOrdering == other.ScanLineOrdering ) && ( IsTargetAvailable == other.IsTargetAvailable ) && ( Status == other.Status );
 		}
 
 
@@ -137,7 +129,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns true if the specified object is a <see cref="PathTargetInfo"/> structure that equals this structure; otherwise returns false.</returns>
 		public override bool Equals( object obj )
 		{
-			return ( obj is PathTargetInfo ) && this.Equals( (PathTargetInfo)obj );
+			return ( obj is PathTargetInfo pti ) && this.Equals( pti );
 		}
 
 

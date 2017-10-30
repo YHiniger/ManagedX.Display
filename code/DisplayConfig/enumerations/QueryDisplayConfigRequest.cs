@@ -34,6 +34,13 @@
 		/// </summary>
 		[Source( "WinUser.h", "QDC_VIRTUAL_MODE_AWARE" )]
 		VirtualModeAware = 0x00000010,
+
+		/// <summary>
+		/// <para>Requires Windows 10 or newer.</para>
+		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "HMD" )]
+		[Source( "WinUser.h", "QDC_INCLUDE_HMD" )]
+		IncludeHMD = 0x00000020,
 	
 	}
 

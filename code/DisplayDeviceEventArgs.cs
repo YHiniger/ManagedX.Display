@@ -22,7 +22,7 @@ namespace ManagedX.Graphics
 
 
 		/// <summary>Gets the device name of the added display device.</summary>
-		public string DeviceIdentifier { get { return string.Copy( deviceIdentifier ); } }
+		public string DeviceIdentifier => string.Copy( deviceIdentifier );
 
 	}
 

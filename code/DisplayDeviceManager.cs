@@ -17,7 +17,7 @@ namespace ManagedX.Graphics
 
 
 		/// <summary>Defines the maximum length, in chars, of a GDI device name.</summary>
-		public const int MaxDeviceNameChars = DisplayDeviceBase.MaxDeviceNameChars;
+		public const int MaxDeviceNameChars = DisplayDevice.MaxDeviceNameChars;
 
 
 		private const QueryDisplayConfigRequest DisplayConfigRequest = QueryDisplayConfigRequest.DatabaseCurrent;// | QueryDisplayConfigRequest.VirtualModeAware;
@@ -77,7 +77,6 @@ namespace ManagedX.Graphics
 
 			if( removedAdapters.Count > 0 )
 			{
-				var adapterRemovedEvent = AdapterRemoved;
 				while( removedAdapters.Count > 0 )
 				{
 					var s = removedAdapters[ 0 ];
@@ -87,18 +86,15 @@ namespace ManagedX.Graphics
 					adaptersByDeviceName.Remove( s );
 
 					adapter.OnRemoved();
-					if( adapterRemovedEvent != null )
-						adapterRemovedEvent.Invoke( null, new DisplayDeviceEventArgs( adapter.DeviceIdentifier ) );
+					AdapterRemoved?.Invoke( null, new DisplayDeviceEventArgs( adapter.DeviceIdentifier ) );
 				}
 			}
 
 			if( addedAdapters.Count > 0 )
 			{
-				var adapterAddedEvent = AdapterAdded;
 				while( addedAdapters.Count > 0 )
 				{
-					if( adapterAddedEvent != null )
-						adapterAddedEvent.Invoke( null, new DisplayDeviceEventArgs( addedAdapters[ 0 ] ) );
+					AdapterAdded?.Invoke( null, new DisplayDeviceEventArgs( addedAdapters[ 0 ] ) );
 					addedAdapters.RemoveAt( 0 );
 				}
 			}
@@ -113,8 +109,8 @@ namespace ManagedX.Graphics
 			}
 
 
-			if( primaryAdapterChanged && PrimaryAdapterChanged != null )
-				PrimaryAdapterChanged.Invoke( null, EventArgs.Empty );
+			if( primaryAdapterChanged )
+				PrimaryAdapterChanged?.Invoke( null, EventArgs.Empty );
 
 			isInitialized = true;
 		}
@@ -132,8 +128,7 @@ namespace ManagedX.Graphics
 				
 				if( primaryAdapterDeviceName != null )
 				{
-					DisplayAdapter adapter;
-					if( adaptersByDeviceName.TryGetValue( primaryAdapterDeviceName, out adapter ) )
+					if( adaptersByDeviceName.TryGetValue( primaryAdapterDeviceName, out DisplayAdapter adapter ) )
 						return adapter;
 				}
 				return null;
@@ -173,8 +168,7 @@ namespace ManagedX.Graphics
 			if( !isInitialized )
 				Refresh();
 
-			DisplayAdapter adapter;
-			if( adaptersByDeviceName.TryGetValue( deviceName, out adapter ) )
+			if( adaptersByDeviceName.TryGetValue( deviceName, out DisplayAdapter adapter ) )
 				return adapter;
 			return null;
 		}
@@ -223,7 +217,8 @@ namespace ManagedX.Graphics
 		public static DisplayAdapter GetAdapterById( Luid adapterId )
 		{
 			var adapters = Adapters;
-			for( var a = 0; a < adapters.Count; a++ )
+			var aMax = adapters.Count;
+			for( var a = 0; a < aMax; ++a )
 			{
 				var adapter = adapters[ a ];
 				var info = adapter.GetDisplayConfigInfo();
@@ -248,8 +243,7 @@ namespace ManagedX.Graphics
 
 			var monitorInfo = DisplayMonitor.GetMonitorInfo( monitorHandle );
 
-			DisplayAdapter adapter;
-			if( adaptersByDeviceName.TryGetValue( monitorInfo.AdapterDeviceName, out adapter ) )
+			if( adaptersByDeviceName.TryGetValue( monitorInfo.AdapterDeviceName, out DisplayAdapter adapter ) )
 				return adapter.Monitors.GetMonitorByHandle( monitorHandle );
 
 			return null;
@@ -276,7 +270,8 @@ namespace ManagedX.Graphics
 			var adapters = new DisplayAdapter[ adaptersByDeviceName.Count ];
 			adaptersByDeviceName.Values.CopyTo( adapters, 0 );
 
-			for( var a = 0; a < adapters.Length; a++ )
+			var aMax = adapters.Length;
+			for( var a = 0; a < aMax; ++a )
 			{
 				var monitor = adapters[ a ].Monitors.GetMonitorByDevicePath( devicePath );
 				if( monitor != null )
@@ -333,7 +328,8 @@ namespace ManagedX.Graphics
 					currentConfiguration.Refresh();
 
 				var paths = currentConfiguration.PathInfo;
-				for( var p = 0; p < paths.Count; ++p )
+				var pMax = paths.Count;
+				for( var p = 0; p < pMax; ++p )
 				{
 					var path = paths[ p ];
 					var source = path.SourceInfo;
@@ -370,7 +366,8 @@ namespace ManagedX.Graphics
 					currentConfiguration.Refresh();
 
 				var paths = currentConfiguration.PathInfo;
-				for( var p = 0; p < paths.Count; ++p )
+				var pMax = paths.Count;
+				for( var p = 0; p < pMax; ++p )
 				{
 					var path = paths[ p ];
 					var target = path.TargetInfo;

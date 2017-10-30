@@ -63,6 +63,7 @@ namespace ManagedX.Graphics
 		}
 
 
+		[Win32.Source( "WinUser.h" )]
 		[SuppressUnmanagedCodeSecurity]
 		private static class NativeMethods
 		{
@@ -99,7 +100,7 @@ namespace ManagedX.Graphics
 			/// </param>
 			/// <returns>Returns true on success, otherwise false (<paramref name="deviceIndex"/> is out-of-range).</returns>
 			/// <remarks>https://msdn.microsoft.com/en-us/library/dd162609%28v=vs.85%29.aspx</remarks>
-			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
+			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true )]
 			[return: MarshalAs( UnmanagedType.Bool )]
 			internal static extern bool EnumDisplayDevicesW(
 				[In, MarshalAs( UnmanagedType.LPWStr )] string deviceName,
@@ -140,7 +141,7 @@ namespace ManagedX.Graphics
 			/// <param name="options">See <see cref="EnumDisplaySettingsExOptions"/>.</param>
 			/// <returns></returns>
 			/// <remarks>https://msdn.microsoft.com/en-us/library/dd162612(v=vs.85).aspx</remarks>
-			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
+			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true )]
 			[return: MarshalAs( UnmanagedType.Bool )]
 			private static extern bool EnumDisplaySettingsExW(
 				[In, MarshalAs( UnmanagedType.LPWStr )] string deviceName,
@@ -148,11 +149,6 @@ namespace ManagedX.Graphics
 				[In, Out] ref DisplayDeviceMode devMode,
 				[In] EnumDisplaySettingsExOptions options
 			);
-			//BOOL EnumDisplaySettingsEx(
-			//	_In_opt_ LPCWSTR lpszDeviceName,
-			//	_In_ DWORD iModeNum,
-			//	_Inout_ DEVMODEW* lpDevMode,
-			//	_In_ DWORD dwFlags);
 
 
 			/// <summary>Returns a read-only collection containing information about all the graphics modes for a display device.</summary>
@@ -242,6 +238,7 @@ namespace ManagedX.Graphics
 			/// </param>
 			/// <param name="param">Application-defined data that <see cref="EnumDisplayMonitors"/> passes directly to the enumeration function.</param>
 			/// <returns>To continue the enumeration, returns true. Otherwise returns false, which causes <see cref="EnumDisplayMonitors"/> to return false.</returns>
+			/// <remarks>https://msdn.microsoft.com/en-us/library/dd145061%28v=vs.85%29.aspx</remarks>
 			[return: MarshalAs( UnmanagedType.Bool )]
 			internal unsafe delegate bool MonitorEnumProc(
 				[In] IntPtr monitorHandle,
@@ -249,7 +246,6 @@ namespace ManagedX.Graphics
 				[In] Rect* monitor,
 				[In] IntPtr param
 			);
-			// https://msdn.microsoft.com/en-us/library/dd145061%28v=vs.85%29.aspx
 
 
 			/// <summary>Enumerates display monitors (including invisible pseudo-monitors associated with the mirroring drivers) that intersect a region formed by the intersection of a specified clipping rectangle and the visible region of a device context.
@@ -269,7 +265,7 @@ namespace ManagedX.Graphics
 			/// <param name="data">Application-defined data that EnumDisplayMonitors passes directly to the <see cref="MonitorEnumProc"/> function.</param>
 			/// <returns>Returns true on success, otherwise returns false (ie: the callback function interrupted the enumeration).</returns>
 			/// <remarks>https://msdn.microsoft.com/en-us/library/dd162610%28v=vs.85%29.aspx</remarks>
-			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
+			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true )]
 			[return: MarshalAs( UnmanagedType.Bool )]
 			internal unsafe static extern bool EnumDisplayMonitors(
 				[In] IntPtr deviceContextHandle,
@@ -288,7 +284,7 @@ namespace ManagedX.Graphics
 			/// <para>If the window does not intersect a display monitor, the return value depends on the value of <paramref name="option"/>.</para>
 			/// </returns>
 			/// <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/dd145064%28v=vs.85%29.aspx</remarks>
-			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
+			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true )]
 			internal static extern IntPtr MonitorFromWindow(
 				[In] IntPtr windowHandle,
 				[In] MonitorFromWindowOption option
@@ -364,7 +360,7 @@ namespace ManagedX.Graphics
 
 
 		/// <summary>Gets the primary <see cref="DisplayMonitor"/>.</summary>
-		internal static DisplayMonitor PrimaryMonitor { get { return primaryDisplayMonitor; } }
+		internal static DisplayMonitor PrimaryMonitor => primaryDisplayMonitor;
 
 
 		/// <summary>Raised when the <see cref="PrimaryMonitor"/> changed.</summary>
@@ -397,24 +393,21 @@ namespace ManagedX.Graphics
 			if( !mode.Equals( currentMode ) )
 			{
 				currentMode = mode;
-				
-				var currentModeChangedEvent = this.CurrentModeChanged;
-				if( currentModeChangedEvent != null )
-					currentModeChangedEvent.Invoke( this, EventArgs.Empty );
+				this.CurrentModeChanged?.Invoke( this, EventArgs.Empty );
 			}
 		}
 
 
 		/// <summary>Gets the device id of this <see cref="DisplayAdapter"/>.</summary>
-		new public string DeviceId { get { return base.DeviceId; } }
+		new public string DeviceId => base.DeviceId;
 
 
 		/// <summary>Gets a value indicating the state of this <see cref="DisplayAdapter"/>.</summary>
-		public AdapterStateIndicators State { get { return (AdapterStateIndicators)base.RawState; } }
+		public AdapterStateIndicators State => (AdapterStateIndicators)base.RawState;
 
 
 		/// <summary>Gets a read-only collection containing all (32 bpp) display modes supported by both this <see cref="DisplayAdapter"/> and its <see cref="Monitors"/>.</summary>
-		public ReadOnlyDisplayDeviceModeCollection DisplayModes { get { return NativeMethods.EnumDisplaySettingsEx( base.DeviceIdentifier, EnumDisplaySettingsExOptions.None ); } }
+		public ReadOnlyDisplayDeviceModeCollection DisplayModes => NativeMethods.EnumDisplaySettingsEx( base.DeviceIdentifier, EnumDisplaySettingsExOptions.None );
 
 
 		private void RefreshMonitors()
@@ -435,22 +428,20 @@ namespace ManagedX.Graphics
 			var addedMonitors = new List<string>();
 			var primaryMonitorChanged = false;
 
-			DisplayMonitor displayMonitor;
 			var monitors = EnumDisplayDevices( deviceName, true );
+			DisplayMonitor displayMonitor;
 
 			h = 0;
 			for( var m = 0; m < monitors.Count; ++m )
 			{
 				var monitor = monitors[ m ];
 
-				IntPtr handle;
+				var handle = IntPtr.Zero;
 				if( ( monitor.State & (int)MonitorStateIndicators.Active ) == (int)MonitorStateIndicators.Active && ( h < handles.Count ) )
 				{
 					handle = handles[ h ];	// FIXME - this is not the right handle when topology is Clone !
 					++h;
 				}
-				else
-					handle = IntPtr.Zero;
 
 				if( monitorsByDeviceName.TryGetValue( monitor.DeviceName, out displayMonitor ) )
 				{
@@ -494,11 +485,7 @@ namespace ManagedX.Graphics
 
 
 			if( primaryMonitorChanged )
-			{
-				var primaryMonitorChangedEvent = PrimaryMonitorChanged;
-				if( primaryMonitorChangedEvent != null )
-					primaryMonitorChangedEvent.Invoke( this, EventArgs.Empty );
-			}
+				PrimaryMonitorChanged?.Invoke( this, EventArgs.Empty );
 		}
 
 
@@ -518,11 +505,11 @@ namespace ManagedX.Graphics
 		/// <summary>Gets the current display mode of this <see cref="DisplayAdapter"/>.
 		/// <para>Requires the adapter to be attached to the desktop.</para>
 		/// </summary>
-		public DisplayDeviceMode CurrentMode { get { return currentMode; } }
+		public DisplayDeviceMode CurrentMode => currentMode;
 
 
 		/// <summary>Gets the display mode associated with this <see cref="DisplayAdapter"/>, as stored in the Windows registry.</summary>
-		public DisplayDeviceMode RegistryMode { get { return NativeMethods.GetRegistryDisplaySettingsEx( base.DeviceIdentifier, EnumDisplaySettingsExOptions.None ); } }
+		public DisplayDeviceMode RegistryMode => NativeMethods.GetRegistryDisplaySettingsEx( base.DeviceIdentifier, EnumDisplaySettingsExOptions.None );
 
 
 		#region Events
@@ -538,9 +525,7 @@ namespace ManagedX.Graphics
 			
 			monitorsByDeviceName.Clear();
 			
-			var removedEvent = this.Removed;
-			if( removedEvent != null )
-				removedEvent.Invoke( this, EventArgs.Empty );
+			this.Removed?.Invoke( this, EventArgs.Empty );
 		}
 
 
@@ -559,9 +544,7 @@ namespace ManagedX.Graphics
 		/// <param name="connected">True to raise the <see cref="MonitorConnected"/> event, false to raise the <see cref="MonitorDisconnected"/> event.</param>
 		private void OnMonitorConnectedOrDisconnected( string deviceIdentifier, bool connected )
 		{
-			var eventHandler = ( connected ? this.MonitorConnected : this.MonitorDisconnected );
-			if( eventHandler != null )
-				eventHandler.Invoke( this, new DisplayDeviceEventArgs( deviceIdentifier ) );
+			( connected ? this.MonitorConnected : this.MonitorDisconnected )?.Invoke( this, new DisplayDeviceEventArgs( deviceIdentifier ) );
 		}
 
 		#endregion Events

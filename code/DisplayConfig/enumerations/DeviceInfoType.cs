@@ -51,14 +51,28 @@
 		[Source( "WinGDI.h", "DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_BASE_TYPE" )]
 		GetTargetBaseType = 6,
 
-
-		/// <summary></summary>
+		/// <summary>Specifies the state of virtual mode support.
+		/// <para>If the DisplayConfigGetDeviceInfo function is successful, DisplayConfigGetDeviceInfo returns virtual mode support information in the DISPLAYCONFIG_SUPPORT_VIRTUAL_RESOLUTION structure.</para>
+		/// Supported starting in Windows 10.
+		/// </summary>
 		[Source( "WinGDI.h", "DISPLAYCONFIG_DEVICE_INFO_GET_SUPPORT_VIRTUAL_RESOLUTION" )]
 		GetSupportVirtualResolution = 7,
 
-		/// <summary></summary>
+		/// <summary>Specifies how to set the state of virtual mode support.
+		/// <para>If the DisplayConfigGetDeviceInfo function is successful, DisplayConfigGetDeviceInfo uses info in the DISPLAYCONFIG_SUPPORT_VIRTUAL_RESOLUTION structure to change the state of virtual mode support.</para>
+		/// Supported starting in Windows 10.
+		/// </summary>
 		[Source( "WinGDI.h", "DISPLAYCONFIG_DEVICE_INFO_SET_SUPPORT_VIRTUAL_RESOLUTION" )]
-		SetSupportVirtualResolution = 8
+		SetSupportVirtualResolution = 8,
+
+		
+		/// <summary></summary>
+		[Source( "WinGDI.h", "DISPLAYCONFIG_DEVICE_INFO_GET_ADVANCED_COLOR_INFO" )]
+		GetAdvancedColorInfo = 9,
+		
+		/// <summary></summary>
+		[Source( "WinGDI.h", "DISPLAYCONFIG_DEVICE_INFO_SET_ADVANCED_COLOR_STATE" )]
+		SetAdvancedColorState = 10,
 
 	}
 

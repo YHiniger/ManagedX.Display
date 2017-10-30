@@ -5,9 +5,9 @@
 	public abstract class DisplayConfigInfo
 	{
 
-		private Luid adapterId;
-		private int id;
-		private TopologyIndicators topology;
+		private readonly Luid adapterId;
+		private readonly int id;
+		private readonly TopologyIndicators topology;
 		
 
 
@@ -21,15 +21,15 @@
 
 
 		/// <summary>Gets the display adapter id.</summary>
-		public Luid AdapterId { get { return adapterId; } }
+		public Luid AdapterId => adapterId;
 
 
 		/// <summary>Gets the display id.</summary>
-		public int Id { get { return id; } }
+		public int Id => id;
 
 
 		/// <summary>Gets the display topology.</summary>
-		public TopologyIndicators Topology { get { return topology; } }
+		public TopologyIndicators Topology => topology;
 
 	}
 

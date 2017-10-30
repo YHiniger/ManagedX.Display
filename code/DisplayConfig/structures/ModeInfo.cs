@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 
@@ -13,24 +14,30 @@ namespace ManagedX.Graphics.DisplayConfig
 	public struct ModeInfo : IEquatable<ModeInfo>
 	{
 
+		/// <summary>Indicates whether the <see cref="ModeInfo"/> structure represents source or target mode information.</summary>
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
 		[FieldOffset( 0 )]
-		private ModeInfoType infoType;
+		public readonly ModeInfoType InfoType;
 
+		/// <summary>The source or target identifier on the specified adapter this path relates to.</summary>
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
 		[FieldOffset( 4 )]
-		private int id;
+		public readonly int Id;
 
+		/// <summary>The identifier of the adapter this source or target mode information relates to.</summary>
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
 		[FieldOffset( 8 )]
-		private Luid adapterId;
+		public readonly Luid AdapterId;
 
-		/// <summary>A valid <see cref="TargetMode"/> structure that describes the specified target only when <see cref="infoType"/> is <see cref="ModeInfoType.Target"/>.</summary>
+		/// <summary>A valid <see cref="TargetMode"/> structure that describes the specified target only when <see cref="InfoType"/> is <see cref="ModeInfoType.Target"/>.</summary>
 		[FieldOffset( 16 )]
 		private TargetMode targetMode;
 
-		/// <summary>A valid <see cref="SourceMode"/> structure that describes the specified source only when <see cref="infoType"/> is <see cref="ModeInfoType.Source"/>.</summary>
+		/// <summary>A valid <see cref="SourceMode"/> structure that describes the specified source only when <see cref="InfoType"/> is <see cref="ModeInfoType.Source"/>.</summary>
 		[FieldOffset( 16 )]
 		private SourceMode sourceMode;
 
-		/// <summary>A <see cref="DesktopImageInfo"/> structure that describes information about the desktop image only when <see cref="infoType"/> is <see cref="ModeInfoType.DesktopImage"/>.
+		/// <summary>A <see cref="DesktopImageInfo"/> structure that describes information about the desktop image only when <see cref="InfoType"/> is <see cref="ModeInfoType.DesktopImage"/>.
 		/// <para>Supported starting in Windows 10.</para>
 		/// </summary>
 		[FieldOffset( 16 )]
@@ -38,87 +45,40 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 
-		/// <summary>Gets a value indicating whether the <see cref="ModeInfo"/> structure represents source or target mode information.
-		/// <para>If InfoType is <see cref="ModeInfoType.Source"/>, the sourceMode parameter value contains a valid <see cref="SourceMode"/> structure describing the specified source.</para>
-		/// <para>If InfoType is <see cref="ModeInfoType.Target"/>, the targetMode parameter value contains a valid <see cref="TargetMode"/> structure describing the specified target.</para>
-		/// </summary>
-		public ModeInfoType InfoType { get { return infoType; } }
-
-
-		/// <summary>Gets the source or target identifier on the specified adapter this path relates to.</summary>
-		public int Id { get { return id; } }
-
-
-		/// <summary>Gets the identifier of the adapter this source or target mode information relates to.</summary>
-		public Luid AdapterId { get { return adapterId; } }
-
-
 
 		#region Source mode
 
 		/// <summary>When <see cref="InfoType"/> is <see cref="ModeInfoType.Source"/>, gets the size, in pixels, of the source mode.</summary>
-		public Size Size
-		{
-			get
-			{
-				if( infoType == ModeInfoType.Source )
-					return new Size( sourceMode.Width, sourceMode.Height );
-				return Size.Empty;
-			}
-		}
+		public Size Size => InfoType == ModeInfoType.Source ? new Size( sourceMode.Width, sourceMode.Height ) : Size.Empty;
 
 
 		/// <summary>When <see cref="InfoType"/> is <see cref="ModeInfoType.Source"/>, gets the pixel format of the source mode.</summary>
-		public PixelFormat Format
-		{
-			get
-			{
-				if( infoType == ModeInfoType.Source )
-					return sourceMode.Format;
-				return PixelFormat.Undefined;
-			}
-		}
+		public PixelFormat Format => InfoType == ModeInfoType.Source ? sourceMode.Format : PixelFormat.Undefined;
 		
 
 		/// <summary>When <see cref="InfoType"/> is <see cref="ModeInfoType.Source"/>, gets the position, in desktop coordinates, of the upper-left corner of the source mode.</summary>
-		public Point Position
-		{
-			get
-			{
-				if( infoType == ModeInfoType.Source )
-					return sourceMode.Position;
-				return Point.Zero;
-			}
-		}
+		public Point Position => InfoType == ModeInfoType.Source ? sourceMode.Position : Point.Zero;
 
 		#endregion Source mode
 
 
-		/// <summary>When <see cref="InfoType"/> is <see cref="ModeInfoType.Target"/>, gets information about the video signal.</summary>
-		public VideoSignalInfo VideoSignalInformation
-		{
-			get
-			{
-				if( infoType == ModeInfoType.Target )
-					return targetMode.TargetVideoSignalInfo;
-				return VideoSignalInfo.Empty;
-			}
-		}
+		/// <summary>When <see cref="InfoType"/> is <see cref="ModeInfoType.Target"/>, gets information about the target video signal.</summary>
+		public VideoSignalInfo VideoSignalInformation => InfoType == ModeInfoType.Target ? targetMode.TargetVideoSignalInfo : VideoSignalInfo.Empty;
 
 
 		/// <summary>When <see cref="InfoType"/> is <see cref="ModeInfoType.DesktopImage"/>, gets information about the desktop image.</summary>
-		public DesktopImageInfo DesktopImage { get { return desktopImageInfo; } }
+		public DesktopImageInfo DesktopImage => InfoType == ModeInfoType.DesktopImage ? desktopImageInfo : DesktopImageInfo.Empty;
 
 
 		/// <summary>Returns a hash code for this <see cref="ModeInfo"/> structure.</summary>
 		/// <returns>Returns a hash code for this <see cref="ModeInfo"/> structure.</returns>
 		public override int GetHashCode()
 		{
-			int value = (int)infoType ^ id ^ adapterId.GetHashCode();
+			var value = (int)InfoType ^ Id ^ AdapterId.GetHashCode();
 			
-			if( infoType == ModeInfoType.Source )
+			if( InfoType == ModeInfoType.Source )
 				value ^= sourceMode.GetHashCode();
-			else if( infoType == ModeInfoType.Target )
+			else if( InfoType == ModeInfoType.Target )
 				value ^= targetMode.GetHashCode();
 				
 			return value;
@@ -130,14 +90,13 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns true if this <see cref="ModeInfo"/> structure equals the <paramref name="other"/> structure, otherwise returns false.</returns>
 		public bool Equals( ModeInfo other )
 		{
-			bool equal = ( infoType == other.infoType ) && ( id == other.id ) && adapterId.Equals( other.adapterId );
-			if( !equal )
+			if( ( InfoType != other.InfoType ) || ( Id != other.Id ) || !AdapterId.Equals( other.AdapterId ) )
 				return false;
 
-			if( infoType == ModeInfoType.Source )
+			if( InfoType == ModeInfoType.Source )
 				return sourceMode.Equals( other.sourceMode );
 
-			if( infoType == ModeInfoType.Target )
+			if( InfoType == ModeInfoType.Target )
 				return targetMode.Equals( other.targetMode );
 
 			return true;
@@ -149,7 +108,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns true if the specified object is a <see cref="ModeInfo"/> structure which equals this structure.</returns>
 		public override bool Equals( object obj )
 		{
-			return ( obj is ModeInfo ) && this.Equals( (ModeInfo)obj );
+			return ( obj is ModeInfo mi ) && this.Equals( mi );
 		}
 
 

@@ -14,10 +14,10 @@ namespace ManagedX.Graphics.DisplayConfig
 	public sealed class TargetDeviceInformation : TargetInformation
 	{
 
-		/// <summary>Defines the maximum length, in unicode chars, of the <see cref="FriendlyName"/>.</summary>
+		/// <summary>Defines the maximum length, in chars, of the <see cref="FriendlyName"/>.</summary>
 		public const int MaxFriendlyNameLength = 64;
 
-		/// <summary>Defines the maximum length, in unicode chars, of the <see cref="DevicePath"/>.</summary>
+		/// <summary>Defines the maximum length, in chars, of the <see cref="DevicePath"/>.</summary>
 		public const int MaxDevicePathLength = 128;
 
 
@@ -46,14 +46,14 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 
-		private Indicators indicators;
-		private VideoOutputTechnology outputTechnology;
-		private int edid;    // might not be valid (see indicators)
-		private int connectorInstance;
+		private readonly Indicators indicators;
+		private readonly VideoOutputTechnology outputTechnology;
+		private readonly int edid;    // might not be valid (see indicators)
+		private readonly int connectorInstance;
 		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = MaxFriendlyNameLength )]
-		private string monitorFriendlyDeviceName; // might not be valid (see indicators)
+		private readonly string monitorFriendlyDeviceName; // might not be valid (see indicators)
 		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = MaxDevicePathLength )]
-		private string monitorDevicePath;
+		private readonly string monitorDevicePath;
 
 
 
@@ -68,13 +68,13 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 		/// <summary>A value from the <see cref="VideoOutputTechnology"/> enumeration that specifies the target's connector type.</summary>
-		public sealed override VideoOutputTechnology OutputTechnology { get { return outputTechnology; } }
+		public sealed override VideoOutputTechnology OutputTechnology => outputTechnology;
 
 
 		#region EDID
 
 		/// <summary>Gets a value indicating whether extended display identification data (EDID) is valid; see <see cref="ExtendedDisplayIdentificationDataManufactureId"/> and <see cref="ExtendedDisplayIdentificationDataProductCodeId"/>.</summary>
-		public bool IsExtendedDisplayIdentificationDataValid { get { return ( indicators & Indicators.ExtendedDisplayInformationDataIdsValid ) == Indicators.ExtendedDisplayInformationDataIdsValid; } }
+		public bool IsExtendedDisplayIdentificationDataValid => ( indicators & Indicators.ExtendedDisplayInformationDataIdsValid ) == Indicators.ExtendedDisplayInformationDataIdsValid;
 
 
 		/// <summary>When <see cref="IsExtendedDisplayIdentificationDataValid"/> is true, gets the manufacture identifier from the monitor extended display identification data (EDID).</summary>
@@ -107,7 +107,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <para>The connector instance is a consecutive one-based number that is unique within each adapter.</para>
 		/// If this is the only target of this type on the adapter, this value is zero.
 		/// </summary>
-		public int ConnectorInstance { get { return connectorInstance; } }
+		public int ConnectorInstance => connectorInstance;
 
 
 		/// <summary>Gets the friendly name for the monitor, or an empty string.
@@ -128,7 +128,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <summary>Gets a (unicode) string that is the path to the device name for the monitor.
 		/// <para>This path can be used with SetupAPI.dll to obtain the device name that is contained in the installation package.</para>
 		/// </summary>
-		public string DevicePath { get { return string.Copy( monitorDevicePath ?? string.Empty ); } }
+		public string DevicePath => string.Copy( monitorDevicePath ?? string.Empty );
 
 
 		/// <summary>Returns the <see cref="FriendlyName"/>.</summary>

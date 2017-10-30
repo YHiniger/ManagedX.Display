@@ -237,26 +237,43 @@ namespace ManagedX.Graphics.DisplayConfig
 				[In, Out] TargetDeviceInformation requestPacket
 			);
 
-			/// <summary>Retrieves display configuration information about the device.</summary>
-			/// <param name="requestPacket">Contains information about the request, which includes the packet type in the type member.
-			/// <para>The type and size of additional data that the function returns after the header structure depend on the packet type.</para>
-			/// </param>
-			/// <returns>Returns <see cref="ErrorCode.None"/> on success, otherwise returns one of the following <see cref="ErrorCode"/>:
-			/// <see cref="ErrorCode.InvalidParameter"/>,
-			/// <see cref="ErrorCode.NotSupported"/>,
-			/// <see cref="ErrorCode.AccessDenied"/>,
-			/// <see cref="ErrorCode.InsufficientBuffer"/>, or
-			/// <see cref="ErrorCode.GenFailure"/>.</returns>
-			/// <remarks>
-			/// Use this function to obtain additional information about a source or target for an adapter, such as the display name, the preferred display mode, and source device name.
-			/// The caller can call this function to obtain more friendly names to display in the user interface.
-			/// The caller can obtain names for the adapter, the source, and the target.
-			/// The caller can also call this function to obtain the best resolution of the connected display device.
-			/// </remarks>
-			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
-			internal static extern ErrorCode DisplayConfigGetDeviceInfo(
-				[In, Out] TargetPreferredModeInformation requestPacket
-			);
+			///// <summary>Retrieves display configuration information about the device.</summary>
+			///// <param name="requestPacket">Contains information about the request, which includes the packet type in the type member.
+			///// <para>The type and size of additional data that the function returns after the header structure depend on the packet type.</para>
+			///// </param>
+			///// <returns>Returns <see cref="ErrorCode.None"/> on success, otherwise returns one of the following <see cref="ErrorCode"/>:
+			///// <see cref="ErrorCode.InvalidParameter"/>,
+			///// <see cref="ErrorCode.NotSupported"/>,
+			///// <see cref="ErrorCode.AccessDenied"/>,
+			///// <see cref="ErrorCode.InsufficientBuffer"/>, or
+			///// <see cref="ErrorCode.GenFailure"/>.</returns>
+			///// <remarks>
+			///// Use this function to obtain additional information about a source or target for an adapter, such as the display name, the preferred display mode, and source device name.
+			///// The caller can call this function to obtain more friendly names to display in the user interface.
+			///// The caller can obtain names for the adapter, the source, and the target.
+			///// The caller can also call this function to obtain the best resolution of the connected display device.
+			///// </remarks>
+			//[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
+			//internal static extern ErrorCode DisplayConfigGetDeviceInfo(
+			//	[In, Out] TargetPreferredModeInformation requestPacket
+			//);
+
+
+			///// <summary></summary>
+			///// <param name="requestPacket"></param>
+			///// <returns></returns>
+			//[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
+			//internal static extern ErrorCode DisplayConfigGetDeviceInfo(
+			//	[In, Out] AdvancedColorInformation requestPacket
+			//);
+
+			///// <summary></summary>
+			///// <param name="requestPacket"></param>
+			///// <returns></returns>
+			//[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
+			//internal static extern ErrorCode DisplayConfigGetDeviceInfo(
+			//	[In, Out] VirtualResolutionSupportInformation requestPacket
+			//);
 
 			#endregion DisplayConfigGetDeviceInfo
 
@@ -301,7 +318,6 @@ namespace ManagedX.Graphics.DisplayConfig
 
 			return SafeNativeMethods.QueryDisplayConfig( request, ref pathInfoArrayElementCount, pathInfoArray, ref modeInfoArrayElementCount, modeInfoArray, IntPtr.Zero );
 		}
-
 
 
 		/// <summary>Returns a <see cref="DisplayConfigException"/> for a given error code.</summary>
@@ -395,7 +411,6 @@ namespace ManagedX.Graphics.DisplayConfig
 			throw GetException( errorCode );
 		}
 
-
 		/// <summary>Returns the device path of an adapter given its source info.</summary>
 		/// <param name="sourceInfo">A valid <see cref="PathSourceInfo"/> structure.</param>
 		/// <returns>Returns the adapter device path.</returns>
@@ -455,6 +470,34 @@ namespace ManagedX.Graphics.DisplayConfig
 		//	throw GetException( errorCode );
 		//}
 
+		
+		///// <summary></summary>
+		///// <param name="targetInfo"></param>
+		///// <returns></returns>
+		//public static AdvancedColorInformation GetAdvancedColorInformation( PathTargetInfo targetInfo )
+		//{
+		//	var info = new AdvancedColorInformation( targetInfo.AdapterId, targetInfo.Id );
+		//	var errorCode = SafeNativeMethods.DisplayConfigGetDeviceInfo( info );
+		//	if( errorCode != ErrorCode.None )
+		//		throw GetException( errorCode );
+		//	return info;
+		//}
+
+
+		///// <summary>
+		///// <para>Requires Windows 10 or newer.</para>
+		///// </summary>
+		///// <param name="targetInfo"></param>
+		///// <returns></returns>
+		//public static VirtualResolutionSupportInformation GetVirtualResolutionSupportInformation( PathTargetInfo targetInfo )
+		//{
+		//	var info = new VirtualResolutionSupportInformation( targetInfo.AdapterId, targetInfo.Id );
+		//	var errorCode = SafeNativeMethods.DisplayConfigGetDeviceInfo( info );
+		//	if( errorCode != ErrorCode.None )
+		//		throw GetException( errorCode );
+		//	return info;
+		//}
+
 
 
 		/// <summary>Defines the minimum version of Windows supported by DisplayConfig: 6.1 (Windows 7).</summary>
@@ -506,7 +549,7 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 
-		private QueryDisplayConfigRequest request;
+		private readonly QueryDisplayConfigRequest request;
 		private PathInfo[] paths;
 		private ModeInfo[] modes;
 		private TopologyIndicators topologyId;
@@ -535,7 +578,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <summary>Gets the request associated with this <see cref="DisplayConfiguration"/>.
 		/// <para>This is the request passed to the constructor (via the <see cref="Query"/> method) and used to <see cref="Refresh"/> the configuration.</para>
 		/// </summary>
-		public QueryDisplayConfigRequest Request { get { return request; } }
+		public QueryDisplayConfigRequest Request => request;
 
 
 		/// <summary>Refreshes the <see cref="DisplayConfiguration"/>.</summary>
@@ -552,15 +595,15 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 		/// <summary>Gets a read-only collection containing information about all display paths for this configuration.</summary>
-		public ReadOnlyPathInfoCollection PathInfo { get { return new ReadOnlyPathInfoCollection( paths ); } }
+		public ReadOnlyPathInfoCollection PathInfo => new ReadOnlyPathInfoCollection( paths );
 
 
 		/// <summary>Gets a read-only collection containing information about supported display modes for this configuration.</summary>
-		public ReadOnlyModeInfoCollection ModeInfo { get { return new ReadOnlyModeInfoCollection( modes ); } }
+		public ReadOnlyModeInfoCollection ModeInfo => new ReadOnlyModeInfoCollection( modes );
 
 
 		/// <summary>Gets the type of display topology.</summary>
-		public TopologyIndicators Topology { get { return topologyId; } }
+		public TopologyIndicators Topology => topologyId;
 
 	}
 
