@@ -28,12 +28,6 @@ namespace ManagedX.Graphics
 
 
 
-		/// <summary>Gets the <see cref="DeviceName"/> of this display device.
-		/// <para>The device name is in the form "\\.\DISPLAY1" for an adapter, and "\\.\DISPLAY1\Monitor0" for a monitor.</para>
-		/// </summary>
-		public string DeviceIdentifier => device.DeviceName;
-
-
 		/// <summary>Gets the friendly name of this display device.</summary>
 		public virtual string DisplayName
 		{

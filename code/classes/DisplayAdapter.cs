@@ -379,7 +379,7 @@ namespace ManagedX.Graphics
 			: base( displayDevice )
 		{
 			monitorsByDeviceName = new Dictionary<string, DisplayMonitor>();
-			currentMode = NativeMethods.GetCurrentDisplaySettingsEx( base.DeviceIdentifier, EnumDisplaySettingsExOptions.None );
+			currentMode = NativeMethods.GetCurrentDisplaySettingsEx( base.DeviceName, EnumDisplaySettingsExOptions.None );
 		}
 
 
@@ -389,7 +389,7 @@ namespace ManagedX.Graphics
 			base.Refresh( displayDevice );
 			this.RefreshMonitors();
 
-			var mode = NativeMethods.GetCurrentDisplaySettingsEx( base.DeviceIdentifier, EnumDisplaySettingsExOptions.None );
+			var mode = NativeMethods.GetCurrentDisplaySettingsEx( base.DeviceName, EnumDisplaySettingsExOptions.None );
 			if( !mode.Equals( currentMode ) )
 			{
 				currentMode = mode;
@@ -407,17 +407,18 @@ namespace ManagedX.Graphics
 
 
 		/// <summary>Gets a read-only collection containing all (32 bpp) display modes supported by both this <see cref="DisplayAdapter"/> and its <see cref="Monitors"/>.</summary>
-		public ReadOnlyDisplayDeviceModeCollection DisplayModes => NativeMethods.EnumDisplaySettingsEx( base.DeviceIdentifier, EnumDisplaySettingsExOptions.None );
+		public ReadOnlyDisplayDeviceModeCollection DisplayModes => NativeMethods.EnumDisplaySettingsEx( base.DeviceName, EnumDisplaySettingsExOptions.None );
 
 
 		private void RefreshMonitors()
 		{
-			var deviceName = base.DeviceIdentifier;
+			var deviceName = base.DeviceName;
 			
 			var allHandles = GetMonitorHandles();
 			var handles = new List<IntPtr>();
+			var hMax = allHandles.Count;
 			int h;
-			for( h = 0; h < allHandles.Count; ++h )
+			for( h = 0; h < hMax; ++h )
 			{
 				var info = DisplayMonitor.GetMonitorInfo( allHandles[ h ] );
 				if( deviceName.Equals( info.AdapterDeviceName, StringComparison.Ordinal ) )
@@ -437,7 +438,7 @@ namespace ManagedX.Graphics
 				var monitor = monitors[ m ];
 
 				var handle = IntPtr.Zero;
-				if( ( monitor.State & (int)MonitorStateIndicators.Active ) == (int)MonitorStateIndicators.Active && ( h < handles.Count ) )
+				if( ( monitor.State & (int)MonitorStateIndicators.Active ) != 0 && ( h < handles.Count ) )
 				{
 					handle = handles[ h ];	// FIXME - this is not the right handle when topology is Clone !
 					++h;
@@ -509,7 +510,7 @@ namespace ManagedX.Graphics
 
 
 		/// <summary>Gets the display mode associated with this <see cref="DisplayAdapter"/>, as stored in the Windows registry.</summary>
-		public DisplayDeviceMode RegistryMode => NativeMethods.GetRegistryDisplaySettingsEx( base.DeviceIdentifier, EnumDisplaySettingsExOptions.None );
+		public DisplayDeviceMode RegistryMode => NativeMethods.GetRegistryDisplaySettingsEx( base.DeviceName, EnumDisplaySettingsExOptions.None );
 
 
 		#region Events

@@ -7,7 +7,7 @@ namespace ManagedX.Graphics.DisplayConfig
 
 	/// <summary>An exception to be thrown on DisplayConfig error.</summary>
 	[Serializable]
-	public class DisplayConfigException : Exception
+	public class DisplayConfigException : ManagedXException
 	{
 
 		/// <summary>Initializes a new <see cref="DisplayConfigException"/>.</summary>

@@ -20,7 +20,7 @@ namespace ManagedX.Graphics
 		public const int MaxDeviceNameChars = DisplayDevice.MaxDeviceNameChars;
 
 
-		private const QueryDisplayConfigRequest DisplayConfigRequest = QueryDisplayConfigRequest.DatabaseCurrent;// | QueryDisplayConfigRequest.VirtualModeAware;
+		private const QueryDisplayConfigRequest DisplayConfigRequest = QueryDisplayConfigRequest.DatabaseCurrent; // | QueryDisplayConfigRequest.VirtualModeAware | QueryDisplayConfigRequest.IncludeHeadMountedDisplays;
 
 
 
@@ -42,23 +42,24 @@ namespace ManagedX.Graphics
 
 			DisplayAdapter adapter;
 			var displayDevices = DisplayAdapter.EnumDisplayDevices( null, false );
-			for( var a = 0; a < displayDevices.Count; a++ )
+			var aMax = displayDevices.Count;
+			for( var a = 0; a < aMax; ++a )
 			{
 				var displayDevice = displayDevices[ a ];
 
 				if( adaptersByDeviceName.TryGetValue( displayDevice.DeviceName, out adapter ) )
 				{
 					adaptersToRefresh.Add( displayDevice );
-					removedAdapters.Remove( adapter.DeviceIdentifier );
+					removedAdapters.Remove( adapter.DeviceName );
 				}
 				else
 				{
 					adapter = new DisplayAdapter( displayDevice );
-					adaptersByDeviceName.Add( adapter.DeviceIdentifier, adapter );
-					addedAdapters.Add( adapter.DeviceIdentifier );
+					adaptersByDeviceName.Add( adapter.DeviceName, adapter );
+					addedAdapters.Add( adapter.DeviceName );
 				}
 
-				if( adapter.State.HasFlag( AdapterStateIndicators.PrimaryDevice ) && ( primaryAdapterDeviceName != adapter.DeviceIdentifier ) )
+				if( adapter.State.HasFlag( AdapterStateIndicators.PrimaryDevice ) && ( primaryAdapterDeviceName != adapter.DeviceName ) )
 				{
 					primaryAdapterChanged = ( primaryAdapterDeviceName != null );
 					primaryAdapterDeviceName = displayDevice.DeviceName;
@@ -86,7 +87,7 @@ namespace ManagedX.Graphics
 					adaptersByDeviceName.Remove( s );
 
 					adapter.OnRemoved();
-					AdapterRemoved?.Invoke( null, new DisplayDeviceEventArgs( adapter.DeviceIdentifier ) );
+					AdapterRemoved?.Invoke( null, new DisplayDeviceEventArgs( adapter.DeviceName ) );
 				}
 			}
 
@@ -335,7 +336,7 @@ namespace ManagedX.Graphics
 					var source = path.SourceInfo;
 					
 					var sourceDeviceName = DisplayConfiguration.GetSourceGdiDeviceName( source );
-					if( sourceDeviceName == adapter.DeviceIdentifier )
+					if( sourceDeviceName == adapter.DeviceName )
 						return new DisplayConfigAdapterInfo( currentConfiguration, source, path.SupportsVirtualMode );
 				}
 			}

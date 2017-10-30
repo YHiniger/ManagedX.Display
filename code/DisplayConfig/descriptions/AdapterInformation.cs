@@ -11,7 +11,7 @@ namespace ManagedX.Graphics.DisplayConfig
 	internal sealed class AdapterInformation : DeviceInformation
 	{
 
-		/// <summary>Defines the maximum length, in unicode chars, of the <see cref="DevicePath"/>.</summary>
+		/// <summary>Defines the maximum length, in chars, of the <see cref="DevicePath"/>.</summary>
 		public const int MaxDevicePathLength = 128;
 
 
