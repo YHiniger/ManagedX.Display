@@ -500,27 +500,6 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 
-		/// <summary>Defines the minimum version of Windows supported by DisplayConfig: 6.1 (Windows 7).</summary>
-		private static readonly Version MinimumOSVersion = new Version( 6, 1 );
-
-		/// <summary>Gets a value indicating whether DisplayConfig is supported by the operating system.</summary>
-		public static bool IsSupported
-		{
-			get
-			{
-				try
-				{
-					var osVersion = Environment.OSVersion;
-					return ( osVersion.Platform == PlatformID.Win32NT ) && ( osVersion.Version >= MinimumOSVersion );
-				}
-				catch( InvalidOperationException )
-				{
-					return false;
-				}
-			}
-		}
-
-
 		/// <summary>Queries and returns a display configuration.</summary>
 		/// <param name="request">The request (flags?); must not be <see cref="QueryDisplayConfigRequest.None"/>.</param>
 		/// <returns>Returns a <see cref="DisplayConfiguration"/> object containing the requested information.</returns>
@@ -530,9 +509,6 @@ namespace ManagedX.Graphics.DisplayConfig
 		[SuppressMessage( "Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "DisplayConfig" )]
 		public static DisplayConfiguration Query( QueryDisplayConfigRequest request )
 		{
-			if( !IsSupported )
-				throw new PlatformNotSupportedException( "DisplayConfig is only available on Windows 7 or greater." );
-
 			if( request == QueryDisplayConfigRequest.None )
 				throw new InvalidEnumArgumentException( "request", (int)request, typeof( QueryDisplayConfigRequest ) );
 

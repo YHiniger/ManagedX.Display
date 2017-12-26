@@ -21,7 +21,7 @@ namespace ManagedX.Graphics
 
 		/// <summary>Base constructor.</summary>
 		/// <param name="displayDevice">A valid <see cref="DisplayDevice"/> structure representing the display adapter or monitor.</param>
-		internal DisplayDeviceBase( DisplayDevice displayDevice )
+		internal DisplayDeviceBase( ref DisplayDevice displayDevice )
 		{
 			device = displayDevice;
 		}

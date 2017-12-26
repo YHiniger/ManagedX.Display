@@ -36,7 +36,7 @@ namespace ManagedX.Graphics
 		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = MaxStringChars )]
 		private readonly string deviceString;
 
-		/// <summary>The device state; can be either a combination of <see cref="AdapterStateIndicators"/> values or a combination of <see cref="MonitorStateIndicators"/> values.</summary>
+		/// <summary>The device state; can be either a combination of <see cref="DisplayAdapterStateIndicators"/> values or a combination of <see cref="DisplayMonitorStateIndicators"/> values.</summary>
 		internal readonly int State;
 
 		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = MaxStringChars )]

@@ -8,7 +8,7 @@
 	/// </summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/dd183569%28v=vs.85%29.aspx</remarks>
 	[System.Flags]
-	public enum MonitorStateIndicators : int
+	public enum DisplayMonitorStateIndicators : int
 	{
 
 		/// <summary>No indicators specified.</summary>

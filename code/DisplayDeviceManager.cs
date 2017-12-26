@@ -59,7 +59,7 @@ namespace ManagedX.Graphics
 					addedAdapters.Add( adapter.DeviceName );
 				}
 
-				if( adapter.State.HasFlag( AdapterStateIndicators.PrimaryDevice ) && ( primaryAdapterDeviceName != adapter.DeviceName ) )
+				if( adapter.State.HasFlag( DisplayAdapterStateIndicators.PrimaryDevice ) && ( primaryAdapterDeviceName != adapter.DeviceName ) )
 				{
 					primaryAdapterChanged = ( primaryAdapterDeviceName != null );
 					primaryAdapterDeviceName = displayDevice.DeviceName;
@@ -67,13 +67,10 @@ namespace ManagedX.Graphics
 			}
 
 
-			if( DisplayConfiguration.IsSupported )
-			{
-				if( currentConfiguration == null )
-					currentConfiguration = DisplayConfiguration.Query( DisplayConfigRequest );
-				else
-					currentConfiguration.Refresh();
-			}
+			if( currentConfiguration == null )
+				currentConfiguration = DisplayConfiguration.Query( DisplayConfigRequest );
+			else
+				currentConfiguration.Refresh();
 
 
 			if( removedAdapters.Count > 0 )
@@ -223,7 +220,7 @@ namespace ManagedX.Graphics
 			{
 				var adapter = adapters[ a ];
 				var info = adapter.GetDisplayConfigInfo();
-				if( info.AdapterId.Equals( adapterId ) )
+				if( info != null && info.AdapterId.Equals( adapterId ) )
 					return adapter;
 			}
 			return null;
@@ -321,24 +318,21 @@ namespace ManagedX.Graphics
 			if( adapter == null )
 				throw new ArgumentNullException( "adapter" );
 
-			if( DisplayConfiguration.IsSupported )
-			{
-				if( currentConfiguration == null )
-					currentConfiguration = DisplayConfiguration.Query( DisplayConfigRequest );
-				else
-					currentConfiguration.Refresh();
+			if( currentConfiguration == null )
+				currentConfiguration = DisplayConfiguration.Query( DisplayConfigRequest );
+			else
+				currentConfiguration.Refresh();
 
-				var paths = currentConfiguration.PathInfo;
-				var pMax = paths.Count;
-				for( var p = 0; p < pMax; ++p )
-				{
-					var path = paths[ p ];
-					var source = path.SourceInfo;
-					
-					var sourceDeviceName = DisplayConfiguration.GetSourceGdiDeviceName( source );
-					if( sourceDeviceName == adapter.DeviceName )
-						return new DisplayConfigAdapterInfo( currentConfiguration, source, path.SupportsVirtualMode );
-				}
+			var paths = currentConfiguration.PathInfo;
+			var pMax = paths.Count;
+			for( var p = 0; p < pMax; ++p )
+			{
+				var path = paths[ p ];
+				var source = path.SourceInfo;
+
+				var sourceDeviceName = DisplayConfiguration.GetSourceGdiDeviceName( source );
+				if( sourceDeviceName == adapter.DeviceName )
+					return new DisplayConfigAdapterInfo( currentConfiguration, source, path.SupportsVirtualMode );
 			}
 
 			return null;
@@ -346,7 +340,6 @@ namespace ManagedX.Graphics
 
 
 		/// <summary>Gets DisplayConfig information about a <see cref="DisplayMonitor"/>.
-		/// <para>Requires Windows 7 or greater.</para>
 		/// <note type="note">Calling this method will change the monitor's display name to a more friendly name than "Generic PnP Monitor".</note>
 		/// </summary>
 		/// <param name="monitor">A <see cref="DisplayMonitor"/>.</param>
@@ -359,29 +352,26 @@ namespace ManagedX.Graphics
 			if( monitor == null )
 				throw new ArgumentNullException( "monitor" );
 
-			if( DisplayConfiguration.IsSupported )
+			if( currentConfiguration == null )
+				currentConfiguration = DisplayConfiguration.Query( DisplayConfigRequest );
+			else
+				currentConfiguration.Refresh();
+
+			var paths = currentConfiguration.PathInfo;
+			var pMax = paths.Count;
+			for( var p = 0; p < pMax; ++p )
 			{
-				if( currentConfiguration == null )
-					currentConfiguration = DisplayConfiguration.Query( DisplayConfigRequest );
-				else
-					currentConfiguration.Refresh();
-
-				var paths = currentConfiguration.PathInfo;
-				var pMax = paths.Count;
-				for( var p = 0; p < pMax; ++p )
+				var path = paths[ p ];
+				var target = path.TargetInfo;
+				var targetDeviceName = DisplayConfiguration.GetTargetDeviceName( target );
+				if( monitor == GetMonitorByDevicePath( targetDeviceName.DevicePath ) )
 				{
-					var path = paths[ p ];
-					var target = path.TargetInfo;
-					var targetDeviceName = DisplayConfiguration.GetTargetDeviceName( target );
-					if( monitor == GetMonitorByDevicePath( targetDeviceName.DevicePath ) )
-					{
-						if( !string.IsNullOrWhiteSpace( targetDeviceName.FriendlyName ) )
-							monitor.DisplayName = targetDeviceName.FriendlyName;
+					if( !string.IsNullOrWhiteSpace( targetDeviceName.FriendlyName ) )
+						monitor.DisplayName = targetDeviceName.FriendlyName;
 
-						//var preferredMode = DisplayConfiguration.GetPreferredModeInfo( target );
+					//var preferredMode = DisplayConfiguration.GetPreferredModeInfo( target );
 
-						return new DisplayConfigMonitorInfo( currentConfiguration, target, targetDeviceName, path.SupportsVirtualMode );
-					}
+					return new DisplayConfigMonitorInfo( currentConfiguration, target, targetDeviceName, path.SupportsVirtualMode );
 				}
 			}
 

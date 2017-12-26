@@ -51,8 +51,8 @@
     <AssemblyOriginatorKeyFile>ManagedX.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="code\classes\DisplayAdapter.cs" />
-    <Compile Include="code\classes\DisplayDeviceBase.cs" />
+    <Compile Include="code\GDI\DisplayAdapter.cs" />
+    <Compile Include="code\GDI\DisplayDeviceBase.cs" />
     <Compile Include="code\DisplayConfig\descriptions\AdapterInformation.cs" />
     <None Include="code\DisplayConfig\descriptions\AdvancedColorInformation.cs" />
     <Compile Include="code\DisplayConfig\descriptions\DeviceInformation.cs" />
@@ -69,10 +69,10 @@
     <Compile Include="code\DisplayConfig\descriptions\TargetDeviceInformation.cs" />
     <Compile Include="code\DisplayConfig\descriptions\TargetPreferredModeInformation.cs" />
     <Compile Include="code\DisplayDeviceEventArgs.cs" />
-    <Compile Include="code\classes\DisplayMonitor.cs" />
-    <Compile Include="code\classes\ReadOnlyDisplayAdapterCollection.cs" />
-    <Compile Include="code\classes\ReadOnlyDisplayDeviceModeCollection.cs" />
-    <Compile Include="code\classes\ReadOnlyDisplayMonitorCollection.cs" />
+    <Compile Include="code\GDI\DisplayMonitor.cs" />
+    <Compile Include="code\GDI\ReadOnlyDisplayAdapterCollection.cs" />
+    <Compile Include="code\GDI\ReadOnlyDisplayDeviceModeCollection.cs" />
+    <Compile Include="code\GDI\ReadOnlyDisplayMonitorCollection.cs" />
     <Compile Include="code\DisplayConfig\DisplayConfiguration.cs" />
     <Compile Include="code\DisplayConfig\enumerations\QueryDisplayConfigRequest.cs" />
     <Compile Include="code\DisplayConfig\enumerations\DeviceInfoType.cs" />
@@ -92,15 +92,15 @@
     <Compile Include="code\DisplayConfig\enumerations\VideoOutputTechnology.cs" />
     <Compile Include="code\DisplayConfig\structures\VideoSignalInfo.cs" />
     <Compile Include="code\DisplayDeviceManager.cs" />
-    <Compile Include="code\enumerations\AdapterStateIndicators.cs" />
-    <Compile Include="code\enumerations\MonitorStateIndicators.cs" />
-    <Compile Include="code\enumerations\DisplayOrientation.cs" />
+    <Compile Include="code\GDI\DisplayAdapterStateIndicators.cs" />
+    <Compile Include="code\GDI\DisplayMonitorStateIndicators.cs" />
+    <Compile Include="code\GDI\DisplayOrientation.cs" />
     <Compile Include="code\Media\BitmapInfoHeader.cs" />
     <Compile Include="code\Media\DirectShow\VideoInfoHeader.cs" />
     <Compile Include="code\Media\DirectShow\VideoInfoHeader2.cs" />
-    <Compile Include="code\structures\DisplayDevice.cs" />
-    <Compile Include="code\structures\DisplayDeviceMode.cs" />
-    <Compile Include="code\structures\MonitorInfoEx.cs" />
+    <Compile Include="code\GDI\DisplayDevice.cs" />
+    <Compile Include="code\GDI\DisplayDeviceMode.cs" />
+    <Compile Include="code\GDI\MonitorInfoEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="LICENSE" />
     <None Include="ManagedX.snk" />
