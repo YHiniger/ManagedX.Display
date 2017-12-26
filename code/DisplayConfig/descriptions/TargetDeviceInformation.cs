@@ -9,16 +9,17 @@ namespace ManagedX.Graphics.DisplayConfig
 
 	/// <summary>Contains information about the target (defined in WinGDI.h).</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553989%28v=vs.85%29.aspx</remarks>
+	[System.Diagnostics.DebuggerStepThrough]
 	[Source( "WinGDI.h", "DISPLAYCONFIG_TARGET_DEVICE_NAME" )]
 	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 4, Size = 420 )]
 	public sealed class TargetDeviceInformation : TargetInformation
 	{
 
 		/// <summary>Defines the maximum length, in chars, of the <see cref="FriendlyName"/>.</summary>
-		public const int MaxFriendlyNameLength = 64;
+		public const int MaxFriendlyNameChars = 64;
 
 		/// <summary>Defines the maximum length, in chars, of the <see cref="DevicePath"/>.</summary>
-		public const int MaxDevicePathLength = 128;
+		public const int MaxDevicePathChars = 128;
 
 
 
@@ -50,9 +51,9 @@ namespace ManagedX.Graphics.DisplayConfig
 		private readonly VideoOutputTechnology outputTechnology;
 		private readonly int edid;    // might not be valid (see indicators)
 		private readonly int connectorInstance;
-		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = MaxFriendlyNameLength )]
+		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = MaxFriendlyNameChars )]
 		private readonly string monitorFriendlyDeviceName; // might not be valid (see indicators)
-		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = MaxDevicePathLength )]
+		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = MaxDevicePathChars )]
 		private readonly string monitorDevicePath;
 
 
@@ -63,6 +64,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		public TargetDeviceInformation( Luid adapterId, int id )
 			: base( DeviceInfoType.GetTargetName, 420, adapterId, id )
 		{
+			monitorFriendlyDeviceName = monitorDevicePath = string.Empty;
 		}
 
 
@@ -78,27 +80,11 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 		/// <summary>When <see cref="IsExtendedDisplayIdentificationDataValid"/> is true, gets the manufacture identifier from the monitor extended display identification data (EDID).</summary>
-		public short ExtendedDisplayIdentificationDataManufactureId
-		{
-			get
-			{
-				if( indicators.HasFlag( Indicators.ExtendedDisplayInformationDataIdsValid ) )
-					return (short)( edid & 0x0000ffff );
-				return 0;
-			}
-		}
+		public short ExtendedDisplayIdentificationDataManufactureId => (short)( indicators.HasFlag( Indicators.ExtendedDisplayInformationDataIdsValid ) ? ( edid & 0x0000FFFF ) : 0 );
 
 
 		/// <summary>When <see cref="IsExtendedDisplayIdentificationDataValid"/> is true, gets the product code from the monitor extended display identification data (EDID).</summary>
-		public short ExtendedDisplayIdentificationDataProductCodeId
-		{
-			get
-			{
-				if( indicators.HasFlag( Indicators.ExtendedDisplayInformationDataIdsValid ) )
-					return (short)( edid >> 16 );
-				return 0;
-			}
-		}
+		public short ExtendedDisplayIdentificationDataProductCodeId => (short)( indicators.HasFlag( Indicators.ExtendedDisplayInformationDataIdsValid ) ? ( edid >> 16 ) : 0 );
 
 		#endregion EDID
 

@@ -94,6 +94,13 @@ namespace ManagedX.Graphics.DisplayConfig
 		}
 
 
+		/// <summary></summary>
+		/// <returns></returns>
+		public override string ToString()
+		{
+			return DisplayDeviceManager.GetAdapterByGDIDeviceName( DisplayConfiguration.GetSourceGDIDeviceName( SourceInfo ) ).DisplayName + " - " + DisplayConfiguration.GetTargetDeviceName( TargetInfo ).FriendlyName;
+		}
+
 
 		/// <summary>The empty <see cref="PathInfo"/> structure.</summary>
 		public static readonly PathInfo Empty;

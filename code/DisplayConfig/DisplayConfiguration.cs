@@ -49,7 +49,7 @@ namespace ManagedX.Graphics.DisplayConfig
 			/// <see cref="ErrorCode.AccessDenied"/>, or
 			/// <see cref="ErrorCode.GenFailure"/>.
 			/// </returns>
-			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
+			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			internal static extern ErrorCode GetDisplayConfigBufferSizes(
 				[In] QueryDisplayConfigRequest request,
 				[Out] out int pathArrayElementCount,
@@ -83,7 +83,7 @@ namespace ManagedX.Graphics.DisplayConfig
 			/// If QueryDisplayConfig returns <see cref="ErrorCode.None"/>, <paramref name="pathInfoArrayElementCount"/> is updated with the number of valid entries in <paramref name="pathInfoArray"/>.
 			/// </param>
 			/// <param name="pathInfoArray">
-			/// Pointer to a variable that contains an array of <see cref="PathInfo"/> elements. Each element in <paramref name="pathInfoArray"/> describes a single path from a source to a target.
+			/// Pointer to a variable that contains an array of <see cref="Paths"/> elements. Each element in <paramref name="pathInfoArray"/> describes a single path from a source to a target.
 			/// The source and target mode information indexes are only valid in combination with the <paramref name="modeInfoArray"/> tables that are returned for the API at the same time.
 			/// This parameter cannot be null.
 			/// The <paramref name="pathInfoArray"/> is always returned in path priority order.
@@ -119,7 +119,7 @@ namespace ManagedX.Graphics.DisplayConfig
 			/// If QueryDisplayConfig returns <see cref="ErrorCode.None"/>, <paramref name="pathInfoArrayElementCount"/> is updated with the number of valid entries in <paramref name="pathInfoArray"/>.
 			/// </param>
 			/// <param name="pathInfoArray">
-			/// Pointer to a variable that contains an array of <see cref="PathInfo"/> elements. Each element in <paramref name="pathInfoArray"/> describes a single path from a source to a target.
+			/// Pointer to a variable that contains an array of <see cref="Paths"/> elements. Each element in <paramref name="pathInfoArray"/> describes a single path from a source to a target.
 			/// The source and target mode information indexes are only valid in combination with the <paramref name="modeInfoArray"/> tables that are returned for the API at the same time.
 			/// This parameter cannot be null.
 			/// The <paramref name="pathInfoArray"/> is always returned in path priority order.
@@ -128,7 +128,7 @@ namespace ManagedX.Graphics.DisplayConfig
 			/// Pointer to a variable that specifies the number in element of the mode information table. This parameter cannot be null.
 			/// If QueryDisplayConfig returns <see cref="ErrorCode.None"/>, <paramref name="modeInfoArrayElementCount"/> is updated with the number of valid entries in <paramref name="modeInfoArray"/>. 
 			/// </param>
-			/// <param name="modeInfoArray">Pointer to a variable that contains an array of <see cref="ModeInfo"/> elements. This parameter cannot be null.</param>
+			/// <param name="modeInfoArray">Pointer to a variable that contains an array of <see cref="DisplayModes"/> elements. This parameter cannot be null.</param>
 			/// <param name="currentTopologyId">Pointer to a variable that receives the identifier of the currently active topology in the CCD database.
 			/// For a list of possible values, see the <see cref="TopologyIndicators"/> enumerated type.
 			/// The currentTopologyId parameter is only set when the <paramref name="request"/> parameter value is QDC_DATABASE_CURRENT.
@@ -153,7 +153,6 @@ namespace ManagedX.Graphics.DisplayConfig
 				[Out] out TopologyIndicators currentTopologyId
 			);
 
-
 			#endregion QueryDisplayConfig
 
 
@@ -162,9 +161,11 @@ namespace ManagedX.Graphics.DisplayConfig
 			// https://msdn.microsoft.com/en-us/library/windows/hardware/ff553903%28v=vs.85%29.aspx
 			//LONG DisplayConfigGetDeviceInfo(
 			//	_Inout_ DISPLAYCONFIG_DEVICE_INFO_HEADER* requestPacket);
+			// NOTE - sadly, we can't rely on DeviceInformation: it causes a FatalEngineExecutionException.
+
 
 			/// <summary>Retrieves display configuration information about the device.</summary>
-			/// <param name="requestPacket">An initialized <see cref="AdapterInformation"/>.
+			/// <param name="adapterInformation">An initialized <see cref="AdapterInformation"/>.
 			/// <para>This object contains information about the request, which includes the packet type in the type member.
 			/// The type and size of additional data that the function returns after the header structure depend on the packet type.
 			/// </para>
@@ -181,10 +182,10 @@ namespace ManagedX.Graphics.DisplayConfig
 			/// The caller can obtain names for the adapter, the source, and the target.
 			/// The caller can also call this function to obtain the best resolution of the connected display device.
 			/// </remarks>
-			[SuppressMessage( "Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "AdapterInformation.devicePath" )]
+			[SuppressMessage( "Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "AdapterInformation.DevicePath" )]
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			internal static extern ErrorCode DisplayConfigGetDeviceInfo(
-				[In, Out] AdapterInformation requestPacket
+				[In, Out] AdapterInformation adapterInformation
 			);
 
 			/// <summary>Retrieves display configuration information about the device.</summary>
@@ -205,7 +206,7 @@ namespace ManagedX.Graphics.DisplayConfig
 			/// The caller can obtain names for the adapter, the source, and the target.
 			/// The caller can also call this function to obtain the best resolution of the connected display device.
 			/// </remarks>
-			[SuppressMessage( "Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "SourceDeviceInformation.viewGdiDeviceName" )]
+			[SuppressMessage( "Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "SourceDeviceInformation.GDIDeviceName" )]
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			internal static extern ErrorCode DisplayConfigGetDeviceInfo(
 				[In, Out] SourceDeviceInformation requestPacket
@@ -236,6 +237,7 @@ namespace ManagedX.Graphics.DisplayConfig
 			internal static extern ErrorCode DisplayConfigGetDeviceInfo(
 				[In, Out] TargetDeviceInformation requestPacket
 			);
+
 
 			///// <summary>Retrieves display configuration information about the device.</summary>
 			///// <param name="requestPacket">Contains information about the request, which includes the packet type in the type member.
@@ -282,14 +284,14 @@ namespace ManagedX.Graphics.DisplayConfig
 
 		/// <summary>Retrieves information about all possible display paths for all display devices, or views, in the current setting.</summary>
 		/// <param name="request">The type of information to retrieve; must not be <see cref="QueryDisplayConfigRequest.None"/>.</param>
-		/// <param name="pathInfoArray">Receives an array of <see cref="PathInfo"/> elements; can't be null.
+		/// <param name="pathInfoArray">Receives an array of <see cref="Paths"/> elements; can't be null.
 		/// <para>
 		/// Each element in <paramref name="pathInfoArray"/> describes a single path from a source to a target.
 		/// The source and target mode information indexes are only valid in combination with the <paramref name="modeInfoArray"/> tables that are returned for the API at the same time.
 		/// The <paramref name="pathInfoArray"/> is always returned in path priority order.
 		/// </para>
 		/// </param>
-		/// <param name="modeInfoArray">Receives an array of <see cref="ModeInfo"/> elements; can't be null.</param>
+		/// <param name="modeInfoArray">Receives an array of <see cref="DisplayModes"/> elements; can't be null.</param>
 		/// <param name="currentTopologyId">When <paramref name="request"/> is or specifies <see cref="QueryDisplayConfigRequest.DatabaseCurrent"/>, receives the identifier of the currently active topology in the CCD database.</param>
 		/// <returns>Returns <see cref="ErrorCode.None"/> on success, otherwise returns one of the following <see cref="ErrorCode"/>:
 		/// <see cref="ErrorCode.InvalidParameter"/>,
@@ -359,8 +361,8 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns the GDI device name of a source device.</returns>
 		/// <exception cref="ArgumentException"/>
 		/// <exception cref="DisplayConfigException"/>
-		[SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gdi" )]
-		public static string GetSourceGdiDeviceName( PathSourceInfo sourceInfo )
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "GDI" )]
+		public static string GetSourceGDIDeviceName( PathSourceInfo sourceInfo )
 		{
 			if( sourceInfo == PathSourceInfo.Empty )
 				throw new ArgumentException( "Invalid source info: empty.", "sourceInfo" );
@@ -368,7 +370,7 @@ namespace ManagedX.Graphics.DisplayConfig
 			var deviceName = new SourceDeviceInformation( sourceInfo.AdapterId, sourceInfo.Id );
 			var errorCode = SafeNativeMethods.DisplayConfigGetDeviceInfo( deviceName );
 			if( errorCode == ErrorCode.None )
-				return deviceName.GdiDeviceName;
+				return deviceName.GDIDeviceName.TrimEnd( '\0' );
 
 			throw GetException( errorCode );
 		}
@@ -406,7 +408,7 @@ namespace ManagedX.Graphics.DisplayConfig
 			var adapterName = new AdapterInformation( adapterId, id );
 			var errorCode = SafeNativeMethods.DisplayConfigGetDeviceInfo( adapterName );
 			if( errorCode == ErrorCode.None )
-				return adapterName.DevicePath;
+				return adapterName.DevicePath.TrimEnd( '\0' );
 			
 			throw GetException( errorCode );
 		}
@@ -571,11 +573,11 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 		/// <summary>Gets a read-only collection containing information about all display paths for this configuration.</summary>
-		public ReadOnlyPathInfoCollection PathInfo => new ReadOnlyPathInfoCollection( paths );
+		public ReadOnlyPathInfoCollection Paths => new ReadOnlyPathInfoCollection( paths );
 
 
 		/// <summary>Gets a read-only collection containing information about supported display modes for this configuration.</summary>
-		public ReadOnlyModeInfoCollection ModeInfo => new ReadOnlyModeInfoCollection( modes );
+		public ReadOnlyModeInfoCollection DisplayModes => new ReadOnlyModeInfoCollection( modes );
 
 
 		/// <summary>Gets the type of display topology.</summary>

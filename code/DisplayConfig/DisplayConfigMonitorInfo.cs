@@ -29,8 +29,8 @@
 			else
 				modeInfoIndex = info.ModeInfoIndex;
 
-			if( modeInfoIndex > PathTargetInfo.InvalidModeInfoIndex && modeInfoIndex < displayConfiguration.ModeInfo.Count )
-				mode = displayConfiguration.ModeInfo[ modeInfoIndex ].VideoSignalInformation;
+			if( modeInfoIndex > PathTargetInfo.InvalidModeInfoIndex && modeInfoIndex < displayConfiguration.DisplayModes.Count )
+				mode = displayConfiguration.DisplayModes[ modeInfoIndex ].VideoSignalInformation;
 
 			displayName = targetDeviceName.FriendlyName;
 			connectorInstance = targetDeviceName.ConnectorInstance;
@@ -94,7 +94,7 @@
 
 
         /// <summary>Gets the scan-line ordering of the video signal.</summary>
-        public ScanLineOrdering ScanLineOrdering => mode.ScanLineOrdering;
+        public ScanlineOrdering ScanLineOrdering => mode.ScanlineOrdering;
 		
 
 		/// <summary>Gets the video standard (if any) which defines the video signal.</summary>

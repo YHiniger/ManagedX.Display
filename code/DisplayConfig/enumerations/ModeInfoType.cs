@@ -22,6 +22,7 @@
 		[Source( "WinGDI.h", "DISPLAYCONFIG_MODE_INFO_TYPE_TARGET" )]
 		Target = 2,
 
+
 		/// <summary>Indicates that the <see cref="ModeInfo"/> structure contains a valid <see cref="DesktopImageInfo"/> structure.
 		/// <para>Requires Windows 10 or newer.</para>
 		/// </summary>

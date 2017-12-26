@@ -6,6 +6,7 @@ namespace ManagedX.Graphics.DisplayConfig
 {
 
 	/// <summary>Specifies base output technology info for a given target ID (defined in WinGDI.h).</summary>
+	[System.Diagnostics.DebuggerStepThrough]
 	[StructLayout( LayoutKind.Sequential )]
 	public abstract class TargetInformation : DeviceInformation
 	{

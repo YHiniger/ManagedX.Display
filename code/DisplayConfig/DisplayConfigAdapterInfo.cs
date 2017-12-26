@@ -25,9 +25,9 @@
 			else
 				modeInfoIndex = source.ModeInfoIndex;
 
-			if( modeInfoIndex > PathSourceInfo.InvalidModeInfoIndex && modeInfoIndex < displayConfiguration.ModeInfo.Count )
+			if( modeInfoIndex > PathSourceInfo.InvalidModeInfoIndex && modeInfoIndex < displayConfiguration.DisplayModes.Count )
 			{
-				var mode = displayConfiguration.ModeInfo[ modeInfoIndex ];
+				var mode = displayConfiguration.DisplayModes[ modeInfoIndex ];
 				size = mode.Size;
 				format = mode.Format;
 				position = mode.Position;

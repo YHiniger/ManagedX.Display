@@ -9,7 +9,8 @@ namespace ManagedX.Graphics.DisplayConfig
 	/// <para>Requires Windows 8.1 or newer.</para>
 	/// </summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/dn362043%28v=vs.85%29.aspx</remarks>
-	[Win32.Native( "WinGDI.h", "DISPLAYCONFIG_TARGET_BASE_TYPE" )]
+	[System.Diagnostics.DebuggerStepThrough]
+	[Win32.Source( "WinGDI.h", "DISPLAYCONFIG_TARGET_BASE_TYPE" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 24 )]
 	internal sealed class TargetBaseInformation : TargetInformation
 	{

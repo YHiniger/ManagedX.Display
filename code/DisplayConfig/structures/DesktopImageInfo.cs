@@ -10,8 +10,9 @@ namespace ManagedX.Graphics.DisplayConfig
 	/// <para>Only available on Windows 10 or newer.</para>
 	/// </summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/mt622102%28v=vs.85%29.aspx</remarks>
+	[System.Diagnostics.DebuggerStepThrough]
 	[Win32.Source( "WinGDI.h", "DISPLAYCONFIG_DESKTOP_IMAGE_INFO" )]
-	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 40 )]
+	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 40 )] // THINKABOUTME - Pack = 8
 	public struct DesktopImageInfo : IEquatable<DesktopImageInfo>
 	{
 
@@ -55,7 +56,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns true if the specified object is a <see cref="DesktopImageInfo"/> structure which is equivalent to this structure, otherwise returns false.</returns>
 		public override bool Equals( object obj )
 		{
-			return ( obj is DesktopImageInfo dii ) && this.Equals( dii );
+			return obj is DesktopImageInfo info && this.Equals( info );
 		}
 
 

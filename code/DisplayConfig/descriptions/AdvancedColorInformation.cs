@@ -24,8 +24,12 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 		private readonly StateIndicators stateIndicators;
-		private readonly ColorEncoding colorEncoding;
-		private readonly int bitsPerColorChannel;
+
+		/// <summary></summary>
+		public readonly ColorEncoding ColorEncoding;
+		
+		/// <summary></summary>
+		public readonly int BitsPerColorChannel;
 
 
 
@@ -46,14 +50,6 @@ namespace ManagedX.Graphics.DisplayConfig
 
 		/// <summary></summary>
 		public bool IsWideColorEnforced => stateIndicators.HasFlag( StateIndicators.WideColorEnforced );
-
-
-		/// <summary></summary>
-		public ColorEncoding ColorEncoding => colorEncoding;
-
-
-		/// <summary></summary>
-		public int BitsPerColorChannel => bitsPerColorChannel;
 
 	}
 

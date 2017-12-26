@@ -22,11 +22,11 @@ namespace ManagedX.Graphics.DisplayConfig
 
 		/// <summary>Defines the invalid <see cref="CloneGroupId"/>: 0xFFFF.</summary>
 		[Source( "WinGDI.h", "DISPLAYCONFIG_PATH_CLONE_GROUP_INVALID" )]
-		public const int InvalidCloneGroupId = 0xffff;
+		public const int InvalidCloneGroupId = 0x0000FFFF;
 
 		/// <summary>Defines the invalid <see cref="ModeInfoIndex2"/>: 0xFFFF.</summary>
 		[Source( "WinGDI.h", "DISPLAYCONFIG_PATH_SOURCE_MODE_IDX_INVALID" )]
-		public const int InvalidModeInfoIndex2 = 0xffff;
+		public const int InvalidModeInfoIndex2 = 0x0000FFFF;
 
 
 

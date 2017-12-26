@@ -15,10 +15,8 @@ namespace ManagedX.Graphics
 		/// <summary>Defines the maximum number of display adapters supported by the system: 16.</summary>
 		public const int MaxAdapterCount = DisplayAdapter.MaxAdapterCount;
 
-
 		/// <summary>Defines the maximum length, in chars, of a GDI device name.</summary>
 		public const int MaxDeviceNameChars = DisplayDevice.MaxDeviceNameChars;
-
 
 		private const QueryDisplayConfigRequest DisplayConfigRequest = QueryDisplayConfigRequest.DatabaseCurrent; // | QueryDisplayConfigRequest.VirtualModeAware | QueryDisplayConfigRequest.IncludeHeadMountedDisplays;
 
@@ -153,8 +151,8 @@ namespace ManagedX.Graphics
 		/// <returns>Returns the <see cref="DisplayAdapter"/> whose device identifier matches the specified <paramref name="deviceName"/>, or null.</returns>
 		/// <exception cref="ArgumentNullException"/>
 		/// <exception cref="ArgumentException"/>
-		[SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gdi" )]
-		public static DisplayAdapter GetAdapterByGdiDeviceName( string deviceName )
+		[SuppressMessage( "Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "GDI" )]
+		public static DisplayAdapter GetAdapterByGDIDeviceName( string deviceName )
 		{
 			if( string.IsNullOrWhiteSpace( deviceName ) )
 			{
@@ -207,9 +205,7 @@ namespace ManagedX.Graphics
 		public static event EventHandler<DisplayDeviceEventArgs> AdapterRemoved;
 
 
-		/// <summary>Returns a <see cref="DisplayAdapter"/> given its adapter id, or null.
-		/// <para>Requires Windows 7 or newer.</para>
-		/// </summary>
+		/// <summary>Returns a <see cref="DisplayAdapter"/> given its adapter id, or null.</summary>
 		/// <param name="adapterId">The adapter id of the requested adapter.</param>
 		/// <returns>Returns the requested <see cref="DisplayAdapter"/>, or null if it doesn't exit.</returns>
 		public static DisplayAdapter GetAdapterById( Luid adapterId )
@@ -305,9 +301,7 @@ namespace ManagedX.Graphics
 
 		#region DisplayConfig extension methods
 
-		/// <summary>Gets DisplayConfig information about a <see cref="DisplayAdapter"/>.
-		/// <para>Requires Windows 7 or greater.</para>
-		/// </summary>
+		/// <summary>Gets DisplayConfig information about a <see cref="DisplayAdapter"/>.</summary>
 		/// <param name="adapter">A <see cref="DisplayAdapter"/>.</param>
 		/// <returns></returns>
 		/// <exception cref="ArgumentNullException"/>
@@ -323,14 +317,14 @@ namespace ManagedX.Graphics
 			else
 				currentConfiguration.Refresh();
 
-			var paths = currentConfiguration.PathInfo;
+			var paths = currentConfiguration.Paths;
 			var pMax = paths.Count;
 			for( var p = 0; p < pMax; ++p )
 			{
 				var path = paths[ p ];
 				var source = path.SourceInfo;
 
-				var sourceDeviceName = DisplayConfiguration.GetSourceGdiDeviceName( source );
+				var sourceDeviceName = DisplayConfiguration.GetSourceGDIDeviceName( source );
 				if( sourceDeviceName == adapter.DeviceName )
 					return new DisplayConfigAdapterInfo( currentConfiguration, source, path.SupportsVirtualMode );
 			}
@@ -357,7 +351,7 @@ namespace ManagedX.Graphics
 			else
 				currentConfiguration.Refresh();
 
-			var paths = currentConfiguration.PathInfo;
+			var paths = currentConfiguration.Paths;
 			var pMax = paths.Count;
 			for( var p = 0; p < pMax; ++p )
 			{

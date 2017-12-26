@@ -35,7 +35,7 @@
 
 		/// <summary></summary>
 		[Source( "WinGDI.h", "DISPLAYCONFIG_TARGET_IS_HMD" )]
-		TargetIsHeadMountedDisplay = 0x00000020,
+		IsHeadMountedDisplay = 0x00000020,
 
 	}
 

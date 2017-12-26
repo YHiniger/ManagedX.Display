@@ -6,6 +6,7 @@ namespace ManagedX.Graphics.DisplayConfig
 
 	/// <summary>Contains information about the preferred mode of a display (defined in WinGDI.h).</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553996%28v=vs.85%29.aspx</remarks>
+	[System.Diagnostics.DebuggerStepThrough]
 	[Win32.Source( "WinGDI.h", "DISPLAYCONFIG_TARGET_PREFERRED_MODE" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 76 )]
 	public sealed class TargetPreferredModeInformation : DeviceInformation
@@ -39,7 +40,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns a string representing this <see cref="TargetPreferredModeInformation"/>.</returns>
 		public sealed override string ToString()
 		{
-			return string.Format( System.Globalization.CultureInfo.InvariantCulture, "{0}x{1}@{2}Hz", width, height, VideoSignal.VSyncFrequency.ToSingle() );
+			return string.Format( System.Globalization.CultureInfo.InvariantCulture, "{0}x{1}@{2}Hz", width, height, targetMode.TargetVideoSignalInfo.VSyncFrequency.ToSingle() );
 		}
 
 	}

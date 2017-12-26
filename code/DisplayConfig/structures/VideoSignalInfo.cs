@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 
@@ -13,53 +14,47 @@ namespace ManagedX.Graphics.DisplayConfig
 	public struct VideoSignalInfo : IEquatable<VideoSignalInfo>
 	{
 
-		private readonly long pixelRate;
-		private readonly Rational hSyncFreq;
-		private readonly Rational vSyncFreq;
-		private readonly Size activeSize;
-		private readonly Size totalSize;
-		private readonly int videoStandard;	// bits 0..15: videoStandard, 16..21: vSyncFreqDivider, 22..31: reserved
-		private readonly ScanLineOrdering scanLineOrdering;
+		/// <summary>The pixel clock rate.</summary>
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
+		public readonly long PixelRate;
+
+		/// <summary>The horizontal frequency, in hertz (Hz).</summary>
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
+		public readonly Rational HSyncFrequency;
+
+		/// <summary>The vertical frequency, in hertz (Hz).</summary>
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
+		public readonly Rational VSyncFrequency;
+
+		/// <summary>The size, in pixels, of the active portion of the video signal.</summary>
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
+		public readonly Size ActiveSize;
+
+		/// <summary>The size, in pixels, of the entire video signal.</summary>
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
+		public readonly Size TotalSize;
+
+		private readonly int videoStandard; // bits 0..15: videoStandard, 16..21: vSyncFreqDivider, 22..31: reserved
+
+		/// <summary>The scan-line ordering (for example, progressive or interlaced) of the video signal.</summary>
+		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
+		public readonly ScanlineOrdering ScanlineOrdering;
 
 
-
-		/// <summary>Gets the pixel clock rate.</summary>
-		public long PixelRate => pixelRate;
-
-
-		/// <summary>Gets the horizontal frequency, in hertz (Hz).</summary>
-		public Rational HSyncFrequency => hSyncFreq;
-
-
-		/// <summary>Gets the vertical frequency, in hertz (Hz).</summary>
-		public Rational VSyncFrequency => vSyncFreq;
-		
-
-		/// <summary>Gets the size, in pixels, of the active portion of the video signal.</summary>
-		public Size ActiveSize => activeSize;
-		
-
-		/// <summary>Gets the size, in pixels, of the entire video signal.</summary>
-		public Size TotalSize => totalSize;
-		
 
 		/// <summary>Gets the video standard (if any) which defines the video signal.</summary>
-		public VideoSignalStandard VideoStandard => (VideoSignalStandard)( videoStandard & 0x0000ffff );
+		public VideoSignalStandard VideoStandard => (VideoSignalStandard)( videoStandard & 0x0000FFFF );
 
 
 		/// <summary>Additional signal information (supported by WDDM 1.3 and later display miniport drivers running on Windows 8.1 and later).</summary>
-		public int VSyncFrequencyDivider => ( videoStandard >> 16 ) & 0x0000003f;
-
-
-        /// <summary>The scan-line ordering (for example, progressive or interlaced) of the video signal.</summary>
-        public ScanLineOrdering ScanLineOrdering => scanLineOrdering;
+		public int VSyncFrequencyDivider => ( videoStandard >> 16 ) & 0x0000003F;
 
 
 		/// <summary>Returns a hash code for this <see cref="VideoSignalInfo"/> structure.</summary>
 		/// <returns>Returns a hash code for this <see cref="VideoSignalInfo"/> structure.</returns>
 		public override int GetHashCode()
 		{
-			return pixelRate.GetHashCode() ^ hSyncFreq.GetHashCode() ^ vSyncFreq.GetHashCode() ^ activeSize.GetHashCode() ^ totalSize.GetHashCode() ^ videoStandard ^ (int)scanLineOrdering;
+			return PixelRate.GetHashCode() ^ HSyncFrequency.GetHashCode() ^ VSyncFrequency.GetHashCode() ^ ActiveSize.GetHashCode() ^ TotalSize.GetHashCode() ^ videoStandard ^ (int)ScanlineOrdering;
 		}
 
 
@@ -68,7 +63,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns true if this <see cref="VideoSignalInfo"/> structure and the <paramref name="other"/> structure are equal, otherwise returns false.</returns>
 		public bool Equals( VideoSignalInfo other )
 		{
-			return ( pixelRate == other.pixelRate ) && hSyncFreq.Equals( other.hSyncFreq ) && vSyncFreq.Equals( other.vSyncFreq ) && activeSize.Equals( other.activeSize ) && totalSize.Equals( other.totalSize ) && ( videoStandard == other.videoStandard ) && ( scanLineOrdering == other.scanLineOrdering );
+			return ( PixelRate == other.PixelRate ) && HSyncFrequency.Equals( other.HSyncFrequency ) && VSyncFrequency.Equals( other.VSyncFrequency ) && ActiveSize.Equals( other.ActiveSize ) && TotalSize.Equals( other.TotalSize ) && ( videoStandard == other.videoStandard ) && ( ScanlineOrdering == other.ScanlineOrdering );
 		}
 
 
@@ -85,7 +80,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns a string representing this <see cref="VideoSignalInfo"/> structure.</returns>
 		public override string ToString()
 		{
-			return string.Format( System.Globalization.CultureInfo.InvariantCulture, "{{Pixel rate={0}, HSyncFrequency={1}, VSyncFrequency={2}, ActiveSize={3}, TotalSize={4}, VideoStandard={5}, ScanlineOrdering={6}}}", pixelRate, hSyncFreq, vSyncFreq, activeSize, totalSize, videoStandard, scanLineOrdering );
+			return string.Format( System.Globalization.CultureInfo.InvariantCulture, "{{Pixel rate={0}, HSyncFrequency={1}, VSyncFrequency={2}, ActiveSize={3}, TotalSize={4}, VideoStandard={5}, ScanlineOrdering={6}}}", PixelRate, HSyncFrequency, VSyncFrequency, ActiveSize, TotalSize, videoStandard, ScanlineOrdering );
 		}
 
 

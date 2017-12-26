@@ -16,7 +16,7 @@ namespace ManagedX.Graphics.DisplayConfig
 	{
 
 		[Flags]
-		private enum StateIndicators : int
+		private enum Indicators : int
 		{
 
 			None = 0x00000000,
@@ -28,7 +28,7 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 
-		private StateIndicators stateIndicators;
+		private readonly Indicators indicators;
 
 
 
@@ -42,13 +42,13 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <summary>Gets or sets a value indicating whether to disable virtual mode for the monitor.</summary>
 		public bool DisableMonitorVirtualResolution
 		{
-			get => stateIndicators.HasFlag( StateIndicators.DisableMonitorVirtualResolution );
+			get => indicators.HasFlag( Indicators.DisableMonitorVirtualResolution );
 			set
 			{
 				if( value )
-					stateIndicators |= StateIndicators.DisableMonitorVirtualResolution;
+					indicators |= Indicators.DisableMonitorVirtualResolution;
 				else
-					stateIndicators &= ~StateIndicators.DisableMonitorVirtualResolution;
+					indicators &= ~Indicators.DisableMonitorVirtualResolution;
 			}
 		}
 
