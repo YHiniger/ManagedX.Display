@@ -4,18 +4,12 @@
 namespace ManagedX.Graphics
 {
 
-	/// <summary>Base class for GDI display devices (adapters, monitors).
-	/// <para>For Desktop applications only ?</para>
-	/// </summary>
+	/// <summary>Base class for GDI display devices (adapters, monitors).</summary>
 	public abstract class DisplayDeviceBase : IEquatable<DisplayDeviceBase>
 	{
 
-		/// <summary>Defines the maximum length, in chars, of the GDI <see cref="DeviceName"/>.</summary>
-		public const int MaxDeviceNameChars = DisplayDevice.MaxDeviceNameChars;
-
-
-
 		private DisplayDevice device;
+		internal DisplayDeviceId identifier;
 
 
 
@@ -36,10 +30,14 @@ namespace ManagedX.Graphics
 		}
 
 		
+		/// <summary>Raised when the state of this display device changed.</summary>
+		public event EventHandler StateChanged;
+
+
 		#region Protected properties
 		
 		/// <summary>Gets the state of this display device.</summary>
-		protected int RawState => device.State;
+		protected int State => device.State;
 
 
 		/// <summary>Gets the device id of this display device.
@@ -50,14 +48,17 @@ namespace ManagedX.Graphics
 		#endregion Protected properties
 
 
-		/// <summary>Gets the device name of this display device.
+		/// <summary>Gets the GDI device name of this display device.
 		/// <para>The device name is in the form "\\.\DISPLAY1" for an adapter, and "\\.\DISPLAY1\Monitor0" for a monitor.</para>
 		/// </summary>
 		public string DeviceName => device.DeviceName;
 
 
-		/// <summary>Resets, if relevant, the underlying <see cref="DisplayDevice"/> structure and raises events when required.</summary>
-		internal virtual void Refresh( DisplayDevice displayDevice )
+		/// <summary>Gets the registry key associated with this display device.</summary>
+		public string DeviceKey => device.DeviceKey;
+
+
+		internal virtual void Refresh( ref DisplayDevice displayDevice )
 		{
 			if( !device.Equals( displayDevice ) )
 			{
@@ -71,12 +72,12 @@ namespace ManagedX.Graphics
 		}
 
 
-		/// <summary>Raised when the state of this display device changed.</summary>
-		public event EventHandler StateChanged;
+		#region DisplayConfig
 
+		/// <summary>Gets the display identifier for this display device.</summary>
+		public DisplayDeviceId Identifier => identifier;
 
-		/// <summary>Gets the (registry?) key associated with this display device.</summary>
-		public string DeviceKey => device.DeviceKey;
+		#endregion DisplayConfig
 
 
 		/// <summary>Returns the hash code of the underlying <see cref="DisplayDevice"/> structure.</summary>

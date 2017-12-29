@@ -15,101 +15,19 @@ namespace ManagedX.Graphics
 		/// <summary>Defines the maximum number of display adapters supported by the system: 16.</summary>
 		public const int MaxAdapterCount = DisplayAdapter.MaxAdapterCount;
 
-		/// <summary>Defines the maximum length, in chars, of a GDI device name.</summary>
+		/// <summary>Defines the maximum length, in (unicode) chars, of a GDI device name: 32.</summary>
 		public const int MaxDeviceNameChars = DisplayDevice.MaxDeviceNameChars;
 
-		private const QueryDisplayConfigRequest DisplayConfigRequest = QueryDisplayConfigRequest.DatabaseCurrent; // | QueryDisplayConfigRequest.VirtualModeAware | QueryDisplayConfigRequest.IncludeHeadMountedDisplays;
+		private const QueryDisplayConfigRequest DisplayConfigRequest = QueryDisplayConfigRequest.AllPaths;// | QueryDisplayConfigRequest.VirtualModeAware | QueryDisplayConfigRequest.IncludeHeadMountedDisplays;
 
 
 
 		private static readonly Dictionary<string, DisplayAdapter> adaptersByDeviceName = new Dictionary<string, DisplayAdapter>( MaxAdapterCount );
 		private static string primaryAdapterDeviceName;
 		private static bool isInitialized;
-		private static DisplayConfiguration currentConfiguration;
+		private static readonly DisplayConfiguration configuration = DisplayConfiguration.Query( DisplayConfigRequest );
 		//private static DisplayConfiguration registryConfiguration;
 
-
-
-		/// <summary>Refreshes the device list and states, and raises events.</summary>
-		public static void Refresh()
-		{
-			var removedAdapters = new List<string>( adaptersByDeviceName.Keys );
-			var addedAdapters = new List<string>();
-			var adaptersToRefresh = new List<DisplayDevice>( removedAdapters.Count );
-			var primaryAdapterChanged = false;
-
-			DisplayAdapter adapter;
-			var displayDevices = DisplayAdapter.EnumDisplayDevices( null, false );
-			var aMax = displayDevices.Count;
-			for( var a = 0; a < aMax; ++a )
-			{
-				var displayDevice = displayDevices[ a ];
-
-				if( adaptersByDeviceName.TryGetValue( displayDevice.DeviceName, out adapter ) )
-				{
-					adaptersToRefresh.Add( displayDevice );
-					removedAdapters.Remove( adapter.DeviceName );
-				}
-				else
-				{
-					adapter = new DisplayAdapter( displayDevice );
-					adaptersByDeviceName.Add( adapter.DeviceName, adapter );
-					addedAdapters.Add( adapter.DeviceName );
-				}
-
-				if( adapter.State.HasFlag( DisplayAdapterStateIndicators.PrimaryDevice ) && ( primaryAdapterDeviceName != adapter.DeviceName ) )
-				{
-					primaryAdapterChanged = ( primaryAdapterDeviceName != null );
-					primaryAdapterDeviceName = displayDevice.DeviceName;
-				}
-			}
-
-
-			if( currentConfiguration == null )
-				currentConfiguration = DisplayConfiguration.Query( DisplayConfigRequest );
-			else
-				currentConfiguration.Refresh();
-
-
-			if( removedAdapters.Count > 0 )
-			{
-				while( removedAdapters.Count > 0 )
-				{
-					var s = removedAdapters[ 0 ];
-					removedAdapters.RemoveAt( 0 );
-
-					adapter = adaptersByDeviceName[ s ];
-					adaptersByDeviceName.Remove( s );
-
-					adapter.OnRemoved();
-					AdapterRemoved?.Invoke( null, new DisplayDeviceEventArgs( adapter.DeviceName ) );
-				}
-			}
-
-			if( addedAdapters.Count > 0 )
-			{
-				while( addedAdapters.Count > 0 )
-				{
-					AdapterAdded?.Invoke( null, new DisplayDeviceEventArgs( addedAdapters[ 0 ] ) );
-					addedAdapters.RemoveAt( 0 );
-				}
-			}
-
-
-			while( adaptersToRefresh.Count > 0 )
-			{
-				var device = adaptersToRefresh[ 0 ];
-				if( adaptersByDeviceName.TryGetValue( device.DeviceName, out adapter ) )
-					adapter.Refresh( device );
-				adaptersToRefresh.RemoveAt( 0 );
-			}
-
-
-			if( primaryAdapterChanged )
-				PrimaryAdapterChanged?.Invoke( null, EventArgs.Empty );
-
-			isInitialized = true;
-		}
 
 
 		#region Display adapters
@@ -146,7 +64,7 @@ namespace ManagedX.Graphics
 		}
 
 
-		/// <summary>Returns a GDI display adapter given its device name (ie: \\.\DISPLAY1).</summary>
+		/// <summary>Returns a <see cref="DisplayAdapter"/> given its GDI device name (ie: <code>\\.\DISPLAY1</code>).</summary>
 		/// <param name="deviceName">The adapter device name.</param>
 		/// <returns>Returns the <see cref="DisplayAdapter"/> whose device identifier matches the specified <paramref name="deviceName"/>, or null.</returns>
 		/// <exception cref="ArgumentNullException"/>
@@ -205,27 +123,40 @@ namespace ManagedX.Graphics
 		public static event EventHandler<DisplayDeviceEventArgs> AdapterRemoved;
 
 
-		/// <summary>Returns a <see cref="DisplayAdapter"/> given its adapter id, or null.</summary>
-		/// <param name="adapterId">The adapter id of the requested adapter.</param>
-		/// <returns>Returns the requested <see cref="DisplayAdapter"/>, or null if it doesn't exit.</returns>
-		public static DisplayAdapter GetAdapterById( Luid adapterId )
-		{
-			var adapters = Adapters;
-			var aMax = adapters.Count;
-			for( var a = 0; a < aMax; ++a )
-			{
-				var adapter = adapters[ a ];
-				var info = adapter.GetDisplayConfigInfo();
-				if( info != null && info.AdapterId.Equals( adapterId ) )
-					return adapter;
-			}
-			return null;
-		}
+		///// <summary></summary>
+		///// <param name="identifier"></param>
+		///// <returns></returns>
+		//public static DisplayAdapter GetAdapter( DisplayDeviceId identifier )
+		//{
+		//	foreach( var adapter in adaptersByDeviceName.Values )
+		//	{
+		//		if( adapter.Identifier.Equals( identifier ) )
+		//			return adapter;
+		//	}
+		//	return null;
+		//}
 
 		#endregion Display adapters
 
 
 		#region Display monitors
+
+		///// <summary></summary>
+		///// <param name="identifier"></param>
+		///// <returns></returns>
+		//public static DisplayMonitor GetMonitor( DisplayDeviceId identifier )
+		//{
+		//	foreach( var adapter in adaptersByDeviceName.Values )
+		//	{
+		//		foreach( var monitor in adapter.Monitors )
+		//		{
+		//			if( monitor.identifier.Equals( identifier ) )
+		//				return monitor;
+		//		}
+		//	}
+		//	return null;
+		//}
+
 
 		/// <summary>Returns a monitor given its handle (HMONITOR).</summary>
 		/// <param name="monitorHandle">The monitor handle.</param>
@@ -235,10 +166,9 @@ namespace ManagedX.Graphics
 			if( !isInitialized )
 				Refresh();
 
-			var monitorInfo = DisplayMonitor.GetMonitorInfo( monitorHandle );
-
+			var monitorInfo = DisplayMonitor.GetInfo( monitorHandle );
 			if( adaptersByDeviceName.TryGetValue( monitorInfo.AdapterDeviceName, out DisplayAdapter adapter ) )
-				return adapter.Monitors.GetMonitorByHandle( monitorHandle );
+				return adapter.GetMonitorByHandle( monitorHandle );
 
 			return null;
 		}
@@ -249,7 +179,7 @@ namespace ManagedX.Graphics
 		/// <returns>Returns the <see cref="DisplayMonitor"/> which has the largest area of intersection with the bounding rectangle of a window.</returns>
 		public static DisplayMonitor GetMonitorFromWindowHandle( IntPtr windowHandle )
 		{
-			return GetMonitorByHandle( DisplayAdapter.GetMonitorHandleFromWindow( windowHandle ) );
+			return GetMonitorByHandle( DisplayMonitor.GetMonitorHandleFromWindow( windowHandle ) );
 		}
 
 
@@ -267,7 +197,7 @@ namespace ManagedX.Graphics
 			var aMax = adapters.Length;
 			for( var a = 0; a < aMax; ++a )
 			{
-				var monitor = adapters[ a ].Monitors.GetMonitorByDevicePath( devicePath );
+				var monitor = adapters[ a ].GetMonitorByDevicePath( devicePath );
 				if( monitor != null )
 					return monitor;
 			}
@@ -299,80 +229,138 @@ namespace ManagedX.Graphics
 		#endregion Display monitors
 
 
-		#region DisplayConfig extension methods
-
-		/// <summary>Gets DisplayConfig information about a <see cref="DisplayAdapter"/>.</summary>
-		/// <param name="adapter">A <see cref="DisplayAdapter"/>.</param>
-		/// <returns></returns>
-		/// <exception cref="ArgumentNullException"/>
-		/// <exception cref="DisplayConfigException"/>
-		[SuppressMessage( "Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters" )]
-		public static DisplayConfigAdapterInfo GetDisplayConfigInfo( this DisplayAdapter adapter )
+		private static void GetDisplayConfigInfo( DisplayAdapter adapter )
 		{
-			if( adapter == null )
-				throw new ArgumentNullException( "adapter" );
-
-			if( currentConfiguration == null )
-				currentConfiguration = DisplayConfiguration.Query( DisplayConfigRequest );
-			else
-				currentConfiguration.Refresh();
-
-			var paths = currentConfiguration.Paths;
+			var paths = configuration.Paths;
 			var pMax = paths.Count;
+			PathInfo path;
+			PathSourceInfo source;
+			PathTargetInfo target;
+			TargetDeviceDescription desc;
+			DisplayMonitor monitor;
+			int index;
 			for( var p = 0; p < pMax; ++p )
 			{
-				var path = paths[ p ];
-				var source = path.SourceInfo;
+				path = paths[ p ];
+				source = path.SourceInfo;
 
-				var sourceDeviceName = DisplayConfiguration.GetSourceGDIDeviceName( source );
-				if( sourceDeviceName == adapter.DeviceName )
-					return new DisplayConfigAdapterInfo( currentConfiguration, source, path.SupportsVirtualMode );
+				if( adapter.DeviceName.Equals( DisplayConfiguration.GetSourceGDIDeviceName( source ), StringComparison.Ordinal ) )
+				{
+					adapter.identifier = source.Identifier;
+					if( path.SupportsVirtualMode )
+					{
+						adapter.cloneGroupId = source.CloneGroupId;
+						index = source.ModeInfoIndex2;
+					}
+					else
+					{
+						adapter.cloneGroupId = -1;
+						index = source.ModeInfoIndex;
+					}
+					if( index == PathSourceInfo.InvalidModeInfoIndex )
+						adapter.currentModeFormat = PixelFormat.Undefined;
+					else
+						adapter.currentModeFormat = configuration.DisplayModes[ index ].Format;
+
+					target = path.TargetInfo;
+					desc = DisplayConfiguration.GetTargetDeviceDescription( target );
+					monitor = adapter.GetMonitorByDevicePath( desc.DevicePath );
+					if( monitor != null )
+					{
+						monitor.identifier = target.Identifier;
+						if( !string.IsNullOrWhiteSpace( desc.FriendlyName ) )
+							monitor.DisplayName = desc.FriendlyName;
+
+						monitor.videoOutputTechnology = target.OutputTechnology;
+						monitor.scaling = target.Scaling;
+						monitor.refreshRate = target.RefreshRate;
+						monitor.scanlineOrdering = target.ScanlineOrdering;
+						index = path.SupportsVirtualMode ? target.ModeInfoIndex2 : target.ModeInfoIndex;
+						if( index != PathTargetInfo.InvalidModeInfoIndex )
+							monitor.videoSignalInfo = configuration.DisplayModes[ index ].VideoSignalInformation;
+						else
+							monitor.videoSignalInfo = VideoSignalInfo.Empty;
+						monitor.Orientation = target.Rotation;
+
+						monitor.connectorInstance = desc.ConnectorInstance;
+					}
+				}
 			}
-
-			return null;
 		}
 
 
-		/// <summary>Gets DisplayConfig information about a <see cref="DisplayMonitor"/>.
-		/// <note type="note">Calling this method will change the monitor's display name to a more friendly name than "Generic PnP Monitor".</note>
-		/// </summary>
-		/// <param name="monitor">A <see cref="DisplayMonitor"/>.</param>
-		/// <returns></returns>
-		/// <exception cref="ArgumentNullException"/>
-		/// <exception cref="DisplayConfigException"/>
-		[SuppressMessage( "Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters" )]
-		public static DisplayConfigMonitorInfo GetDisplayConfigInfo( this DisplayMonitor monitor )
+		/// <summary>Refreshes the device list and their state, and raises events.</summary>
+		public static void Refresh()
 		{
-			if( monitor == null )
-				throw new ArgumentNullException( "monitor" );
+			configuration.Refresh();
 
-			if( currentConfiguration == null )
-				currentConfiguration = DisplayConfiguration.Query( DisplayConfigRequest );
-			else
-				currentConfiguration.Refresh();
+			var adaptersToRefresh = new List<DisplayDevice>( adaptersByDeviceName.Count );
+			var removedAdapters = new List<string>( adaptersByDeviceName.Keys );
+			var newAdapters = new List<string>();
+			var primaryAdapterChanged = false;
 
-			var paths = currentConfiguration.Paths;
-			var pMax = paths.Count;
-			for( var p = 0; p < pMax; ++p )
+			DisplayAdapter adapter;
+			var displayDevices = DisplayAdapter.EnumDisplayDevices( null, false );
+			var aMax = displayDevices.Count;
+			for( var a = 0; a < aMax; ++a )
 			{
-				var path = paths[ p ];
-				var target = path.TargetInfo;
-				var targetDeviceName = DisplayConfiguration.GetTargetDeviceName( target );
-				if( monitor == GetMonitorByDevicePath( targetDeviceName.DevicePath ) )
+				var displayDevice = displayDevices[ a ];
+
+				if( adaptersByDeviceName.TryGetValue( displayDevice.DeviceName, out adapter ) )
 				{
-					if( !string.IsNullOrWhiteSpace( targetDeviceName.FriendlyName ) )
-						monitor.DisplayName = targetDeviceName.FriendlyName;
+					adaptersToRefresh.Add( displayDevice );
+					removedAdapters.Remove( adapter.DeviceName );
+				}
+				else
+				{
+					adapter = new DisplayAdapter( displayDevice );
+					GetDisplayConfigInfo( adapter );
+					adaptersByDeviceName.Add( adapter.DeviceName, adapter );
+					newAdapters.Add( adapter.DeviceName );
+				}
 
-					//var preferredMode = DisplayConfiguration.GetPreferredModeInfo( target );
-
-					return new DisplayConfigMonitorInfo( currentConfiguration, target, targetDeviceName, path.SupportsVirtualMode );
+				if( adapter.State.HasFlag( DisplayAdapterStateIndicators.PrimaryDevice ) && ( primaryAdapterDeviceName != adapter.DeviceName ) )
+				{
+					primaryAdapterChanged = ( primaryAdapterDeviceName != null );
+					primaryAdapterDeviceName = displayDevice.DeviceName;
 				}
 			}
 
-			return null;
-		}
+			while( removedAdapters.Count > 0 )
+			{
+				var s = removedAdapters[ 0 ];
+				removedAdapters.RemoveAt( 0 );
 
-		#endregion DisplayConfig extension methods
+				adapter = adaptersByDeviceName[ s ];
+				adaptersByDeviceName.Remove( s );
+
+				adapter.OnRemoved();
+				AdapterRemoved?.Invoke( null, new DisplayDeviceEventArgs( adapter.DeviceName ) );
+			}
+
+			while( newAdapters.Count > 0 )
+			{
+				AdapterAdded?.Invoke( null, new DisplayDeviceEventArgs( newAdapters[ 0 ] ) );
+				newAdapters.RemoveAt( 0 );
+			}
+
+			while( adaptersToRefresh.Count > 0 )
+			{
+				var device = adaptersToRefresh[ 0 ];
+				adaptersToRefresh.RemoveAt( 0 );
+				if( adaptersByDeviceName.TryGetValue( device.DeviceName, out adapter ) )
+				{
+					adapter.Refresh( ref device );
+					GetDisplayConfigInfo( adapter );
+				}
+			}
+
+
+			if( primaryAdapterChanged )
+				PrimaryAdapterChanged?.Invoke( null, EventArgs.Empty );
+
+			isInitialized = true;
+		}
 
 	}
 

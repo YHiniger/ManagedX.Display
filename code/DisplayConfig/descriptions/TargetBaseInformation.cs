@@ -12,7 +12,7 @@ namespace ManagedX.Graphics.DisplayConfig
 	[System.Diagnostics.DebuggerStepThrough]
 	[Win32.Source( "WinGDI.h", "DISPLAYCONFIG_TARGET_BASE_TYPE" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 24 )]
-	internal sealed class TargetBaseInformation : TargetInformation
+	internal sealed class TargetBaseInformation : TargetDescription
 	{
 
 		private readonly VideoOutputTechnology outputTechnology;

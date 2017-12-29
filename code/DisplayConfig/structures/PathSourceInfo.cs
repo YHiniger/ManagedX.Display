@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 
@@ -20,13 +21,11 @@ namespace ManagedX.Graphics.DisplayConfig
 		[Source( "WinGDI.h", "DISPLAYCONFIG_PATH_MODE_IDX_INVALID" )]
 		public const int InvalidModeInfoIndex = -1;
 
-		/// <summary>Defines the invalid <see cref="CloneGroupId"/>: 0xFFFF.</summary>
 		[Source( "WinGDI.h", "DISPLAYCONFIG_PATH_CLONE_GROUP_INVALID" )]
-		public const int InvalidCloneGroupId = 0x0000FFFF;
+		private const int InvalidCloneGroupId = 0x0000FFFF;
 
-		/// <summary>Defines the invalid <see cref="ModeInfoIndex2"/>: 0xFFFF.</summary>
 		[Source( "WinGDI.h", "DISPLAYCONFIG_PATH_SOURCE_MODE_IDX_INVALID" )]
-		public const int InvalidModeInfoIndex2 = 0x0000FFFF;
+		private const int InvalidModeInfoIndex2 = 0x0000FFFF;
 
 
 
@@ -43,15 +42,9 @@ namespace ManagedX.Graphics.DisplayConfig
 		}
 
 
-
-		/// <summary>The identifier of the adapter that this source information relates to.</summary>
+		/// <summary>The identifier of the adapter that this source information relates to, and the source identifier on the specified adapter that this path relates to.</summary>
 		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
-		public readonly Luid AdapterId;
-
-		/// <summary>The source identifier on the specified adapter that this path relates to.</summary>
-		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
-		public readonly int Id;
-
+		public readonly DisplayDeviceId Identifier;
 		private readonly int modeInfoIdx;	// cloneGroupId (16 bits) + sourceModeInfoIdx (16 bits)
 		private readonly StatusIndicators status;
 
@@ -67,17 +60,31 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <para>If this value is invalid, then it must be set to <see cref="InvalidCloneGroupId"/>.</para>
 		/// Supported starting in Windows 10.
 		/// </summary>
-		public int CloneGroupId => modeInfoIdx & 0x0000ffff;
+		public int CloneGroupId
+		{
+			get
+			{
+				var id = modeInfoIdx & 0x0000FFFF;
+				return id == InvalidCloneGroupId ? InvalidModeInfoIndex : id;
+			}
+		}
 
 
 		/// <summary>A valid index into the mode array of the <see cref="SourceMode"/> entry that contains the source mode information for this path only when <see cref="PathInfo.SupportsVirtualMode"/> is true.
 		/// <para>If there is no entry for this in the mode array, the value of this property is <see cref="InvalidModeInfoIndex2"/>.</para>
 		/// Supported starting in Windows 10.
 		/// </summary>
-		public int ModeInfoIndex2 => modeInfoIdx >> 16;
+		public int ModeInfoIndex2
+		{
+			get
+			{
+				var index = modeInfoIdx >> 16;
+				return index == InvalidModeInfoIndex2 ? InvalidModeInfoIndex : index;
+			}
+		}
 
 
-		/// <summary>Gets a value indicating whether the source is in use.</summary>
+		/// <summary>Gets a value indicating whether the source is in use by at least one active path.</summary>
 		public bool InUse => status.HasFlag( StatusIndicators.InUse );
 
 
@@ -85,7 +92,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns a hash code for this <see cref="PathSourceInfo"/> structure.</returns>
 		public override int GetHashCode()
 		{
-			return AdapterId.GetHashCode() ^ Id ^ modeInfoIdx ^ (int)status;
+			return Identifier.GetHashCode() ^ modeInfoIdx ^ (int)status;
 		}
 
 
@@ -94,7 +101,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns true if the structures are equal, otherwise returns false.</returns>
 		public bool Equals( PathSourceInfo other )
 		{
-			return this.AdapterId.Equals( other.AdapterId ) && ( Id == other.Id ) && ( modeInfoIdx == other.modeInfoIdx ) && ( status == other.status );
+			return Identifier.Equals( other.Identifier ) && ( modeInfoIdx == other.modeInfoIdx ) && ( status == other.status );
 		}
 
 
@@ -103,7 +110,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns true if the specified object is a <see cref="PathSourceInfo"/> structure which equals this structure, otherwise returns false.</returns>
 		public override bool Equals( object obj )
 		{
-			return ( obj is PathSourceInfo psi ) && this.Equals( psi );
+			return obj is PathSourceInfo info && this.Equals( info );
 		}
 
 
@@ -117,6 +124,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <param name="pathSourceInfo">A <see cref="PathSourceInfo"/> structure.</param>
 		/// <param name="other">A <see cref="PathSourceInfo"/> structure.</param>
 		/// <returns>Returns true if the structures are equal, otherwise returns false.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool operator ==( PathSourceInfo pathSourceInfo, PathSourceInfo other )
 		{
 			return pathSourceInfo.Equals( other );
@@ -127,6 +135,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <param name="pathSourceInfo">A <see cref="PathSourceInfo"/> structure.</param>
 		/// <param name="other">A <see cref="PathSourceInfo"/> structure.</param>
 		/// <returns>Returns true if the structures are not equal, otherwise returns false.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool operator !=( PathSourceInfo pathSourceInfo, PathSourceInfo other )
 		{
 			return !pathSourceInfo.Equals( other );

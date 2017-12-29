@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 
@@ -63,6 +64,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <param name="targetMode">A <see cref="TargetMode"/> structure.</param>
 		/// <param name="other">A <see cref="TargetMode"/> structure.</param>
 		/// <returns>Returns true if the structures are equal, otherwise returns false.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool operator ==( TargetMode targetMode, TargetMode other )
 		{
 			return targetMode.TargetVideoSignalInfo.Equals( other.TargetVideoSignalInfo );
@@ -73,6 +75,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <param name="targetMode">A <see cref="TargetMode"/> structure.</param>
 		/// <param name="other">A <see cref="TargetMode"/> structure.</param>
 		/// <returns>Returns true if the structures are not equal, otherwise returns false.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool operator !=( TargetMode targetMode, TargetMode other )
 		{
 			return !targetMode.TargetVideoSignalInfo.Equals( other.TargetVideoSignalInfo );

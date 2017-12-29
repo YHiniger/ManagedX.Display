@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 
@@ -60,7 +61,7 @@ namespace ManagedX.Graphics
 
 
 		/// <summary>Gets the device name of the display adapter or monitor; can't be null.</summary>
-		public string DeviceName => string.Copy( deviceName ?? string.Empty );
+		public string DeviceName => string.Copy( deviceName?.TrimEnd( '\0' ) ?? string.Empty );
 
 
 		/// <summary>Gets a description of the display adapter/monitor device; can't be null.</summary>
@@ -131,6 +132,7 @@ namespace ManagedX.Graphics
 		/// <param name="displayDevice">A <see cref="DisplayDevice"/> structure.</param>
 		/// <param name="other">A <see cref="DisplayDevice"/> structure.</param>
 		/// <returns>Returns true if the structures are equal, otherwise returns false.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool operator ==( DisplayDevice displayDevice, DisplayDevice other )
 		{
 			return displayDevice.Equals( other );
@@ -141,6 +143,7 @@ namespace ManagedX.Graphics
 		/// <param name="displayDevice">A <see cref="DisplayDevice"/> structure.</param>
 		/// <param name="other">A <see cref="DisplayDevice"/> structure.</param>
 		/// <returns>Returns true if the structures are not equal, otherwise returns false.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool operator !=( DisplayDevice displayDevice, DisplayDevice other )
 		{
 			return !displayDevice.Equals( other );

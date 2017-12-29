@@ -12,31 +12,23 @@ namespace ManagedX.Graphics.DisplayConfig
 	[System.Diagnostics.DebuggerStepThrough]
 	[Win32.Source( "WinGDI.h", "DISPLAYCONFIG_DEVICE_INFO_HEADER" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 20 )]
-	public abstract class DeviceInformation
+	public abstract class DeviceDescription
 	{
 		
 		private readonly DeviceInfoType infoType;
 		private readonly int structSize;
-		private readonly Luid adapterId;
-		private readonly int id;
+		private readonly DisplayDeviceId id;
 
 
 
-		/// <summary>Constructor.</summary>
-		/// <param name="type">Indicates the type of information to configure or obtain; must not be <see cref="DeviceInfoType.Undefined"/>.</param>
-		/// <param name="size">The size, in bytes, of the description (including this header, which is 20 bytes).</param>
-		/// <param name="adapterId">The id of the adapter the device information refers to.</param>
-		/// <param name="id">The identifier of the source or target to get or set information for.</param>
-		/// <exception cref="ArgumentException"/>
-		internal DeviceInformation( DeviceInfoType type, int size, Luid adapterId, int id )
+		internal DeviceDescription( DeviceInfoType type, int size, DisplayDeviceId displayDeviceId )
 		{
 			if( type == DeviceInfoType.Undefined )
 				throw new ArgumentException( "Invalid DisplayConfig device info type.", "type" );
 
 			infoType = type;
 			structSize = size;
-			this.adapterId = adapterId;
-			this.id = id;
+			id = displayDeviceId;
 		}
 
 	}

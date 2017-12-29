@@ -8,32 +8,32 @@
 	/// </summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/ff553924%28v=vs.85%29.aspx</remarks>
 	[Source( "WinGDI.h", "DISPLAYCONFIG_DEVICE_INFO_TYPE" )]
-	public enum DeviceInfoType : int
+	internal enum DeviceInfoType : int
 	{
 
 		/// <summary>Undefined.</summary>
 		Undefined,
 
 		/// <summary>Specifies the source name of the display device.
-		/// <para>If the DisplayConfigGetDeviceInfo function is successful, it returns the source name in the <see cref="SourceDeviceInformation"/> object.</para>
+		/// <para>If the DisplayConfigGetDeviceInfo function is successful, it returns the source name in the <see cref="SourceDeviceName"/> object.</para>
 		/// </summary>
 		[Source( "WinGDI.h", "DISPLAYCONFIG_DEVICE_INFO_GET_SOURCE_NAME" )]
 		GetSourceName,
 
 		/// <summary>Specifies information about the monitor.
-		/// <para>If the DisplayConfigGetDeviceInfo function is successful, it returns info about the monitor in the <see cref="TargetDeviceInformation"/> object.</para>
+		/// <para>If the DisplayConfigGetDeviceInfo function is successful, it returns info about the monitor in the <see cref="TargetDeviceDescription"/> object.</para>
 		/// </summary>
 		[Source( "WinGDI.h", "DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME" )]
 		GetTargetName,
 
 		/// <summary>Specifies information about the preferred mode of a monitor.
-		/// <para>If the DisplayConfigGetDeviceInfo function is successful, it returns info about the preferred mode of a monitor in the <see cref="TargetPreferredModeInformation"/> object.</para>
+		/// <para>If the DisplayConfigGetDeviceInfo function is successful, it returns info about the preferred mode of a monitor in the <see cref="TargetPreferredMode"/> object.</para>
 		/// </summary>
 		[Source( "WinGDI.h", "DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_PREFERRED_MODE" )]
 		GetTargetPreferredMode,
 
 		/// <summary>Specifies the graphics adapter name.
-		/// <para>If the DisplayConfigGetDeviceInfo function is successful, it returns the adapter name in the <see cref="AdapterInformation"/> object.</para>
+		/// <para>If the DisplayConfigGetDeviceInfo function is successful, it returns the adapter name in the <see cref="AdapterDevicePath"/> object.</para>
 		/// </summary>
 		[Source( "WinGDI.h", "DISPLAYCONFIG_DEVICE_INFO_GET_ADAPTER_NAME" )]
 		GetAdapterName,

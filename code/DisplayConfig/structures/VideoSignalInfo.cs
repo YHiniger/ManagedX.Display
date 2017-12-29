@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 
-namespace ManagedX.Graphics.DisplayConfig
+namespace ManagedX.Graphics
 {
 
 	/// <summary>Contains information about the video signal for a display.</summary>
@@ -72,7 +73,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns true if the specified object is a <see cref="VideoSignalInfo"/> structure which equals this structure, otherwise returns false.</returns>
 		public override bool Equals( object obj )
 		{
-			return ( obj != null ) && ( obj is VideoSignalInfo vsi ) && this.Equals( vsi );
+			return obj is VideoSignalInfo info && this.Equals( info );
 		}
 
 
@@ -94,6 +95,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <param name="videoSignalInfo">A <see cref="VideoSignalInfo"/> structure.</param>
 		/// <param name="other">A <see cref="VideoSignalInfo"/> structure.</param>
 		/// <returns>Returns true if the structures are equal, otherwise returns false.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool operator ==( VideoSignalInfo videoSignalInfo, VideoSignalInfo other )
 		{
 			return videoSignalInfo.Equals( other );
@@ -104,6 +106,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <param name="videoSignalInfo">A <see cref="VideoSignalInfo"/> structure.</param>
 		/// <param name="other">A <see cref="VideoSignalInfo"/> structure.</param>
 		/// <returns>Returns true if the structures are not equal, otherwise returns false.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool operator !=( VideoSignalInfo videoSignalInfo, VideoSignalInfo other )
 		{
 			return !videoSignalInfo.Equals( other );

@@ -9,7 +9,7 @@ namespace ManagedX.Graphics.DisplayConfig
 	[System.Diagnostics.DebuggerStepThrough]
 	[Win32.Source( "WinGDI.h", "DISPLAYCONFIG_ADAPTER_NAME" )]
 	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 4, Size = 276 )]
-	internal sealed class AdapterInformation : DeviceInformation
+	internal sealed class AdapterDevicePath : DeviceDescription
 	{
 
 		/// <summary>Defines the maximum length, in Unicode chars, of the <see cref="DevicePath"/>.</summary>
@@ -23,8 +23,8 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 
-		internal AdapterInformation( Luid adapterId, int id )
-			: base( DeviceInfoType.GetAdapterName, 276, adapterId, id )
+		internal AdapterDevicePath( DisplayDeviceId displayDeviceId )
+			: base( DeviceInfoType.GetAdapterName, 276, displayDeviceId )
 		{
 			DevicePath = new string( '\0', MaxDevicePathChars );
 		}

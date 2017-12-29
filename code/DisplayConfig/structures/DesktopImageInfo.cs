@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 
@@ -71,6 +72,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <param name="desktopImageInfo">A <see cref="DesktopImageInfo"/> structure.</param>
 		/// <param name="other">A <see cref="DesktopImageInfo"/> structure.</param>
 		/// <returns>Returns true if the structures are equivalent, otherwise returns false.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool operator ==( DesktopImageInfo desktopImageInfo, DesktopImageInfo other )
 		{
 			return desktopImageInfo.Equals( other );
@@ -81,6 +83,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <param name="desktopImageInfo">A <see cref="DesktopImageInfo"/> structure.</param>
 		/// <param name="other">A <see cref="DesktopImageInfo"/> structure.</param>
 		/// <returns>Returns true if the structures are not equivalent, otherwise returns false.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool operator !=( DesktopImageInfo desktopImageInfo, DesktopImageInfo other )
 		{
 			return !desktopImageInfo.Equals( other );

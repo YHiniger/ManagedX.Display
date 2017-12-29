@@ -12,7 +12,7 @@ namespace ManagedX.Graphics.DisplayConfig
 	[System.Diagnostics.DebuggerStepThrough]
 	[Source( "WinGDI.h", "DISPLAYCONFIG_TARGET_DEVICE_NAME" )]
 	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 4, Size = 420 )]
-	public sealed class TargetDeviceInformation : TargetInformation
+	public sealed class TargetDeviceDescription : TargetDescription
 	{
 
 		/// <summary>Defines the maximum length, in chars, of the <see cref="FriendlyName"/>.</summary>
@@ -58,11 +58,10 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 
-		/// <summary>Initializes a new <see cref="TargetDeviceInformation"/>.</summary>
-		/// <param name="adapterId">The adapter identifier.</param>
-		/// <param name="id">The target device identifier.</param>
-		public TargetDeviceInformation( Luid adapterId, int id )
-			: base( DeviceInfoType.GetTargetName, 420, adapterId, id )
+		/// <summary>Initializes a new <see cref="TargetDeviceDescription"/>.</summary>
+		/// <param name="displayDeviceId">The identifier of the target.</param>
+		public TargetDeviceDescription( DisplayDeviceId displayDeviceId )
+			: base( DeviceInfoType.GetTargetName, 420, displayDeviceId )
 		{
 			monitorFriendlyDeviceName = monitorDevicePath = string.Empty;
 		}

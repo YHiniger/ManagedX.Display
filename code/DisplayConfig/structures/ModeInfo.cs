@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 
@@ -49,7 +50,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		#region Source mode
 
 		/// <summary>When <see cref="InfoType"/> is <see cref="ModeInfoType.Source"/>, gets the size, in pixels, of the source mode.</summary>
-		public Size Size => InfoType == ModeInfoType.Source ? new Size( sourceMode.Width, sourceMode.Height ) : Size.Empty;
+		public Size Size => InfoType == ModeInfoType.Source ? sourceMode.Size : Size.Empty;
 
 
 		/// <summary>When <see cref="InfoType"/> is <see cref="ModeInfoType.Source"/>, gets the pixel format of the source mode.</summary>
@@ -119,6 +120,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <param name="modeInfo">A <see cref="ModeInfo"/> structure.</param>
 		/// <param name="other">A <see cref="ModeInfo"/> structure.</param>
 		/// <returns>Returns true if the structures are equal, otherwise returns false.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool operator ==( ModeInfo modeInfo, ModeInfo other )
 		{
 			return modeInfo.Equals( other );
@@ -129,6 +131,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <param name="modeInfo">A <see cref="ModeInfo"/> structure.</param>
 		/// <param name="other">A <see cref="ModeInfo"/> structure.</param>
 		/// <returns>Returns false if the structures are equal, otherwise returns true.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool operator !=( ModeInfo modeInfo, ModeInfo other )
 		{
 			return !modeInfo.Equals( other );

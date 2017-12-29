@@ -9,7 +9,7 @@ namespace ManagedX.Graphics.DisplayConfig
 	[System.Diagnostics.DebuggerStepThrough]
 	[Win32.Source( "WinGDI.h", "DISPLAYCONFIG_GET_ADVANCED_COLOR_INFO" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 32 )]
-	internal sealed class AdvancedColorInformation : DeviceInformation
+	internal sealed class AdvancedColorInformation : DeviceDescription
 	{
 
 		[Flags]

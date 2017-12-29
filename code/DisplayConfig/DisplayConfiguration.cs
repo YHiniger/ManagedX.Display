@@ -10,9 +10,7 @@ namespace ManagedX.Graphics.DisplayConfig
 	using Win32;
 
 
-	/// <summary>Provides access to DisplayConfig.
-	/// <para>Requires Windows 7 or greater.</para>
-	/// </summary>
+	/// <summary>Provides access to DisplayConfig.</summary>
 	/// <remarks>https://msdn.microsoft.com/en-us/library/windows/hardware/hh406259%28v=vs.85%29.aspx</remarks>
 	public sealed class DisplayConfiguration
 	{
@@ -153,6 +151,7 @@ namespace ManagedX.Graphics.DisplayConfig
 				[Out] out TopologyIndicators currentTopologyId
 			);
 
+
 			#endregion QueryDisplayConfig
 
 
@@ -165,7 +164,7 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 			/// <summary>Retrieves display configuration information about the device.</summary>
-			/// <param name="adapterInformation">An initialized <see cref="AdapterInformation"/>.
+			/// <param name="adapterInformation">An initialized <see cref="AdapterDevicePath"/>.
 			/// <para>This object contains information about the request, which includes the packet type in the type member.
 			/// The type and size of additional data that the function returns after the header structure depend on the packet type.
 			/// </para>
@@ -182,14 +181,14 @@ namespace ManagedX.Graphics.DisplayConfig
 			/// The caller can obtain names for the adapter, the source, and the target.
 			/// The caller can also call this function to obtain the best resolution of the connected display device.
 			/// </remarks>
-			[SuppressMessage( "Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "AdapterInformation.DevicePath" )]
+			[SuppressMessage( "Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "AdapterDevicePath.DevicePath" )]
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			internal static extern ErrorCode DisplayConfigGetDeviceInfo(
-				[In, Out] AdapterInformation adapterInformation
+				[In, Out] AdapterDevicePath adapterInformation
 			);
 
 			/// <summary>Retrieves display configuration information about the device.</summary>
-			/// <param name="requestPacket">An initialized <see cref="SourceDeviceInformation"/>.
+			/// <param name="sourceDeviceInformation">An initialized <see cref="SourceDeviceName"/>.
 			/// <para>This object contains information about the request, which includes the packet type in the type member.
 			/// The type and size of additional data that the function returns after the header structure depend on the packet type.
 			/// </para>
@@ -206,14 +205,14 @@ namespace ManagedX.Graphics.DisplayConfig
 			/// The caller can obtain names for the adapter, the source, and the target.
 			/// The caller can also call this function to obtain the best resolution of the connected display device.
 			/// </remarks>
-			[SuppressMessage( "Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "SourceDeviceInformation.GDIDeviceName" )]
+			[SuppressMessage( "Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "SourceDeviceName.GDIDeviceName" )]
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			internal static extern ErrorCode DisplayConfigGetDeviceInfo(
-				[In, Out] SourceDeviceInformation requestPacket
+				[In, Out] SourceDeviceName sourceDeviceInformation
 			);
 
 			/// <summary>Retrieves display configuration information about the device.</summary>
-			/// <param name="requestPacket">An initialized <see cref="TargetDeviceInformation"/>.
+			/// <param name="targetDeviceInformation">An initialized <see cref="TargetDeviceDescription"/>.
 			/// <para>This object contains information about the request, which includes the packet type in the type member.
 			/// The type and size of additional data that the function returns after the header structure depend on the packet type.
 			/// </para>
@@ -231,11 +230,11 @@ namespace ManagedX.Graphics.DisplayConfig
 			/// The caller can obtain names for the adapter, the source, and the target.
 			/// The caller can also call this function to obtain the best resolution of the connected display device.
 			/// </remarks>
-			[SuppressMessage( "Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "TargetDeviceInformation.monitorDevicePath" )]
-			[SuppressMessage( "Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "TargetDeviceInformation.monitorFriendlyDeviceName" )]
+			[SuppressMessage( "Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "TargetDeviceDescription.monitorFriendlyDeviceName" )]
+			[SuppressMessage( "Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "TargetDeviceDescription.monitorDevicePath" )]
 			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true, SetLastError = false )]
 			internal static extern ErrorCode DisplayConfigGetDeviceInfo(
-				[In, Out] TargetDeviceInformation requestPacket
+				[In, Out] TargetDeviceDescription targetDeviceInformation
 			);
 
 
@@ -280,6 +279,7 @@ namespace ManagedX.Graphics.DisplayConfig
 			#endregion DisplayConfigGetDeviceInfo
 
 		}
+
 
 
 		/// <summary>Retrieves information about all possible display paths for all display devices, or views, in the current setting.</summary>
@@ -367,7 +367,7 @@ namespace ManagedX.Graphics.DisplayConfig
 			if( sourceInfo == PathSourceInfo.Empty )
 				throw new ArgumentException( "Invalid source info: empty.", "sourceInfo" );
 
-			var deviceName = new SourceDeviceInformation( sourceInfo.AdapterId, sourceInfo.Id );
+			var deviceName = new SourceDeviceName( sourceInfo.Identifier );
 			var errorCode = SafeNativeMethods.DisplayConfigGetDeviceInfo( deviceName );
 			if( errorCode == ErrorCode.None )
 				return deviceName.GDIDeviceName.TrimEnd( '\0' );
@@ -375,17 +375,17 @@ namespace ManagedX.Graphics.DisplayConfig
 			throw GetException( errorCode );
 		}
 
-		/// <summary>Returns a <see cref="TargetDeviceInformation"/> structure containing information about the specified display target.</summary>
+		/// <summary>Returns a <see cref="TargetDeviceDescription"/> structure containing information about the specified display target.</summary>
 		/// <param name="targetInfo">A valid <see cref="PathTargetInfo"/> structure; must not be empty.</param>
-		/// <returns>Returns a <see cref="TargetDeviceInformation"/> structure containing information about the specified display target.</returns>
+		/// <returns>Returns a <see cref="TargetDeviceDescription"/> structure containing information about the specified display target.</returns>
 		/// <exception cref="ArgumentException"/>
 		/// <exception cref="DisplayConfigException"/>
-		public static TargetDeviceInformation GetTargetDeviceName( PathTargetInfo targetInfo )
+		public static TargetDeviceDescription GetTargetDeviceDescription( PathTargetInfo targetInfo )
 		{
 			if( targetInfo == PathTargetInfo.Empty )
 				throw new ArgumentException( "Invalid target info: empty.", "targetInfo" );
 
-			var deviceName = new TargetDeviceInformation( targetInfo.AdapterId, targetInfo.Id );
+			var deviceName = new TargetDeviceDescription( targetInfo.Identifier );
 			var errorCode = SafeNativeMethods.DisplayConfigGetDeviceInfo( deviceName );
 			if( errorCode == ErrorCode.None )
 				return deviceName;
@@ -394,18 +394,9 @@ namespace ManagedX.Graphics.DisplayConfig
 		}
 
 
-		/// <summary>Returns the adapter device path for a given adapter LUID and id.</summary>
-		/// <param name="adapterId">The adapter <see cref="Luid"/>.</param>
-		/// <param name="id">The adapter id.</param>
-		/// <returns>Returns the adapter device path.</returns>
-		/// <exception cref="ArgumentException"/>
-		/// <exception cref="DisplayConfigException"/>
-		private static string GetAdapterDeviceName( Luid adapterId, int id )
+		private static string GetAdapterDevicePath( DisplayDeviceId displayDeviceId )
 		{
-			if( adapterId == Luid.Zero )
-				throw new ArgumentException( "Invalid adapter id.", "adapterId" );
-
-			var adapterName = new AdapterInformation( adapterId, id );
+			var adapterName = new AdapterDevicePath( displayDeviceId );
 			var errorCode = SafeNativeMethods.DisplayConfigGetDeviceInfo( adapterName );
 			if( errorCode == ErrorCode.None )
 				return adapterName.DevicePath.TrimEnd( '\0' );
@@ -418,23 +409,12 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns the adapter device path.</returns>
 		/// <exception cref="ArgumentException"/>
 		/// <exception cref="DisplayConfigException"/>
-		public static string GetAdapterDeviceName( PathSourceInfo sourceInfo )
+		public static string GetAdapterDevicePath( PathSourceInfo sourceInfo )
 		{
 			if( sourceInfo == PathSourceInfo.Empty )
 				throw new ArgumentException( "Invalid source info.", "sourceInfo" );
 
-			try
-			{
-				return GetAdapterDeviceName( sourceInfo.AdapterId, sourceInfo.Id );
-			}
-			catch( ArgumentException ex )
-			{
-				throw new ArgumentException( "Invalid source info.", "sourceInfo", ex );
-			}
-			catch( DisplayConfigException )
-			{
-				throw;
-			}
+			return GetAdapterDevicePath( sourceInfo.Identifier );
 		}
 
 		/// <summary>Returns the device path of an adapter given its target info.</summary>
@@ -442,23 +422,12 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns the adapter device path.</returns>
 		/// <exception cref="ArgumentException"/>
 		/// <exception cref="DisplayConfigException"/>
-		public static string GetAdapterDeviceName( PathTargetInfo targetInfo )
+		public static string GetAdapterDevicePath( PathTargetInfo targetInfo )
 		{
 			if( targetInfo == PathTargetInfo.Empty )
 				throw new ArgumentException( "Invalid target info.", "targetInfo" );
 
-			try
-			{
-				return GetAdapterDeviceName( targetInfo.AdapterId, targetInfo.Id );
-			}
-			catch( ArgumentException ex )
-			{
-				throw new ArgumentException( "Invalid target info.", "targetInfo", ex );
-			}
-			catch( DisplayConfigException )
-			{
-				throw;
-			}
+			return GetAdapterDevicePath( targetInfo.Identifier );
 		}
 
 
@@ -545,7 +514,7 @@ namespace ManagedX.Graphics.DisplayConfig
 			{
 				this.Refresh();
 			}
-			catch( DisplayConfigException ex )
+			catch( Exception ex )
 			{
 				throw new DisplayConfigException( "Failed to instantiate display configuration.", ex );
 			}
@@ -564,8 +533,6 @@ namespace ManagedX.Graphics.DisplayConfig
 		public void Refresh()
 		{
 			var errorCode = QueryDisplayConfig( request, out paths, out modes, out topologyId );
-			if( errorCode == ErrorCode.InsufficientBuffer )
-				errorCode = QueryDisplayConfig( request, out paths, out modes, out topologyId );
 
 			if( errorCode != ErrorCode.None )
 				throw GetException( errorCode );

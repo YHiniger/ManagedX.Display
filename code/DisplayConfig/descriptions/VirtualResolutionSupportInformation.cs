@@ -12,7 +12,7 @@ namespace ManagedX.Graphics.DisplayConfig
 	[System.Diagnostics.DebuggerStepThrough]
 	[Win32.Source( "WinGDI.h", "DISPLAYCONFIG_SUPPORT_VIRTUAL_RESOLUTION" )]
 	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 4, Size = 24 )]
-	internal sealed class VirtualResolutionSupportInformation : DeviceInformation
+	internal sealed class VirtualResolutionSupportInformation : DeviceDescription
 	{
 
 		[Flags]

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 
@@ -153,6 +154,7 @@ namespace ManagedX.Graphics
 		/// <param name="header">A <see cref="BitmapInfoHeader"/> structure.</param>
 		/// <param name="other">A <see cref="BitmapInfoHeader"/> structure.</param>
 		/// <returns>Returns true if the specified structures are equivalent, otherwise returns false.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool operator ==( BitmapInfoHeader header, BitmapInfoHeader other )
 		{
 			return header.Equals( other );
@@ -162,6 +164,7 @@ namespace ManagedX.Graphics
 		/// <param name="header">A <see cref="BitmapInfoHeader"/> structure.</param>
 		/// <param name="other">A <see cref="BitmapInfoHeader"/> structure.</param>
 		/// <returns>Returns true if the specified structures are not equivalent, otherwise returns false.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool operator !=( BitmapInfoHeader header, BitmapInfoHeader other )
 		{
 			return !header.Equals( other );

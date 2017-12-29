@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 
@@ -16,28 +17,20 @@ namespace ManagedX.Graphics.DisplayConfig
 	public struct PathTargetInfo : IEquatable<PathTargetInfo>
 	{
 
-		/// <summary>Defines the invalid <see cref="ModeInfoIndex"/>: -1.</summary>
+		/// <summary>Defines the invalid <see cref="ModeInfoIndex"/>, <see cref="ModeInfoIndex2"/> and <see cref="DesktopModeInfoIndex"/>: -1.</summary>
 		public const int InvalidModeInfoIndex = PathSourceInfo.InvalidModeInfoIndex;
 
-
-		/// <summary>Defines the invalid <see cref="DesktopModeInfoIndex"/>: 0xFFFF.</summary>
 		[Source( "WinGDI.h", "DISPLAYCONFIG_PATH_DESKTOP_IMAGE_IDX_INVALID" )]
-		public const int InvalidDesktopModeInfoIndex = 0x0000FFFF;
+		private const int InvalidDesktopModeInfoIndex = 0x0000FFFF;
 
-
-		/// <summary>Defines the invalid <see cref="ModeInfoIndex2"/>: 0xFFFF.</summary>
 		[Source( "WinGDI.h", "DISPLAYCONFIG_PATH_TARGET_MODE_IDX_INVALID" )]
-		public const int InvalidModeInfoIndex2 = 0x0000FFFF;
+		private const int InvalidModeInfoIndex2 = 0x0000FFFF;
 
 
 
-		/// <summary>The identifier of the adapter that the path is on.</summary>
+		/// <summary>The identifier of the adapter that the path is on, and the target identifier on the specified adapter that this path relates to.</summary>
 		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
-		public readonly Luid AdapterId;
-
-		/// <summary>The target identifier on the specified adapter that this path relates to.</summary>
-		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
-		public readonly int Id;
+		public readonly DisplayDeviceId Identifier;
 
 		private readonly int modeInfoIdx;   // desktopModeInfoIndex (16 bits), targetModeInfoIndex (16 bits)
 
@@ -69,7 +62,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// In this case, the caller specifies this value in the targetVideoSignalInfo member of the <see cref="TargetMode"/> structure.
 		/// </summary>
 		[SuppressMessage( "Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields" )]
-		public readonly ScanlineOrdering ScanLineOrdering;
+		public readonly ScanlineOrdering ScanlineOrdering;
 
 		/// <summary>Indicates whether the target is available.
 		/// true indicates that the target is available.
@@ -93,17 +86,35 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 		/// <summary>Gets the index into the mode array of the <see cref="DesktopImageInfo"/> entry that contains the desktop mode information for this path only when <see cref="PathInfo.SupportsVirtualMode"/> is true.
-		/// <para>If there is no entry for this in the mode array, the value of this property is <see cref="InvalidDesktopModeInfoIndex"/>.</para>
+		/// <para>If there is no entry for this in the mode array, the value of this property is <see cref="InvalidModeInfoIndex"/>.</para>
 		/// Requires Windows 10 or newer.
 		/// </summary>
-		public int DesktopModeInfoIndex => modeInfoIdx & 0x0000FFFF;
+		public int DesktopModeInfoIndex
+		{
+			get
+			{
+				var index = modeInfoIdx & 0x0000FFFF;
+				if( index == InvalidDesktopModeInfoIndex )
+					return InvalidModeInfoIndex;
+				return index;
+			}
+		}
 
 
 		/// <summary>Gets the index into the mode array of the <see cref="TargetMode"/> entry which contains the target mode information for this path only when <see cref="PathInfo.SupportsVirtualMode"/> is true.
-		/// <para>If there is no entry for this in the mode array, the value of targetModeInfoIdx is <see cref="InvalidModeInfoIndex2"/>.</para>
+		/// <para>If there is no entry for this in the mode array, the value of ModeInfoIndex2 is <see cref="InvalidModeInfoIndex"/>.</para>
 		/// Requires Windows 10 or newer.
 		/// </summary>
-		public int ModeInfoIndex2 => modeInfoIdx >> 16;
+		public int ModeInfoIndex2
+		{
+			get
+			{
+				var index = modeInfoIdx >> 16;
+				if( index == InvalidModeInfoIndex2 )
+					return InvalidModeInfoIndex;
+				return index;
+			}
+		}
 
 
 
@@ -111,7 +122,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns a hash code for this <see cref="PathTargetInfo"/> structure.</returns>
 		public override int GetHashCode()
 		{
-			return AdapterId.GetHashCode() ^ Id ^ modeInfoIdx ^ (int)OutputTechnology ^ (int)Rotation ^ (int)Scaling ^ RefreshRate.GetHashCode() ^ (int)ScanLineOrdering ^ ( IsTargetAvailable ? -1 : 0 ) ^ (int)State;
+			return Identifier.GetHashCode() ^ modeInfoIdx ^ (int)OutputTechnology ^ (int)Rotation ^ (int)Scaling ^ RefreshRate.GetHashCode() ^ (int)ScanlineOrdering ^ ( IsTargetAvailable ? -1 : 0 ) ^ (int)State;
 		}
 
 
@@ -120,7 +131,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns true if the <paramref name="other"/> structure equals this <see cref="PathTargetInfo"/> structure, otherwise returns false.</returns>
 		public bool Equals( PathTargetInfo other )
 		{
-			return AdapterId.Equals( other.AdapterId ) && ( Id == other.Id ) && ( modeInfoIdx == other.modeInfoIdx ) && ( OutputTechnology == other.OutputTechnology ) && ( Rotation == other.Rotation ) && ( Scaling == other.Scaling ) && RefreshRate.Equals( other.RefreshRate ) && ( ScanLineOrdering == other.ScanLineOrdering ) && ( IsTargetAvailable == other.IsTargetAvailable ) && ( State == other.State );
+			return Identifier.Equals( other.Identifier ) && ( modeInfoIdx == other.modeInfoIdx ) && ( OutputTechnology == other.OutputTechnology ) && ( Rotation == other.Rotation ) && ( Scaling == other.Scaling ) && RefreshRate.Equals( other.RefreshRate ) && ( ScanlineOrdering == other.ScanlineOrdering ) && ( IsTargetAvailable == other.IsTargetAvailable ) && ( State == other.State );
 		}
 
 
@@ -143,6 +154,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <param name="pathTargetInfo">A <see cref="PathTargetInfo"/> structure.</param>
 		/// <param name="other">A <see cref="PathTargetInfo"/> structure.</param>
 		/// <returns>Returns true if the structures are equal, otherwise returns false.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool operator ==( PathTargetInfo pathTargetInfo, PathTargetInfo other )
 		{
 			return pathTargetInfo.Equals( other );
@@ -153,6 +165,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <param name="pathTargetInfo">A <see cref="PathTargetInfo"/> structure.</param>
 		/// <param name="other">A <see cref="PathTargetInfo"/> structure.</param>
 		/// <returns>Returns true if the structures are not equal, otherwise returns false.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool operator !=( PathTargetInfo pathTargetInfo, PathTargetInfo other )
 		{
 			return !pathTargetInfo.Equals( other );

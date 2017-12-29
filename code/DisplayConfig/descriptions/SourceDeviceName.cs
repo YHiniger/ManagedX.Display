@@ -9,7 +9,7 @@ namespace ManagedX.Graphics.DisplayConfig
 	[System.Diagnostics.DebuggerStepThrough]
 	[Win32.Source( "WinGDI.h", "DISPLAYCONFIG_SOURCE_DEVICE_NAME" )]
 	[StructLayout( LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 4, Size = 84 )]
-	internal sealed class SourceDeviceInformation : DeviceInformation
+	internal sealed class SourceDeviceName : DeviceDescription
 	{
 
 		/// <summary>The GDI device name for the source, or view.
@@ -20,8 +20,8 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 
-		internal SourceDeviceInformation( Luid adapterId, int id )
-			: base( DeviceInfoType.GetSourceName, 84, adapterId, id )
+		internal SourceDeviceName( DisplayDeviceId displayDeviceId )
+			: base( DeviceInfoType.GetSourceName, 84, displayDeviceId )
 		{
 			GDIDeviceName = new string( '\0', DisplayDevice.MaxDeviceNameChars );
 		}

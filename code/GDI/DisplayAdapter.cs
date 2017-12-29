@@ -8,12 +8,11 @@ using System.Security;
 namespace ManagedX.Graphics
 {
 
-	/// <summary>A display adapter.</summary>
+	/// <summary>Represents a GDI (Graphics Device Interface) display adapter.</summary>
 	public sealed class DisplayAdapter : DisplayDeviceBase
 	{
 
-		/// <summary>Defines the maximum number of display adapters supported by the system: 16.</summary>
-		public const int MaxAdapterCount = 16;
+		internal const int MaxAdapterCount = 16;
 
 
 		#region Native
@@ -44,21 +43,6 @@ namespace ManagedX.Graphics
 			/// <para>Otherwise, it will only return modes that have the same orientation as the one currently set for the requested display.</para>
 			/// </summary>
 			RotatedMode = 0x00000002
-
-		}
-
-
-		private enum MonitorFromWindowOption : int
-		{
-
-			/// <summary>Causes the method to return <see cref="IntPtr.Zero"/>.</summary>
-			DefaultToNull,
-
-			/// <summary>Causes the method to return a handle to the primary display monitor.</summary>
-			DefaultToPrimary,
-
-			/// <summary>Causes the method to return a handle to the display monitor that is nearest to the window.</summary>
-			DefaultToNearest
 
 		}
 
@@ -110,8 +94,6 @@ namespace ManagedX.Graphics
 			);
 
 
-			#region EnumDisplaySettingsEx
-
 			/// <summary>Retrieves information about one of the graphics modes for a display device.
 			/// To retrieve information for all the graphics modes for a display device, make a series of calls to this function.</summary>
 			/// <param name="deviceName">
@@ -149,8 +131,6 @@ namespace ManagedX.Graphics
 				[In, Out] ref DisplayDeviceMode devMode,
 				[In] EnumDisplaySettingsExOptions options
 			);
-
-			#endregion EnumDisplaySettingsEx
 
 
 			#region EnumDisplayMonitors (unsafe)
@@ -196,7 +176,7 @@ namespace ManagedX.Graphics
 			/// <param name="data">Application-defined data that EnumDisplayMonitors passes directly to the <see cref="MonitorEnumProc"/> function.</param>
 			/// <returns>Returns true on success, otherwise returns false (ie: the callback function interrupted the enumeration).</returns>
 			/// <remarks>https://msdn.microsoft.com/en-us/library/dd162610%28v=vs.85%29.aspx</remarks>
-			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true )]
+			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, ExactSpelling = true, PreserveSig = true )]
 			[return: MarshalAs( UnmanagedType.Bool )]
 			unsafe internal static extern bool EnumDisplayMonitors(
 				[In] IntPtr deviceContextHandle,
@@ -206,20 +186,6 @@ namespace ManagedX.Graphics
 			);
 
 			#endregion EnumDisplayMonitors (unsafe)
-
-
-			/// <summary>Retrieves a handle to the display monitor that has the largest area of intersection with the bounding rectangle of a specified window.</summary>
-			/// <param name="windowHandle">A handle to the window of interest.</param>
-			/// <param name="option">Determines the function's return value if the window does not intersect any display monitor.</param>
-			/// <returns>If the window intersects one or more display monitor rectangles, the return value is an HMONITOR handle to the display monitor that has the largest area of intersection with the window.
-			/// <para>If the window does not intersect a display monitor, the return value depends on the value of <paramref name="option"/>.</para>
-			/// </returns>
-			/// <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/dd145064%28v=vs.85%29.aspx</remarks>
-			[DllImport( LibraryName, CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, ExactSpelling = true, PreserveSig = true )]
-			internal static extern IntPtr MonitorFromWindow(
-				[In] IntPtr windowHandle,
-				[In] MonitorFromWindowOption option
-			);
 
 		}
 
@@ -325,18 +291,6 @@ namespace ManagedX.Graphics
 		}
 
 
-		/// <summary>Returns a handle to the display monitor that has the largest area of intersection with the bounding rectangle of a specified window.</summary>
-		/// <param name="windowHandle">A handle to the window of interest.</param>
-		/// <returns>If the window intersects one or more display monitor rectangles, the return value is an HMONITOR handle to the display monitor that has the largest area of intersection with the window.
-		/// <para>If the window does not intersect a display monitor, the return value is the nearest monitor.</para>
-		/// </returns>
-		/// <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/dd145064%28v=vs.85%29.aspx</remarks>
-		internal static IntPtr GetMonitorHandleFromWindow( IntPtr windowHandle )
-		{
-			return NativeMethods.MonitorFromWindow( windowHandle, MonitorFromWindowOption.DefaultToNearest );
-		}
-
-
 		/// <summary>Returns a read-only collection containing the handle (HMONITOR) of all connected monitors.</summary>
 		/// <returns>Returns a read-only collection containing the handle (HMONITOR) of all connected monitors.</returns>
 		unsafe private static ReadOnlyCollection<IntPtr> GetMonitorHandles()
@@ -344,9 +298,9 @@ namespace ManagedX.Graphics
 			var handles = new List<IntPtr>( 1 );
 			
 			var callback = new NativeMethods.MonitorEnumProc(
-				( IntPtr hMonitor, IntPtr hDeviceContext, Rect* monitor, IntPtr param ) =>
+				( IntPtr monitorHandle, IntPtr deviceContextHandle, Rect* monitor, IntPtr param ) =>
 				{
-					handles.Add( hMonitor );
+					handles.Add( monitorHandle );
 					return true;
 				}
 			);
@@ -370,7 +324,9 @@ namespace ManagedX.Graphics
 
 		
 		private readonly Dictionary<string, DisplayMonitor> monitorsByDeviceName;
-		private DisplayDeviceMode currentMode;
+		private DisplayDeviceMode currentMode;  // THINKABOUTME - if the adapter is connected, this is the current mode; otherwise this should the mode stored in the registry ?
+		internal PixelFormat currentModeFormat;
+		internal int cloneGroupId;
 
 
 
@@ -383,32 +339,6 @@ namespace ManagedX.Graphics
 
 
 
-		internal sealed override void Refresh( DisplayDevice displayDevice )
-		{
-			base.Refresh( displayDevice );
-			this.RefreshMonitorList();
-
-			var mode = GetCurrentDisplaySettingsEx( base.DeviceName, EnumDisplaySettingsExOptions.None );
-			if( !mode.Equals( currentMode ) )
-			{
-				currentMode = mode;
-				this.CurrentModeChanged?.Invoke( this, EventArgs.Empty );
-			}
-		}
-
-
-		/// <summary>Gets the device id of this <see cref="DisplayAdapter"/>.</summary>
-		new public string DeviceId => base.DeviceId;
-
-
-		/// <summary>Gets a value indicating the state of this <see cref="DisplayAdapter"/>.</summary>
-		public DisplayAdapterStateIndicators State => (DisplayAdapterStateIndicators)base.RawState;
-
-
-		/// <summary>Gets a read-only collection containing all (32 bpp) display modes supported by both this <see cref="DisplayAdapter"/> and its <see cref="Monitors"/>.</summary>
-		public ReadOnlyDisplayDeviceModeCollection DisplayModes => EnumDisplaySettingsEx( base.DeviceName, EnumDisplaySettingsExOptions.None );
-
-
 		private void RefreshMonitorList()
 		{
 			var deviceName = base.DeviceName;
@@ -419,7 +349,7 @@ namespace ManagedX.Graphics
 			int h;
 			for( h = 0; h < hMax; ++h )
 			{
-				var info = DisplayMonitor.GetMonitorInfo( allHandles[ h ] );
+				var info = DisplayMonitor.GetInfo( allHandles[ h ] );
 				if( deviceName.Equals( info.AdapterDeviceName, StringComparison.Ordinal ) )
 					handles.Add( allHandles[ h ] );
 			}
@@ -445,7 +375,7 @@ namespace ManagedX.Graphics
 
 				if( monitorsByDeviceName.TryGetValue( monitor.DeviceName, out displayMonitor ) )
 				{
-					displayMonitor.Refresh( monitor );
+					displayMonitor.Refresh( ref monitor );
 					displayMonitor.Handle = handle;
 					removedMonitors.Remove( monitor.DeviceName );
 				}
@@ -489,7 +419,35 @@ namespace ManagedX.Graphics
 		}
 
 
-		/// <summary>Gets a read-only collection containing all monitors currently connected to this <see cref="DisplayAdapter"/>.</summary>
+		internal sealed override void Refresh( ref DisplayDevice displayDevice )
+		{
+			base.Refresh( ref displayDevice );
+
+			this.RefreshMonitorList();
+
+			if( this.State.HasFlag( DisplayAdapterStateIndicators.AttachedToDesktop ) )
+			{
+				var mode = GetCurrentDisplaySettingsEx( base.DeviceName, EnumDisplaySettingsExOptions.None );
+				if( !mode.Equals( currentMode ) )
+				{
+					currentMode = mode;
+					this.CurrentModeChanged?.Invoke( this, EventArgs.Empty );
+				}
+			}
+		}
+
+
+		/// <summary>Gets the GDI device id of this <see cref="DisplayAdapter"/>.</summary>
+		new public string DeviceId => base.DeviceId;
+
+
+		/// <summary>Gets a value indicating the state of this <see cref="DisplayAdapter"/>.</summary>
+		new public DisplayAdapterStateIndicators State => (DisplayAdapterStateIndicators)base.State;
+
+
+		/// <summary>Gets a read-only collection containing all monitors currently connected to this <see cref="DisplayAdapter"/>.
+		/// <para>Multiple monitors indicate a clone topology.</para>
+		/// </summary>
 		public ReadOnlyDisplayMonitorCollection Monitors
 		{
 			get
@@ -502,6 +460,43 @@ namespace ManagedX.Graphics
 		}
 
 
+		/// <summary>Returns the monitor corresponding to the specified handle.</summary>
+		/// <param name="monitorHandle">A monitor handle.</param>
+		/// <returns>Returns the requested monitor, or null.</returns>
+		public DisplayMonitor GetMonitorByHandle( IntPtr monitorHandle )
+		{
+			this.RefreshMonitorList();
+			foreach( var monitor in monitorsByDeviceName.Values )
+			{
+				if( monitor.Handle == monitorHandle )
+					return monitor;
+			}
+			return null;
+		}
+
+
+		/// <summary>Returns the display monitor corresponding to the specified device path, or null.</summary>
+		/// <param name="devicePath">The display monitor's device path.</param>
+		/// <returns>Returns the display monitor corresponding to the specified device path, or null.</returns>
+		public DisplayMonitor GetMonitorByDevicePath( string devicePath )
+		{
+			if( !string.IsNullOrWhiteSpace( devicePath ) )
+			{
+				this.RefreshMonitorList();
+				foreach( var monitor in monitorsByDeviceName.Values )
+				{
+					if( devicePath.Equals( monitor.DevicePath, StringComparison.Ordinal ) )
+						return monitor;
+				}
+			}
+			return null;
+		}
+
+
+		/// <summary>Gets a read-only collection containing all (32 bpp) display modes supported by both this <see cref="DisplayAdapter"/> and its <see cref="Monitors"/>.</summary>
+		public ReadOnlyDisplayDeviceModeCollection DisplayModes => EnumDisplaySettingsEx( base.DeviceName, EnumDisplaySettingsExOptions.None );
+
+
 		/// <summary>Gets the current display mode of this <see cref="DisplayAdapter"/>.
 		/// <para>Requires the adapter to be attached to the desktop.</para>
 		/// </summary>
@@ -512,12 +507,26 @@ namespace ManagedX.Graphics
 		public DisplayDeviceMode RegistryMode => GetRegistryDisplaySettingsEx( base.DeviceName, EnumDisplaySettingsExOptions.None );
 
 
+		#region DisplayConfig
+
+		/// <summary>Gets the current pixel format for this <see cref="DisplayAdapter"/>.</summary>
+		public PixelFormat CurrentFormat => currentModeFormat;
+
+		
+		/// <summary>Gets the clone group id for this <see cref="DisplayAdapter"/>.
+		/// <para>Requires Windows 10 or newer.</para>
+		/// </summary>
+		public int CloneGroupId => cloneGroupId;
+
+		#endregion DisplayConfig
+
+
 		#region Events
 
 		/// <summary>Raised when this <see cref="DisplayAdapter"/> is removed from the system.</summary>
 		public event EventHandler Removed;
 
-		/// <summary>Raises the <see cref="Removed"/> event.</summary>
+		/// <summary>Raises the Disconnected event of all associated display monitors, and raises the <see cref="Removed"/> event.</summary>
 		internal void OnRemoved()
 		{
 			foreach( var monitor in monitorsByDeviceName.Values )

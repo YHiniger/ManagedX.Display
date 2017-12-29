@@ -9,7 +9,7 @@ namespace ManagedX.Graphics.DisplayConfig
 	[System.Diagnostics.DebuggerStepThrough]
 	[Win32.Source( "WinGDI.h", "DISPLAYCONFIG_TARGET_PREFERRED_MODE" )]
 	[StructLayout( LayoutKind.Sequential, Pack = 4, Size = 76 )]
-	public sealed class TargetPreferredModeInformation : DeviceInformation
+	public sealed class TargetPreferredMode : DeviceDescription
 	{
 
 		private readonly int width;
@@ -18,11 +18,10 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 
-		/// <summary>Initializes a new <see cref="TargetPreferredModeInformation"/>.</summary>
-		/// <param name="adapterId">The adapter LUID of the target.</param>
-		/// <param name="id">The target id.</param>
-		public TargetPreferredModeInformation( Luid adapterId, int id )
-			: base( DeviceInfoType.GetTargetPreferredMode, 76, adapterId, id )
+		/// <summary>Initializes a new <see cref="TargetPreferredMode"/>.</summary>
+		/// <param name="displayDeviceId">The identifier of the target.</param>
+		public TargetPreferredMode( DisplayDeviceId displayDeviceId )
+			: base( DeviceInfoType.GetTargetPreferredMode, 76, displayDeviceId )
 		{
 		}
 
@@ -36,8 +35,8 @@ namespace ManagedX.Graphics.DisplayConfig
 		public VideoSignalInfo VideoSignal => targetMode.TargetVideoSignalInfo;
 
 
-		/// <summary>Returns a string representing this <see cref="TargetPreferredModeInformation"/>.</summary>
-		/// <returns>Returns a string representing this <see cref="TargetPreferredModeInformation"/>.</returns>
+		/// <summary>Returns a string representing this <see cref="TargetPreferredMode"/>.</summary>
+		/// <returns>Returns a string representing this <see cref="TargetPreferredMode"/>.</returns>
 		public sealed override string ToString()
 		{
 			return string.Format( System.Globalization.CultureInfo.InvariantCulture, "{0}x{1}@{2}Hz", width, height, targetMode.TargetVideoSignalInfo.VSyncFrequency.ToSingle() );

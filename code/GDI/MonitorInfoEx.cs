@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 
@@ -131,6 +132,7 @@ namespace ManagedX.Graphics
 		/// <param name="monitorInfo">A <see cref="MonitorInfoEx"/> structure.</param>
 		/// <param name="other">A <see cref="MonitorInfoEx"/> structure.</param>
 		/// <returns>Returns true if the structures are equal, otherwise returns false.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool operator ==( MonitorInfoEx monitorInfo, MonitorInfoEx other )
 		{
 			return monitorInfo.Equals( other );
@@ -141,6 +143,7 @@ namespace ManagedX.Graphics
 		/// <param name="monitorInfo">A <see cref="MonitorInfoEx"/> structure.</param>
 		/// <param name="other">A <see cref="MonitorInfoEx"/> structure.</param>
 		/// <returns>Returns true if the structures are not equal, otherwise returns false.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool operator !=( MonitorInfoEx monitorInfo, MonitorInfoEx other )
 		{
 			return !monitorInfo.Equals( other );

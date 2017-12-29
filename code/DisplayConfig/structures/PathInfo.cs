@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 
@@ -94,13 +95,6 @@ namespace ManagedX.Graphics.DisplayConfig
 		}
 
 
-		/// <summary></summary>
-		/// <returns></returns>
-		public override string ToString()
-		{
-			return DisplayDeviceManager.GetAdapterByGDIDeviceName( DisplayConfiguration.GetSourceGDIDeviceName( SourceInfo ) ).DisplayName + " - " + DisplayConfiguration.GetTargetDeviceName( TargetInfo ).FriendlyName;
-		}
-
 
 		/// <summary>The empty <see cref="PathInfo"/> structure.</summary>
 		public static readonly PathInfo Empty;
@@ -112,6 +106,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <param name="pathInfo">A <see cref="PathInfo"/> structure.</param>
 		/// <param name="other">A <see cref="PathInfo"/> structure.</param>
 		/// <returns>Returns true if the structures are equal, otherwise returns false.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool operator ==( PathInfo pathInfo, PathInfo other )
 		{
 			return pathInfo.Equals( other );
@@ -122,6 +117,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <param name="pathInfo">A <see cref="PathInfo"/> structure.</param>
 		/// <param name="other">A <see cref="PathInfo"/> structure.</param>
 		/// <returns>Returns true if the structures are not equal, otherwise returns false.</returns>
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static bool operator !=( PathInfo pathInfo, PathInfo other )
 		{
 			return !pathInfo.Equals( other );

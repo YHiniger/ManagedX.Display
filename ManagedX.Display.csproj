@@ -7,7 +7,7 @@
     <ProjectGuid>{F86AFB12-D88E-45F8-A306-EE6B900720F4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ManagedX</RootNamespace>
+    <RootNamespace>ManagedX.Graphics</RootNamespace>
     <AssemblyName>ManagedX.Display</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -51,23 +51,21 @@
     <AssemblyOriginatorKeyFile>ManagedX.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="code\DisplayDeviceId.cs" />
     <Compile Include="code\GDI\DisplayAdapter.cs" />
     <Compile Include="code\GDI\DisplayDeviceBase.cs" />
-    <Compile Include="code\DisplayConfig\descriptions\AdapterInformation.cs" />
+    <Compile Include="code\DisplayConfig\descriptions\AdapterDevicePath.cs" />
     <None Include="code\DisplayConfig\descriptions\AdvancedColorInformation.cs" />
-    <Compile Include="code\DisplayConfig\descriptions\DeviceInformation.cs" />
+    <Compile Include="code\DisplayConfig\descriptions\DeviceDescription.cs" />
     <None Include="code\DisplayConfig\descriptions\TargetBaseInformation.cs" />
-    <Compile Include="code\DisplayConfig\descriptions\TargetInformation.cs" />
+    <Compile Include="code\DisplayConfig\descriptions\TargetDescription.cs" />
     <None Include="code\DisplayConfig\descriptions\VirtualResolutionSupportInformation.cs" />
     <Compile Include="code\DisplayConfig\DisplayConfigException.cs" />
-    <Compile Include="code\DisplayConfig\DisplayConfigMonitorInfo.cs" />
-    <Compile Include="code\DisplayConfig\DisplayConfigInfo.cs" />
-    <Compile Include="code\DisplayConfig\DisplayConfigAdapterInfo.cs" />
-    <Compile Include="code\DisplayConfig\descriptions\SourceDeviceInformation.cs" />
+    <Compile Include="code\DisplayConfig\descriptions\SourceDeviceName.cs" />
     <Compile Include="code\DisplayConfig\enumerations\ColorEncoding.cs" />
     <Compile Include="code\DisplayConfig\structures\DesktopImageInfo.cs" />
-    <Compile Include="code\DisplayConfig\descriptions\TargetDeviceInformation.cs" />
-    <Compile Include="code\DisplayConfig\descriptions\TargetPreferredModeInformation.cs" />
+    <Compile Include="code\DisplayConfig\descriptions\TargetDeviceDescription.cs" />
+    <Compile Include="code\DisplayConfig\descriptions\TargetPreferredMode.cs" />
     <Compile Include="code\DisplayDeviceEventArgs.cs" />
     <Compile Include="code\GDI\DisplayMonitor.cs" />
     <Compile Include="code\GDI\ReadOnlyDisplayAdapterCollection.cs" />
@@ -75,7 +73,7 @@
     <Compile Include="code\GDI\ReadOnlyDisplayMonitorCollection.cs" />
     <Compile Include="code\DisplayConfig\DisplayConfiguration.cs" />
     <Compile Include="code\DisplayConfig\enumerations\QueryDisplayConfigRequest.cs" />
-    <Compile Include="code\DisplayConfig\enumerations\DeviceInfoType.cs" />
+    <Compile Include="code\DisplayConfig\descriptions\DeviceInfoType.cs" />
     <Compile Include="code\DisplayConfig\structures\ModeInfo.cs" />
     <Compile Include="code\DisplayConfig\enumerations\ModeInfoType.cs" />
     <Compile Include="code\DisplayConfig\structures\PathInfo.cs" />
