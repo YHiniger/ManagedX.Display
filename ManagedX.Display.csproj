@@ -68,9 +68,6 @@
     <Compile Include="code\DisplayConfig\descriptions\TargetPreferredMode.cs" />
     <Compile Include="code\DisplayDeviceEventArgs.cs" />
     <Compile Include="code\GDI\DisplayMonitor.cs" />
-    <Compile Include="code\GDI\ReadOnlyDisplayAdapterCollection.cs" />
-    <Compile Include="code\GDI\ReadOnlyDisplayDeviceModeCollection.cs" />
-    <Compile Include="code\GDI\ReadOnlyDisplayMonitorCollection.cs" />
     <Compile Include="code\DisplayConfig\DisplayConfiguration.cs" />
     <Compile Include="code\DisplayConfig\enumerations\QueryDisplayConfigRequest.cs" />
     <Compile Include="code\DisplayConfig\descriptions\DeviceInfoType.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 
 
@@ -51,15 +52,13 @@ namespace ManagedX.Graphics
 
 
 		/// <summary>Gets a read-only collection containing all known display adapters.</summary>
-		public static ReadOnlyDisplayAdapterCollection Adapters
+		public static ReadOnlyCollection<DisplayAdapter> Adapters
 		{
 			get
 			{
 				if( !isInitialized )
 					Refresh();
-
-				var list = new List<DisplayAdapter>( adaptersByDeviceName.Values );
-				return new ReadOnlyDisplayAdapterCollection( list );
+				return new ReadOnlyCollection<DisplayAdapter>( new List<DisplayAdapter>( adaptersByDeviceName.Values ) );
 			}
 		}
 
@@ -92,7 +91,7 @@ namespace ManagedX.Graphics
 		/// <param name="gdiDeviceId">A GDI device id.</param>
 		/// <returns>Returns a read-only collection of GDI display adapters, given their device id.</returns>
 		[SuppressMessage( "Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "gdi" )]
-		public static ReadOnlyDisplayAdapterCollection GetAdaptersByDeviceId( string gdiDeviceId )
+		public static ReadOnlyCollection<DisplayAdapter> GetAdaptersByDeviceId( string gdiDeviceId )
 		{
 			if( !isInitialized )
 				Refresh();
@@ -107,7 +106,7 @@ namespace ManagedX.Graphics
 					adapters.RemoveAt( adapterIndex );
 			}
 			
-			return new ReadOnlyDisplayAdapterCollection( adapters );
+			return new ReadOnlyCollection<DisplayAdapter>( adapters );
 		}
 
 
@@ -257,10 +256,10 @@ namespace ManagedX.Graphics
 						adapter.cloneGroupId = -1;
 						index = source.ModeInfoIndex;
 					}
-					if( index == PathSourceInfo.InvalidModeInfoIndex )
-						adapter.currentModeFormat = PixelFormat.Undefined;
-					else
-						adapter.currentModeFormat = configuration.DisplayModes[ index ].Format;
+					//if( index == PathSourceInfo.InvalidModeInfoIndex )
+					//	adapter.currentModeFormat = PixelFormat.Undefined;
+					//else
+					//	adapter.currentModeFormat = configuration.DisplayModes[ index ].Format;
 
 					target = path.TargetInfo;
 					desc = DisplayConfiguration.GetTargetDeviceDescription( target );

@@ -235,7 +235,7 @@ namespace ManagedX.Graphics
 		/// A null value specifies the current display device on the computer that the calling thread is running on.</param>
 		/// <param name="options">One or more <see cref="EnumDisplaySettingsExOptions"/>.</param>
 		/// <returns>Returns a read-only collection containing information about all the graphics modes for a display device.</returns>
-		private static ReadOnlyDisplayDeviceModeCollection EnumDisplaySettingsEx( string deviceName, EnumDisplaySettingsExOptions options )
+		private static ReadOnlyCollection<DisplayDeviceMode> EnumDisplaySettingsEx( string deviceName, EnumDisplaySettingsExOptions options )
 		{
 			var modes = new List<DisplayDeviceMode>();
 			var devMode = DisplayDeviceMode.Default;
@@ -261,7 +261,7 @@ namespace ManagedX.Graphics
 			if( modes.Count > 1 )
 				modes.Sort( ( DisplayDeviceMode mode, DisplayDeviceMode other ) => { return -mode.CompareTo( other ); } );
 
-			return new ReadOnlyDisplayDeviceModeCollection( modes );
+			return new ReadOnlyCollection<DisplayDeviceMode>( modes );
 		}
 
 
@@ -325,7 +325,7 @@ namespace ManagedX.Graphics
 		
 		private readonly Dictionary<string, DisplayMonitor> monitorsByDeviceName;
 		private DisplayDeviceMode currentMode;  // THINKABOUTME - if the adapter is connected, this is the current mode; otherwise this should the mode stored in the registry ?
-		internal PixelFormat currentModeFormat;
+		//internal PixelFormat currentModeFormat;
 		internal int cloneGroupId;
 
 
@@ -448,14 +448,12 @@ namespace ManagedX.Graphics
 		/// <summary>Gets a read-only collection containing all monitors currently connected to this <see cref="DisplayAdapter"/>.
 		/// <para>Multiple monitors indicate a clone topology.</para>
 		/// </summary>
-		public ReadOnlyDisplayMonitorCollection Monitors
+		public ReadOnlyCollection<DisplayMonitor> Monitors
 		{
 			get
 			{
 				this.RefreshMonitorList();
-
-				var list = new List<DisplayMonitor>( monitorsByDeviceName.Values );
-				return new ReadOnlyDisplayMonitorCollection( list );
+				return new ReadOnlyCollection<DisplayMonitor>( new List<DisplayMonitor>( monitorsByDeviceName.Values ) );
 			}
 		}
 
@@ -494,7 +492,7 @@ namespace ManagedX.Graphics
 
 
 		/// <summary>Gets a read-only collection containing all (32 bpp) display modes supported by both this <see cref="DisplayAdapter"/> and its <see cref="Monitors"/>.</summary>
-		public ReadOnlyDisplayDeviceModeCollection DisplayModes => EnumDisplaySettingsEx( base.DeviceName, EnumDisplaySettingsExOptions.None );
+		public ReadOnlyCollection<DisplayDeviceMode> DisplayModes => EnumDisplaySettingsEx( base.DeviceName, EnumDisplaySettingsExOptions.None );
 
 
 		/// <summary>Gets the current display mode of this <see cref="DisplayAdapter"/>.
@@ -509,8 +507,8 @@ namespace ManagedX.Graphics
 
 		#region DisplayConfig
 
-		/// <summary>Gets the current pixel format for this <see cref="DisplayAdapter"/>.</summary>
-		public PixelFormat CurrentFormat => currentModeFormat;
+		///// <summary>Gets the current pixel format for this <see cref="DisplayAdapter"/>.</summary>
+		//public PixelFormat CurrentFormat => currentModeFormat;
 
 		
 		/// <summary>Gets the clone group id for this <see cref="DisplayAdapter"/>.
