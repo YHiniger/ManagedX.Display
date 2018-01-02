@@ -355,7 +355,7 @@ namespace ManagedX.Graphics
 			}
 
 			var removedMonitors = new List<string>( monitorsByDeviceName.Keys );
-			var addedMonitors = new List<string>();
+			var addedMonitors = new List<DisplayMonitor>();
 			var primaryMonitorChanged = false;
 
 			var monitors = EnumDisplayDevices( deviceName, true );
@@ -383,7 +383,7 @@ namespace ManagedX.Graphics
 				{
 					displayMonitor = new DisplayMonitor( this, monitor, handle );
 					monitorsByDeviceName.Add( monitor.DeviceName, displayMonitor );
-					addedMonitors.Add( monitor.DeviceName );
+					addedMonitors.Add( displayMonitor );
 				}
 
 				if( displayMonitor.IsPrimary && ( primaryDisplayMonitor != displayMonitor ) )
@@ -410,7 +410,7 @@ namespace ManagedX.Graphics
 				monitorsByDeviceName.Remove( deviceName );
 
 				displayMonitor.OnDisconnected();
-				this.OnMonitorConnectedOrDisconnected( deviceName, false );
+				this.OnMonitorConnectedOrDisconnected( displayMonitor, false );
 			}
 
 
@@ -524,7 +524,7 @@ namespace ManagedX.Graphics
 		/// <summary>Raised when this <see cref="DisplayAdapter"/> is removed from the system.</summary>
 		public event EventHandler Removed;
 
-		/// <summary>Raises the Disconnected event of all associated display monitors, and raises the <see cref="Removed"/> event.</summary>
+		/// <summary>Raises the Disconnected event of all associated display monitors, then raises the <see cref="Removed"/> event.</summary>
 		internal void OnRemoved()
 		{
 			foreach( var monitor in monitorsByDeviceName.Values )
@@ -541,17 +541,17 @@ namespace ManagedX.Graphics
 
 		
 		/// <summary>Raised when a display monitor is connected to this <see cref="DisplayAdapter"/>.</summary>
-		public event EventHandler<DisplayDeviceEventArgs> MonitorConnected;
+		public event EventHandler<DisplayAdapterEventArgs> MonitorConnected;
 
 		/// <summary>Raised when a display monitor is disconnected from this <see cref="DisplayAdapter"/>.</summary>
-		public event EventHandler<DisplayDeviceEventArgs> MonitorDisconnected;
+		public event EventHandler<DisplayAdapterEventArgs> MonitorDisconnected;
 
 		/// <summary>Raises the <see cref="MonitorConnected"/> or <see cref="MonitorDisconnected"/> event.</summary>
-		/// <param name="deviceIdentifier">The device name of the display monitor of interest.</param>
+		/// <param name="monitor">The device name of the display monitor of interest.</param>
 		/// <param name="connected">True to raise the <see cref="MonitorConnected"/> event, false to raise the <see cref="MonitorDisconnected"/> event.</param>
-		private void OnMonitorConnectedOrDisconnected( string deviceIdentifier, bool connected )
+		private void OnMonitorConnectedOrDisconnected( DisplayMonitor monitor, bool connected )
 		{
-			( connected ? this.MonitorConnected : this.MonitorDisconnected )?.Invoke( this, new DisplayDeviceEventArgs( deviceIdentifier ) );
+			( connected ? this.MonitorConnected : this.MonitorDisconnected )?.Invoke( this, new DisplayAdapterEventArgs( monitor ) );
 		}
 
 		#endregion Events

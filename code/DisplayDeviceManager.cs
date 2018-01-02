@@ -19,6 +19,10 @@ namespace ManagedX.Graphics
 		/// <summary>Defines the maximum length, in (unicode) chars, of a GDI device name: 32.</summary>
 		public const int MaxDeviceNameChars = DisplayDevice.MaxDeviceNameChars;
 
+		/// <summary>Defines the maximum length, in (unicode) chars, of a GDI device path: 128.</summary>
+		public const int MaxDevicePathChars = DisplayDevice.MaxStringChars;
+
+
 		private const QueryDisplayConfigRequest DisplayConfigRequest = QueryDisplayConfigRequest.AllPaths;// | QueryDisplayConfigRequest.VirtualModeAware | QueryDisplayConfigRequest.IncludeHeadMountedDisplays;
 
 
@@ -39,7 +43,7 @@ namespace ManagedX.Graphics
 			get
 			{
 				if( !isInitialized )
-					Refresh();
+					Update();
 				
 				if( primaryAdapterDeviceName != null )
 				{
@@ -57,7 +61,7 @@ namespace ManagedX.Graphics
 			get
 			{
 				if( !isInitialized )
-					Refresh();
+					Update();
 				return new ReadOnlyCollection<DisplayAdapter>( new List<DisplayAdapter>( adaptersByDeviceName.Values ) );
 			}
 		}
@@ -79,7 +83,7 @@ namespace ManagedX.Graphics
 			}
 
 			if( !isInitialized )
-				Refresh();
+				Update();
 
 			if( adaptersByDeviceName.TryGetValue( deviceName, out DisplayAdapter adapter ) )
 				return adapter;
@@ -94,7 +98,7 @@ namespace ManagedX.Graphics
 		public static ReadOnlyCollection<DisplayAdapter> GetAdaptersByDeviceId( string gdiDeviceId )
 		{
 			if( !isInitialized )
-				Refresh();
+				Update();
 
 			var adapters = new List<DisplayAdapter>( adaptersByDeviceName.Values );
 			var adapterIndex = 0;
@@ -115,11 +119,11 @@ namespace ManagedX.Graphics
 
 
 		/// <summary>Raised when a <see cref="DisplayAdapter"/> is added to the system.</summary>
-		public static event EventHandler<DisplayDeviceEventArgs> AdapterAdded;
+		public static event EventHandler<DisplayDeviceManagerEventArgs> AdapterAdded;
 
 
 		/// <summary>Raised when a <see cref="DisplayAdapter"/> is removed from the system.</summary>
-		public static event EventHandler<DisplayDeviceEventArgs> AdapterRemoved;
+		public static event EventHandler<DisplayDeviceManagerEventArgs> AdapterRemoved;
 
 
 		///// <summary></summary>
@@ -163,7 +167,7 @@ namespace ManagedX.Graphics
 		public static DisplayMonitor GetMonitorByHandle( IntPtr monitorHandle )
 		{
 			if( !isInitialized )
-				Refresh();
+				Update();
 
 			var monitorInfo = DisplayMonitor.GetInfo( monitorHandle );
 			if( adaptersByDeviceName.TryGetValue( monitorInfo.AdapterDeviceName, out DisplayAdapter adapter ) )
@@ -188,7 +192,7 @@ namespace ManagedX.Graphics
 		public static DisplayMonitor GetMonitorByDevicePath( string devicePath )
 		{
 			if( !isInitialized )
-				Refresh();
+				Update();
 
 			var adapters = new DisplayAdapter[ adaptersByDeviceName.Count ];
 			adaptersByDeviceName.Values.CopyTo( adapters, 0 );
@@ -211,7 +215,7 @@ namespace ManagedX.Graphics
 			get
 			{
 				if( !isInitialized )
-					Refresh();
+					Update();
 
 				return DisplayAdapter.PrimaryMonitor;
 			}
@@ -289,13 +293,13 @@ namespace ManagedX.Graphics
 
 
 		/// <summary>Refreshes the device list and their state, and raises events.</summary>
-		public static void Refresh()
+		public static void Update()
 		{
 			configuration.Refresh();
 
 			var adaptersToRefresh = new List<DisplayDevice>( adaptersByDeviceName.Count );
 			var removedAdapters = new List<string>( adaptersByDeviceName.Keys );
-			var newAdapters = new List<string>();
+			var newAdapters = new List<DisplayAdapter>();
 			var primaryAdapterChanged = false;
 
 			DisplayAdapter adapter;
@@ -315,7 +319,7 @@ namespace ManagedX.Graphics
 					adapter = new DisplayAdapter( displayDevice );
 					GetDisplayConfigInfo( adapter );
 					adaptersByDeviceName.Add( adapter.DeviceName, adapter );
-					newAdapters.Add( adapter.DeviceName );
+					newAdapters.Add( adapter );
 				}
 
 				if( adapter.State.HasFlag( DisplayAdapterStateIndicators.PrimaryDevice ) && ( primaryAdapterDeviceName != adapter.DeviceName ) )
@@ -334,12 +338,12 @@ namespace ManagedX.Graphics
 				adaptersByDeviceName.Remove( s );
 
 				adapter.OnRemoved();
-				AdapterRemoved?.Invoke( null, new DisplayDeviceEventArgs( adapter.DeviceName ) );
+				AdapterRemoved?.Invoke( null, new DisplayDeviceManagerEventArgs( adapter ) );
 			}
 
 			while( newAdapters.Count > 0 )
 			{
-				AdapterAdded?.Invoke( null, new DisplayDeviceEventArgs( newAdapters[ 0 ] ) );
+				AdapterAdded?.Invoke( null, new DisplayDeviceManagerEventArgs( newAdapters[ 0 ] ) );
 				newAdapters.RemoveAt( 0 );
 			}
 

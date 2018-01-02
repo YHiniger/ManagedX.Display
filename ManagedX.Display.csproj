@@ -52,7 +52,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="code\DisplayDeviceId.cs" />
+    <Compile Include="code\DisplayDeviceManagerEventArgs.cs" />
     <Compile Include="code\GDI\DisplayAdapter.cs" />
+    <Compile Include="code\GDI\DisplayAdapterEventArgs.cs" />
     <Compile Include="code\GDI\DisplayDeviceBase.cs" />
     <Compile Include="code\DisplayConfig\descriptions\AdapterDevicePath.cs" />
     <None Include="code\DisplayConfig\descriptions\AdvancedColorInformation.cs" />
@@ -66,7 +68,6 @@
     <Compile Include="code\DisplayConfig\structures\DesktopImageInfo.cs" />
     <Compile Include="code\DisplayConfig\descriptions\TargetDeviceDescription.cs" />
     <Compile Include="code\DisplayConfig\descriptions\TargetPreferredMode.cs" />
-    <Compile Include="code\DisplayDeviceEventArgs.cs" />
     <Compile Include="code\GDI\DisplayMonitor.cs" />
     <Compile Include="code\DisplayConfig\DisplayConfiguration.cs" />
     <Compile Include="code\DisplayConfig\enumerations\QueryDisplayConfigRequest.cs" />
