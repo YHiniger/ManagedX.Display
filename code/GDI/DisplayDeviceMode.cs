@@ -215,7 +215,7 @@ namespace ManagedX.Graphics
 		/// <summary>A zero-terminated character array that specifies the name of the form to use; for example, "Letter" or "Legal". A complete set of names can be retrieved by using the EnumForms function.</summary>
 		[MarshalAs( UnmanagedType.ByValTStr, SizeConst = 32 )]
 		private string formName;
-		#endregion
+		#endregion Printer fields
 		private short logPixels;
 		private int bitsPerPel;
 		private int pelsWidth;
@@ -227,13 +227,13 @@ namespace ManagedX.Graphics
 		private int icmIntent;
 		private int mediaType;
 		private int ditherType;
-		#endregion
+		#endregion Printer fields (again)
 		#region Not used, must be zero
 		private int reserved1;
 		private int reserved2;
 		private int panningWidth;
 		private int panningHeight;
-		#endregion
+		#endregion Not used, must be zero
 
 
 
@@ -254,11 +254,11 @@ namespace ManagedX.Graphics
 		/// <summary>Gets the version number of the initialization data specification the structure is based on.
 		/// <para>To ensure the correct version is used for any operating system, use DM_SPECVERSION.</para>
 		/// </summary>
-		public short SpecVersion => specVersion;
+		public Version SpecVersion => new Version( specVersion & 0x00FF, specVersion >> 8 );
 
 
 		/// <summary>Gets the driver version number assigned by the driver developer.</summary>
-		public short DriverVersion => driverVersion;
+		public Version DriverVersion => new Version( driverVersion & 0x00FF, driverVersion >> 8 );
 
 
 		#region "Fields"
