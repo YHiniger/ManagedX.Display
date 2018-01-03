@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
@@ -540,11 +541,11 @@ namespace ManagedX.Graphics.DisplayConfig
 
 
 		/// <summary>Gets a read-only collection containing information about all display paths for this configuration.</summary>
-		public ReadOnlyPathInfoCollection Paths => new ReadOnlyPathInfoCollection( paths );
+		public ReadOnlyCollection<PathInfo> Paths => new ReadOnlyCollection<PathInfo>( paths );
 
 
 		/// <summary>Gets a read-only collection containing information about supported display modes for this configuration.</summary>
-		public ReadOnlyModeInfoCollection DisplayModes => new ReadOnlyModeInfoCollection( modes );
+		public ReadOnlyCollection<ModeInfo> DisplayModes => new ReadOnlyCollection<ModeInfo>( modes );
 
 
 		/// <summary>Gets the type of display topology.</summary>

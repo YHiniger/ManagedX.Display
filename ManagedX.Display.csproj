@@ -75,8 +75,6 @@
     <Compile Include="code\DisplayConfig\structures\ModeInfo.cs" />
     <Compile Include="code\DisplayConfig\enumerations\ModeInfoType.cs" />
     <Compile Include="code\DisplayConfig\structures\PathInfo.cs" />
-    <Compile Include="code\DisplayConfig\ReadOnlyModeInfoCollection.cs" />
-    <Compile Include="code\DisplayConfig\ReadOnlyPathInfoCollection.cs" />
     <Compile Include="code\DisplayConfig\structures\PathSourceInfo.cs" />
     <Compile Include="code\DisplayConfig\structures\PathTargetInfo.cs" />
     <Compile Include="code\DisplayConfig\enumerations\PathTargetInfoStateIndicators.cs" />

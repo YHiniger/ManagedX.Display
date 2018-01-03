@@ -23,14 +23,11 @@ namespace ManagedX.Graphics
 		public const int MaxDevicePathChars = DisplayDevice.MaxStringChars;
 
 
-		private const QueryDisplayConfigRequest DisplayConfigRequest = QueryDisplayConfigRequest.AllPaths;// | QueryDisplayConfigRequest.VirtualModeAware | QueryDisplayConfigRequest.IncludeHeadMountedDisplays;
-
-
 
 		private static readonly Dictionary<string, DisplayAdapter> adaptersByDeviceName = new Dictionary<string, DisplayAdapter>( MaxAdapterCount );
 		private static string primaryAdapterDeviceName;
 		private static bool isInitialized;
-		private static readonly DisplayConfiguration configuration = DisplayConfiguration.Query( DisplayConfigRequest );
+		private static readonly DisplayConfiguration configuration = DisplayConfiguration.Query( QueryDisplayConfigRequest.AllPaths );
 		//private static DisplayConfiguration registryConfiguration;
 
 
@@ -177,15 +174,6 @@ namespace ManagedX.Graphics
 		}
 
 
-		/// <summary>Returns the <see cref="DisplayMonitor"/> which has the largest area of intersection with the bounding rectangle of a window.</summary>
-		/// <param name="windowHandle">A window handle.</param>
-		/// <returns>Returns the <see cref="DisplayMonitor"/> which has the largest area of intersection with the bounding rectangle of a window.</returns>
-		public static DisplayMonitor GetMonitorFromWindowHandle( IntPtr windowHandle )
-		{
-			return GetMonitorByHandle( DisplayMonitor.GetMonitorHandleFromWindow( windowHandle ) );
-		}
-
-
 		/// <summary>Returns a monitor given its device path.</summary>
 		/// <param name="devicePath">The monitor device path.</param>
 		/// <returns>Returns the monitor associated with the specified <paramref name="devicePath"/>, or null.</returns>
@@ -206,6 +194,15 @@ namespace ManagedX.Graphics
 			}
 
 			return null;
+		}
+
+
+		/// <summary>Returns the <see cref="DisplayMonitor"/> which has the largest area of intersection with the bounding rectangle of a window.</summary>
+		/// <param name="windowHandle">A window handle.</param>
+		/// <returns>Returns the <see cref="DisplayMonitor"/> which has the largest area of intersection with the bounding rectangle of a window.</returns>
+		public static DisplayMonitor GetMonitorFromWindowHandle( IntPtr windowHandle )
+		{
+			return GetMonitorByHandle( DisplayMonitor.GetMonitorHandleFromWindow( windowHandle ) );
 		}
 
 
