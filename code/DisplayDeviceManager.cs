@@ -244,7 +244,10 @@ namespace ManagedX.Graphics
 				path = paths[ p ];
 				source = path.SourceInfo;
 
-				if( adapter.DeviceName.Equals( DisplayConfiguration.GetSourceGDIDeviceName( source ), StringComparison.Ordinal ) )
+				if( source == PathSourceInfo.Empty )
+					continue;
+
+				if( adapter.DeviceName.Equals( DisplayConfiguration.GetSourceGDIDeviceName( source ), StringComparison.OrdinalIgnoreCase ) )
 				{
 					adapter.identifier = source.Identifier;
 					if( path.SupportsVirtualMode )
@@ -263,6 +266,9 @@ namespace ManagedX.Graphics
 					//	adapter.currentModeFormat = configuration.DisplayModes[ index ].Format;
 
 					target = path.TargetInfo;
+					if( target == PathTargetInfo.Empty )
+						continue;
+
 					desc = DisplayConfiguration.GetTargetDeviceDescription( target );
 					monitor = adapter.GetMonitorByDevicePath( desc.DevicePath );
 					if( monitor != null )

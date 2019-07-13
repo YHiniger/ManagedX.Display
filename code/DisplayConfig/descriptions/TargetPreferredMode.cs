@@ -39,7 +39,7 @@ namespace ManagedX.Graphics.DisplayConfig
 		/// <returns>Returns a string representing this <see cref="TargetPreferredMode"/>.</returns>
 		public sealed override string ToString()
 		{
-			return string.Format( System.Globalization.CultureInfo.InvariantCulture, "{0}x{1}@{2}Hz", width, height, targetMode.TargetVideoSignalInfo.VSyncFrequency.ToSingle() );
+			return string.Format( System.Globalization.CultureInfo.InvariantCulture, "{0}x{1}@{2}Hz", width, height, targetMode.TargetVideoSignalInfo.VSyncFrequency.ToInt32() );
 		}
 
 	}
